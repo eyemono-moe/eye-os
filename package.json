@@ -1,19 +1,38 @@
 {
-  "name": "solid-9-slice",
+  "name": "streaming-screen",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx --fix .",
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "solid-js": "^1.7.8"
+    "@macaron-css/core": "^1.2.0",
+    "@macaron-css/solid": "^1.4.1",
+    "@macaron-css/vite": "^1.4.3",
+    "solid-js": "^1.7.9"
   },
   "devDependencies": {
-    "typescript": "^5.0.2",
-    "vite": "^4.4.5",
+    "@types/prettier": "^3.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^6.2.1",
+    "eslint": "^8.46.0",
+    "eslint-config-prettier": "^8.10.0",
+    "eslint-config-standard-with-typescript": "^37.0.0",
+    "eslint-plugin-import": "^2.28.0",
+    "eslint-plugin-n": "^16.0.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-solid": "^0.12.1",
+    "eslint-plugin-unused-imports": "^3.0.0",
+    "prettier": "3.0.1",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.8",
     "vite-plugin-solid": "^2.7.0"
-  }
+  },
+  "packageManager": "pnpm@8.6.0"
 }
