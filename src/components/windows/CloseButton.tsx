@@ -1,5 +1,5 @@
 import { styled } from "@macaron-css/solid";
-import { FaRegularWindowMinimize } from "solid-icons/fa";
+import { FaSolidXmark } from "solid-icons/fa";
 import { type Component } from "solid-js";
 
 import { primitiveColors, semanticColors } from "../../theme/color";
@@ -27,16 +27,16 @@ const Button = styled("div", {
   },
 });
 
-const MinimizeButton: Component<{
+const CloseButton: Component<{
   onClick: () => void;
 }> = (props) => {
   return (
     <Container onClick={props.onClick}>
       <Button>
-        <FaRegularWindowMinimize size={24} fill={semanticColors.text.white} />
+        <FaSolidXmark size={24} fill={semanticColors.text.white} />
       </Button>
     </Container>
   );
 };
 
-export default MinimizeButton;
+export default CloseButton;

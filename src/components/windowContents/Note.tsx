@@ -87,6 +87,7 @@ const Note: Component = () => {
         style={{
           "font-size": `${fontSize()}px`,
         }}
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         ref={noteRef!}
       />
     </Container>

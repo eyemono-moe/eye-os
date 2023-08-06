@@ -5,6 +5,7 @@ import { useWindows } from "../contexts/useWindows";
 import firstChar from "../lib/firstChar";
 import { primitiveColors } from "../theme/color";
 
+import AddWindowButton from "./AddWindowButton";
 import OsButton from "./OsButton";
 
 const Container = styled("div", {
@@ -68,6 +69,7 @@ const TaskBar: Component = () => {
             </TaskBarItem>
           )}
         </For>
+        <AddWindowButton />
       </TaskBaritems>
     </Container>
   );

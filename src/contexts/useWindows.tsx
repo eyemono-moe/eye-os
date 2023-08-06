@@ -1,5 +1,5 @@
 import { createContext, useContext, type ParentComponent } from "solid-js";
-import { type SetStoreFunction } from "solid-js/store";
+import { produce, type SetStoreFunction } from "solid-js/store";
 
 import { type WindowContentProps } from "../components/windows/WindowContent";
 import { createLocalStore } from "../lib/createLocalStore";
@@ -30,6 +30,8 @@ export type ThemeContextValue = [
     setState: SetStoreFunction<WindowsContextState>;
     setTop: (index: number) => void;
     resetDisplay: () => void;
+    addWindow: (windowInfo: WindowInfo) => void;
+    removeWindow: (index: number) => void;
   },
 ];
 
@@ -104,13 +106,15 @@ const WindowsContext = createContext<ThemeContextValue>([
     setState: () => {},
     setTop: () => {},
     resetDisplay: () => {},
+    addWindow: () => {},
+    removeWindow: () => {},
   },
 ]);
 
 export const WindowsProvider: ParentComponent = (props) => {
   const [state, setState] = createLocalStore("windows", defaultState);
 
-  const setZIndex = (index: number) => {
+  const setTop = (index: number) => {
     // すでに最前面なら何もしない
     if (state.windows[index].zIndex === state.windows.length - 1) return;
 
@@ -125,10 +129,29 @@ export const WindowsProvider: ParentComponent = (props) => {
   const resetDisplay = () => {
     setState("windows", defaultState.windows);
   };
+  const addWindow = (windowInfo: WindowInfo) => {
+    setState(
+      produce((store) => {
+        store.windows.push(windowInfo);
+      }),
+    );
+  };
+  const removeWindow = (index: number) => {
+    setState(
+      "windows",
+      produce((windows) => {
+        windows.splice(index, 1);
+        return windows;
+      }),
+    );
+  };
 
   return (
     <WindowsContext.Provider
-      value={[state, { setState, setTop: setZIndex, resetDisplay }]}
+      value={[
+        state,
+        { setState, setTop, resetDisplay, addWindow, removeWindow },
+      ]}
     >
       {props.children}
     </WindowsContext.Provider>

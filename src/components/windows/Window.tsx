@@ -10,6 +10,7 @@ import {
 } from "../../contexts/useWindows";
 import { primitiveColors } from "../../theme/color";
 
+import CloseButton from "./CloseButton";
 import MinimizeButton from "./MinimizeButton";
 import WindowContent from "./WindowContent";
 
@@ -169,7 +170,7 @@ const Window: ParentComponent<WindowProps> = (props) => {
   let bottomRef: HTMLDivElement;
   let bottomRightRef: HTMLDivElement;
 
-  const [_, { setState, setTop: setZIndex }] = useWindows();
+  const [_, { setState, setTop, removeWindow }] = useWindows();
 
   const [offsetPosition, setOffsetPosition] = createSignal<Position>({
     x: 0,
@@ -291,7 +292,7 @@ const Window: ParentComponent<WindowProps> = (props) => {
         "z-index": props.windowInfo.zIndex,
       }}
       onPointerDown={() => {
-        setZIndex(props.index());
+        setTop(props.index());
       }}
     >
       <Background
@@ -318,6 +319,11 @@ const Window: ParentComponent<WindowProps> = (props) => {
         <MinimizeButton
           onClick={() => {
             setState("windows", props.index(), "minimized", true);
+          }}
+        />
+        <CloseButton
+          onClick={() => {
+            removeWindow(props.index());
           }}
         />
       </HeaderWrapper>
