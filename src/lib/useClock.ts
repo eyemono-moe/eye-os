@@ -10,8 +10,8 @@ const useClock = () => {
   const [time, setTime] = createSignal(getSecondsSinceMidnight());
 
   const dispose = createAnimationLoop(() => {
-    setTime(getSecondsSinceMidnight())
-    setDate(new Date())
+    setTime(getSecondsSinceMidnight());
+    setDate(new Date());
   });
   onCleanup(dispose);
 
@@ -22,7 +22,6 @@ const useClock = () => {
   const hour = () => Math.floor(time() / 3600);
   const minute = () => Math.floor((time() % 3600) / 60);
   const second = () => Math.floor(time() % 60);
-
 
   return {
     year,

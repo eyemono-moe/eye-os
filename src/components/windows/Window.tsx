@@ -8,9 +8,12 @@ import {
   type WindowInfo,
   useWindows,
 } from "../../contexts/useWindows";
+import usePopup from "../../lib/usePopup";
 import { primitiveColors } from "../../theme/color";
 
 import CloseButton from "./CloseButton";
+import EditButton from "./EditButton";
+import EditPopup from "./EditPopup";
 import MinimizeButton from "./MinimizeButton";
 import WindowContent from "./WindowContent";
 
@@ -171,6 +174,7 @@ const Window: ParentComponent<WindowProps> = (props) => {
   let bottomRightRef: HTMLDivElement;
 
   const [_, { setState, setTop, removeWindow }] = useWindows();
+  const { Popup, open } = usePopup();
 
   const [offsetPosition, setOffsetPosition] = createSignal<Position>({
     x: 0,
@@ -316,6 +320,17 @@ const Window: ParentComponent<WindowProps> = (props) => {
         <Header ref={headerRef!}>
           <HeaderTitle>{props.windowInfo.title}</HeaderTitle>
         </Header>
+        <EditButton
+          onClick={(e) => {
+            open({
+              x: e.pageX,
+              y: e.pageY,
+            });
+          }}
+        />
+        <Popup>
+          <EditPopup index={props.index} />
+        </Popup>
         <MinimizeButton
           onClick={() => {
             setState("windows", props.index(), "minimized", true);

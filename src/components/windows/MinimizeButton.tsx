@@ -1,6 +1,6 @@
 import { styled } from "@macaron-css/solid";
 import { FaRegularWindowMinimize } from "solid-icons/fa";
-import { type Component } from "solid-js";
+import { type JSX, type Component } from "solid-js";
 
 import { primitiveColors, semanticColors } from "../../theme/color";
 
@@ -28,7 +28,7 @@ const Button = styled("div", {
 });
 
 const MinimizeButton: Component<{
-  onClick: () => void;
+  onClick: JSX.EventHandlerUnion<HTMLDivElement, MouseEvent>;
 }> = (props) => {
   return (
     <Container onClick={props.onClick}>

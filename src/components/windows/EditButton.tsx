@@ -1,5 +1,5 @@
 import { styled } from "@macaron-css/solid";
-import { FaSolidXmark } from "solid-icons/fa";
+import { FaSolidPen } from "solid-icons/fa";
 import { type JSX, type Component } from "solid-js";
 
 import { primitiveColors, semanticColors } from "../../theme/color";
@@ -27,16 +27,16 @@ const Button = styled("div", {
   },
 });
 
-const CloseButton: Component<{
+const EditButton: Component<{
   onClick: JSX.EventHandlerUnion<HTMLDivElement, MouseEvent>;
 }> = (props) => {
   return (
     <Container onClick={props.onClick}>
       <Button>
-        <FaSolidXmark size={24} fill={semanticColors.text.white} />
+        <FaSolidPen size={24} fill={semanticColors.text.white} />
       </Button>
     </Container>
   );
 };
 
-export default CloseButton;
+export default EditButton;
