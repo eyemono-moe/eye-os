@@ -1,9 +1,14 @@
 import { type Component } from "solid-js";
 
-import Window from "./components/Window";
+import Layout from "./components/Layout";
+import { WindowsProvider } from "./contexts/useWindows";
 
 const App: Component = () => {
-  return <Window />;
+  return (
+    <WindowsProvider>
+      <Layout />
+    </WindowsProvider>
+  );
 };
 
 export default App;

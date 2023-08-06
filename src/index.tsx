@@ -12,7 +12,8 @@ render(() => <App />, root!);
 globalStyle("html, body", {
   margin: "0",
   padding: "0",
-  fontFamily: `'Noto Sans JP', sans-serif`,
+  fontFamily: `'FOT-ラグランパンチ Std UB', monospace`,
+  background: "transparent",
 });
 
 globalStyle("*, *:before, *:after", {

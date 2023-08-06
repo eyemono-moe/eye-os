@@ -99,6 +99,6 @@ export const semanticColors = {
   },
   ui: {
     border: primitiveColors.gray[300],
-    background: primitiveColors.white,
+    background: primitiveColors.green[400],
   },
 };

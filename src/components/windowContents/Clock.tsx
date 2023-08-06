@@ -1,6 +1,6 @@
 import { type Component } from "solid-js";
 
-import useClock from "../lib/useClock";
+import useClock from "../../lib/useClock";
 
 const Clock: Component = () => {
   const { hour, minute } = useClock();

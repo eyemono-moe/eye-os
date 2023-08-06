@@ -15,6 +15,7 @@
     "@macaron-css/core": "^1.2.0",
     "@macaron-css/solid": "^1.4.1",
     "@macaron-css/vite": "^1.4.3",
+    "@solid-primitives/mouse": "^2.0.15",
     "solid-js": "^1.7.9"
   },
   "devDependencies": {
