@@ -2,8 +2,10 @@ import { lazy, type Component } from "solid-js";
 import { Dynamic } from "solid-js/web";
 
 export const windowContentsMap = {
-  default: lazy(async () => await import("./windowContents/Default")),
-  clock: lazy(async () => await import("./windowContents/Clock")),
+  default: lazy(async () => await import("../windowContents/Default")),
+  clock: lazy(async () => await import("../windowContents/Clock")),
+  note: lazy(async () => await import("../windowContents/Note")),
+  bb: lazy(async () => await import("../windowContents/BlueBack")),
 };
 
 export interface WindowContentProps {

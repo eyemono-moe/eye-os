@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { keyframes } from "@macaron-css/core";
 import { styled } from "@macaron-css/solid";
 import { createSignal, onMount, type ParentComponent } from "solid-js";
 
@@ -6,8 +7,10 @@ import {
   type Position,
   type WindowInfo,
   useWindows,
-} from "../contexts/useWindows";
+} from "../../contexts/useWindows";
+import { primitiveColors } from "../../theme/color";
 
+import MinimizeButton from "./MinimizeButton";
 import WindowContent from "./WindowContent";
 
 const MIN_WIDTH = 100;
@@ -17,6 +20,28 @@ const headerHeight = 36;
 const edgeWidth = 4;
 const borderRadius = 8;
 
+const MaximizeAnimation = keyframes({
+  from: {
+    transform: "translateY(400px) scale(0)",
+    opacity: 0,
+  },
+  to: {
+    transform: "translateY(0) scale(1)",
+    opacity: 1,
+  },
+});
+
+const MinimizeAnimation = keyframes({
+  from: {
+    transform: "translateY(0) scale(1)",
+    opacity: 1,
+  },
+  to: {
+    transform: "translateY(400px) scale(0)",
+    opacity: 0,
+  },
+});
+
 const Container = styled("div", {
   base: {
     position: "absolute",
@@ -25,6 +50,10 @@ const Container = styled("div", {
     gridTemplateRows: `${edgeWidth}px ${
       headerHeight - edgeWidth
     }px 1fr ${edgeWidth}px`,
+    animationDuration: "0.5s",
+    animationIterationCount: 1,
+    animationFillMode: "forwards",
+    pointerEvents: "auto",
   },
 });
 
@@ -76,11 +105,29 @@ const Edge = styled("div", {
   },
 });
 
-const Header = styled("div", {
+const HeaderWrapper = styled("div", {
   base: {
     gridColumn: "2 / 3",
     gridRow: "2 / 3",
+    display: "flex",
+  },
+});
+
+const Header = styled("div", {
+  base: {
+    width: "100%",
     cursor: "move",
+    display: "flex",
+    alignItems: "center",
+  },
+});
+
+const HeaderTitle = styled("div", {
+  base: {
+    fontSize: "18px",
+    fontWeight: "bold",
+    marginLeft: "8px",
+    color: primitiveColors.white,
   },
 });
 
@@ -122,7 +169,7 @@ const Window: ParentComponent<WindowProps> = (props) => {
   let bottomRef: HTMLDivElement;
   let bottomRightRef: HTMLDivElement;
 
-  const [_, { setState }] = useWindows();
+  const [_, { setState, setTop: setZIndex }] = useWindows();
 
   const [offsetPosition, setOffsetPosition] = createSignal<Position>({
     x: 0,
@@ -155,7 +202,6 @@ const Window: ParentComponent<WindowProps> = (props) => {
 
   const handlePointerMoveOnBottom = (e: PointerEvent) => {
     let newY = e.pageY - offsetPosition().y + edgeWidth;
-    console.info(offsetPosition().y);
     if (newY - props.windowInfo.topLeft.y < MIN_WIDTH) {
       newY = props.windowInfo.topLeft.y + MIN_WIDTH;
     }
@@ -239,6 +285,13 @@ const Window: ParentComponent<WindowProps> = (props) => {
         width: `${
           props.windowInfo.bottomRight.x - props.windowInfo.topLeft.x
         }px`,
+        "animation-name": props.windowInfo.minimized
+          ? MinimizeAnimation
+          : MaximizeAnimation,
+        "z-index": props.windowInfo.zIndex,
+      }}
+      onPointerDown={() => {
+        setZIndex(props.index());
       }}
     >
       <Background
@@ -254,12 +307,20 @@ const Window: ParentComponent<WindowProps> = (props) => {
       <Edge ref={bottomLeftRef!} direction="bottomLeft" />
       <Edge ref={bottomRef!} direction="bottom" />
       <Edge ref={bottomRightRef!} direction="bottomRight" />
-      <Header
-        ref={headerRef!}
+      <HeaderWrapper
         style={{
           "background-color": props.windowInfo.color,
         }}
-      />
+      >
+        <Header ref={headerRef!}>
+          <HeaderTitle>{props.windowInfo.title}</HeaderTitle>
+        </Header>
+        <MinimizeButton
+          onClick={() => {
+            setState("windows", props.index(), "minimized", true);
+          }}
+        />
+      </HeaderWrapper>
       <ContentWrapper>
         <WindowContent type={props.windowInfo.type} />
       </ContentWrapper>

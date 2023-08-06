@@ -1,5 +1,5 @@
 {
-  "name": "streaming-screen",
+  "name": "eye-os",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -16,9 +16,12 @@
     "@macaron-css/solid": "^1.4.1",
     "@macaron-css/vite": "^1.4.3",
     "@solid-primitives/mouse": "^2.0.15",
+    "chroma-js": "^2.4.2",
+    "solid-icons": "^1.0.11",
     "solid-js": "^1.7.9"
   },
   "devDependencies": {
+    "@types/chroma-js": "^2.4.0",
     "@types/prettier": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^6.2.1",

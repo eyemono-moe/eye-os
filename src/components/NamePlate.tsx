@@ -6,9 +6,10 @@ import { semanticColors } from "../theme/color";
 
 const Container = styled("div", {
   base: {
-    width: "100%",
+    height: "fit-content",
     display: "grid",
     placeContent: "center",
+    fontFamily: "FOT-ラグランパンチ Std UB",
   },
 });
 

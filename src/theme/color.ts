@@ -1,5 +1,13 @@
-const mix = (color1: string, color2: string, weight: number) => {
-  return `color-mix(in srgb, ${color1} ${weight}%, ${color2})`;
+import chroma from "chroma-js";
+
+// export const mix = (color1: string, color2: string, weight: number) => {
+//   return `color-mix(in srgb, ${color1} ${weight}%, ${color2})`;
+// };
+
+export const mix = (color1: string, color2: string, weight: number) => {
+  return chroma(color1)
+    .mix(color2, weight / 100, "rgb")
+    .hex();
 };
 
 const black = "#191E1E";

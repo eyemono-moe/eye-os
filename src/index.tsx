@@ -3,6 +3,7 @@ import { globalStyle } from "@macaron-css/core";
 import { render } from "solid-js/web";
 
 import App from "./App";
+import { semanticColors } from "./theme/color";
 
 const root = document.getElementById("root");
 
@@ -12,7 +13,8 @@ render(() => <App />, root!);
 globalStyle("html, body", {
   margin: "0",
   padding: "0",
-  fontFamily: `'FOT-ラグランパンチ Std UB', monospace`,
+  fontFamily: `'JetBrainsMono Nerd Font', 'Noto Sans JP Thin', monospace`,
+  color: semanticColors.text.white,
   background: "transparent",
 });
 
