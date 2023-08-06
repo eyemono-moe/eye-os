@@ -54,6 +54,7 @@ const Container = styled("div", {
     animationIterationCount: 1,
     animationFillMode: "forwards",
     pointerEvents: "auto",
+    userSelect: "none",
   },
 });
 
@@ -135,7 +136,6 @@ const Background = styled("div", {
   base: {
     gridColumn: "2 / 3",
     gridRow: "2 / 4",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
     boxSizing: "content-box",
     outlineStyle: "solid",
     outlineWidth: `${edgeWidth}px`,

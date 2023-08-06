@@ -9,7 +9,8 @@ const Container = styled("div", {
     width: "100%",
     height: "100%",
     position: "relative",
-    backgroundColor: primitiveColors.white,
+    backgroundColor: primitiveColors.black,
+    backgroundImage: `repeating-linear-gradient(-45deg, ${primitiveColors.gray[50]}, ${primitiveColors.gray[50]} 10px, transparent 0, transparent 20px)`,
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
@@ -25,8 +26,8 @@ const TextArea = styled("div", {
     padding: "8px",
     fontFamily: `'JetBrainsMono Nerd Font', 'Noto Sans JP Thin', monospace`,
     textAlign: "center",
-    backgroundColor: primitiveColors.white,
-    color: primitiveColors.black,
+    color: primitiveColors.pink[400],
+    userSelect: "text",
   },
 });
 
@@ -57,7 +58,7 @@ const Button = styled("div", {
 
 const Note: Component = () => {
   const [fontSize, setFontSize] = createSignal(24);
-  const [content, setContent] = createSignal("");
+  const [_, setContent] = createSignal("");
   const increaseFontSize = () => {
     setFontSize((s) => s + 4);
   };
@@ -69,17 +70,17 @@ const Note: Component = () => {
     <Container>
       <Buttons>
         <Button onClick={increaseFontSize}>
-          <FaSolidPlus fill={primitiveColors.black} size={24} />
+          <FaSolidPlus fill={primitiveColors.white} size={24} />
         </Button>
         <Button onClick={decreaseFontSize}>
-          <FaSolidMinus fill={primitiveColors.black} size={24} />
+          <FaSolidMinus fill={primitiveColors.white} size={24} />
         </Button>
         <Button
           onClick={() => {
             setContent("");
           }}
         >
-          <FaRegularTrashCan fill={primitiveColors.black} size={24} />
+          <FaRegularTrashCan fill={primitiveColors.white} size={24} />
         </Button>
       </Buttons>
       <TextArea
@@ -91,7 +92,6 @@ const Note: Component = () => {
           setContent(e.currentTarget.innerText);
         }}
       />
-      ;
     </Container>
   );
 };
