@@ -50,7 +50,7 @@ const Button = styled("div", {
     alignItems: "center",
     selectors: {
       "&:hover": {
-        backgroundColor: primitiveColors.blackAlpha[400],
+        backgroundColor: primitiveColors.whiteAlpha[400],
       },
     },
   },
@@ -58,12 +58,15 @@ const Button = styled("div", {
 
 const Note: Component = () => {
   const [fontSize, setFontSize] = createSignal(24);
-  const [_, setContent] = createSignal("");
+  let noteRef: HTMLDivElement;
   const increaseFontSize = () => {
     setFontSize((s) => s + 4);
   };
   const decreaseFontSize = () => {
     setFontSize((s) => Math.max(s - 4, 16));
+  };
+  const clearContent = () => {
+    noteRef.innerHTML = "";
   };
 
   return (
@@ -75,11 +78,7 @@ const Note: Component = () => {
         <Button onClick={decreaseFontSize}>
           <FaSolidMinus fill={primitiveColors.white} size={24} />
         </Button>
-        <Button
-          onClick={() => {
-            setContent("");
-          }}
-        >
+        <Button onClick={clearContent}>
           <FaRegularTrashCan fill={primitiveColors.white} size={24} />
         </Button>
       </Buttons>
@@ -88,9 +87,7 @@ const Note: Component = () => {
         style={{
           "font-size": `${fontSize()}px`,
         }}
-        onInput={(e) => {
-          setContent(e.currentTarget.innerText);
-        }}
+        ref={noteRef!}
       />
     </Container>
   );
