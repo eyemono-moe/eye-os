@@ -1,6 +1,12 @@
 import { styled } from "@macaron-css/solid";
-import { FaSolidMinus, FaSolidPlus, FaRegularTrashCan } from "solid-icons/fa";
-import { createSignal, type Component } from "solid-js";
+import {
+  FaSolidMinus,
+  FaSolidPlus,
+  FaRegularTrashCan,
+  FaSolidAlignCenter,
+  FaSolidAlignLeft,
+} from "solid-icons/fa";
+import { createSignal, type Component, Show } from "solid-js";
 
 import { primitiveColors } from "../../theme/color";
 
@@ -25,7 +31,6 @@ const TextArea = styled("div", {
     outline: "none",
     padding: "8px",
     fontFamily: `'JetBrainsMono Nerd Font', 'Noto Sans JP Thin', monospace`,
-    textAlign: "center",
     color: primitiveColors.pink[400],
     userSelect: "text",
   },
@@ -58,6 +63,7 @@ const Button = styled("div", {
 
 const Note: Component = () => {
   const [fontSize, setFontSize] = createSignal(24);
+  const [alignment, setAlignment] = createSignal<"center" | "left">("left");
   let noteRef: HTMLDivElement;
   const increaseFontSize = () => {
     setFontSize((s) => s + 4);
@@ -67,6 +73,9 @@ const Note: Component = () => {
   };
   const clearContent = () => {
     noteRef.innerHTML = "";
+  };
+  const toggleAlignment = () => {
+    setAlignment((a) => (a === "center" ? "left" : "center"));
   };
 
   return (
@@ -78,6 +87,16 @@ const Note: Component = () => {
         <Button onClick={decreaseFontSize}>
           <FaSolidMinus fill={primitiveColors.white} size={24} />
         </Button>
+        <Button onClick={toggleAlignment}>
+          <Show
+            when={alignment() === "center"}
+            fallback={
+              <FaSolidAlignLeft fill={primitiveColors.white} size={24} />
+            }
+          >
+            <FaSolidAlignCenter fill={primitiveColors.white} size={24} />
+          </Show>
+        </Button>
         <Button onClick={clearContent}>
           <FaRegularTrashCan fill={primitiveColors.white} size={24} />
         </Button>
@@ -86,6 +105,7 @@ const Note: Component = () => {
         contentEditable
         style={{
           "font-size": `${fontSize()}px`,
+          "text-align": alignment(),
         }}
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         ref={noteRef!}

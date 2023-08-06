@@ -14,7 +14,7 @@ const Container = styled("div", {
   },
 });
 
-const Setting = styled("div", {
+export const Setting = styled("div", {
   base: {
     display: "flex",
     flexDirection: "row",
