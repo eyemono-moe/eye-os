@@ -31,7 +31,7 @@ const TextArea = styled("div", {
     outline: "none",
     padding: "8px",
     fontFamily: `'JetBrainsMono Nerd Font', 'Noto Sans JP Thin', monospace`,
-    color: primitiveColors.pink[400],
+    color: primitiveColors.white,
     userSelect: "text",
   },
 });
