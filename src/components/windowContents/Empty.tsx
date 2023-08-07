@@ -3,12 +3,12 @@ import { styled } from "@macaron-css/solid";
 import { primitiveColors } from "../../theme/color";
 import { type WindowData } from "../windows/WindowContent";
 
-export interface DefaultWindowOptions extends WindowData {
-  type: "default";
+export interface EmptyWindowData extends WindowData {
+  type: "empty";
 }
 
-export const defaultOptions: DefaultWindowOptions = {
-  type: "default",
+export const defaultEmptyWindowData: EmptyWindowData = {
+  type: "empty",
 };
 
 const Default = styled("div", {

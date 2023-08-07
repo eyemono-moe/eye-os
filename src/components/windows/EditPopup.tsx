@@ -3,7 +3,7 @@ import { For, type Component } from "solid-js";
 
 import { primitiveColors } from "../../theme/color";
 
-import { type WindowType, windowContentsMap } from "./WindowContent";
+import { type WindowType, defaultWindowData } from "./WindowContent";
 import { useWindow } from "./Windows";
 
 const Container = styled("div", {
@@ -23,12 +23,18 @@ export const Setting = styled("div", {
   },
 });
 
+const Ul = styled("ul", {
+  base: {
+    listStyle: "none",
+  },
+});
+
 const EditPopup: Component = () => {
   const [store, { setState, index }] = useWindow();
 
   return (
     <Container>
-      <ul>
+      <Ul>
         <li>
           <Setting>
             <div>title</div>
@@ -47,21 +53,22 @@ const EditPopup: Component = () => {
             <select
               value={store.type}
               onChange={(e) => {
-                setState(
-                  "windows",
-                  index(),
-                  "type",
-                  e.target.value as WindowType,
-                );
+                setState("windows", index(), (info) => {
+                  const newInfo = { ...info };
+                  newInfo.type = e.target.value as WindowType;
+                  newInfo.option =
+                    defaultWindowData[e.target.value as WindowType].option;
+                  return newInfo;
+                });
               }}
             >
-              <For each={Object.keys(windowContentsMap)}>
+              <For each={Object.keys(defaultWindowData)}>
                 {(type) => <option value={type}>{type}</option>}
               </For>
             </select>
           </Setting>
         </li>
-      </ul>
+      </Ul>
     </Container>
   );
 };

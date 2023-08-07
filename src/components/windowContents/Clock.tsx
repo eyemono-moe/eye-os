@@ -5,9 +5,13 @@ import useClock from "../../lib/useClock";
 import { primitiveColors } from "../../theme/color";
 import { type WindowData } from "../windows/WindowContent";
 
-export interface ClockWindowOptions extends WindowData {
+export interface ClockWindowData extends WindowData {
   type: "clock";
 }
+
+export const defaultClockWindowData: ClockWindowData = {
+  type: "clock",
+};
 
 const Container = styled("div", {
   base: {

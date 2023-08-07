@@ -11,8 +11,6 @@ const root = document.getElementById("root");
 render(() => <App />, root!);
 
 globalStyle("html, body", {
-  margin: "0",
-  padding: "0",
   fontFamily: `'JetBrainsMono Nerd Font', 'Noto Sans JP Thin', monospace`,
   color: semanticColors.text.white,
   background: "transparent",
@@ -20,4 +18,6 @@ globalStyle("html, body", {
 
 globalStyle("*, *:before, *:after", {
   boxSizing: "border-box",
+  margin: "0",
+  padding: "0",
 });

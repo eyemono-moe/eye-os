@@ -81,7 +81,7 @@ const defaultState: WindowsContextState = {
       },
       color: generateWindowColor(),
       minimized: false,
-      type: "default",
+      type: "empty",
       zIndex: 0,
     },
     {

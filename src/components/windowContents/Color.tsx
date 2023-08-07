@@ -2,14 +2,14 @@ import { styled } from "@macaron-css/solid";
 
 import { type WindowData } from "../windows/WindowContent";
 
-export interface ColorWindowOptions extends WindowData {
+export interface ColorWindowData extends WindowData {
   type: "color";
   option: {
     color: string;
   };
 }
 
-export const defaultOptions: ColorWindowOptions = {
+export const defaultColorWindowData: ColorWindowData = {
   type: "color",
   option: {
     color: "#0000ff",

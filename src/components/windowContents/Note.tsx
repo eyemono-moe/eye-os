@@ -16,7 +16,7 @@ import { useWindow } from "../windows/Windows";
 
 type Alignment = "center" | "left";
 
-export interface NoteWindowOptions extends WindowData {
+export interface NoteWindowData extends WindowData {
   type: "note";
   option: {
     content: string;
@@ -24,6 +24,15 @@ export interface NoteWindowOptions extends WindowData {
     fontSize: number;
   };
 }
+
+export const defaultNoteWindowData: NoteWindowData = {
+  type: "note",
+  option: {
+    content: "",
+    alignment: "center",
+    fontSize: 24,
+  },
+};
 
 const Container = styled("div", {
   base: {
@@ -79,10 +88,10 @@ const Button = styled("div", {
 
 const Note: Component = () => {
   const [state, { setState, index }] = useWindow() as [
-    WindowInfo & NoteWindowOptions,
+    WindowInfo & NoteWindowData,
     {
       setState: SetStoreFunction<{
-        windows: Array<WindowInfo & NoteWindowOptions>;
+        windows: Array<WindowInfo & NoteWindowData>;
       }>;
       index: () => number;
     },

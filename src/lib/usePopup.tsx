@@ -8,9 +8,20 @@ import {
 } from "solid-js";
 import { Portal } from "solid-js/web";
 
+const Background = styled("div", {
+  base: {
+    position: "fixed",
+    width: "100%",
+    height: "100vh",
+    top: "0",
+    left: "0",
+  },
+});
+
 const PopupWrapper = styled("div", {
   base: {
     position: "fixed",
+    padding: "8px",
   },
 });
 
@@ -45,6 +56,7 @@ const usePopup = (mount?: Node) => {
     return (
       <Show when={isOpen()}>
         <Portal mount={mount != null ? mount : document.body}>
+          <Background onClick={close} />
           <PopupWrapper
             style={{
               left: `${position().x}px`,

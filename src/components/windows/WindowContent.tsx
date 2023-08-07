@@ -1,17 +1,29 @@
 import { lazy, type Component } from "solid-js";
 import { Dynamic } from "solid-js/web";
 
-import { type ClockWindowOptions } from "../windowContents/Clock";
-import { type ColorWindowOptions } from "../windowContents/Color";
-import { type DefaultWindowOptions } from "../windowContents/Default";
-import { type NoteWindowOptions } from "../windowContents/Note";
+import {
+  defaultClockWindowData,
+  type ClockWindowData,
+} from "../windowContents/Clock";
+import {
+  defaultColorWindowData,
+  type ColorWindowData,
+} from "../windowContents/Color";
+import {
+  defaultEmptyWindowData,
+  type EmptyWindowData,
+} from "../windowContents/Empty";
+import {
+  defaultNoteWindowData,
+  type NoteWindowData,
+} from "../windowContents/Note";
 
 import { useWindow } from "./Windows";
 
 export const windowContentsMap = {
   clock: lazy(async () => await import("../windowContents/Clock")),
   color: lazy(async () => await import("../windowContents/Color")),
-  default: lazy(async () => await import("../windowContents/Default")),
+  empty: lazy(async () => await import("../windowContents/Empty")),
   note: lazy(async () => await import("../windowContents/Note")),
 };
 
@@ -22,11 +34,18 @@ export interface WindowData {
   option?: unknown;
 }
 
+export const defaultWindowData: Record<WindowType, WindowData> = {
+  clock: defaultClockWindowData,
+  color: defaultColorWindowData,
+  empty: defaultEmptyWindowData,
+  note: defaultNoteWindowData,
+};
+
 export type WindowDataConcrete =
-  | ClockWindowOptions
-  | ColorWindowOptions
-  | DefaultWindowOptions
-  | NoteWindowOptions;
+  | ClockWindowData
+  | ColorWindowData
+  | EmptyWindowData
+  | NoteWindowData;
 
 const WindowContent: Component = () => {
   const [state] = useWindow();

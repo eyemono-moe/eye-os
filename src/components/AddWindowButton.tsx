@@ -39,7 +39,7 @@ const AddWindowButton: Component = () => {
             y: 280,
           },
           color: generateWindowColor(),
-          type: "default",
+          type: "empty",
         });
       }}
     >

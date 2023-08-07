@@ -142,6 +142,7 @@ const Background = styled("div", {
     outlineWidth: `${edgeWidth}px`,
     borderRadius: `${borderRadius}px`,
     pointerEvents: "none",
+    boxShadow: `8px 8px 1px 0px ${primitiveColors.blackAlpha[700]}`,
   },
 });
 

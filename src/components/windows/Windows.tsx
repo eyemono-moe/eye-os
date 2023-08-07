@@ -45,7 +45,7 @@ const WindowContext = createContext<WindowContextValue>([
     },
     color: "",
     minimized: false,
-    type: "default",
+    type: "empty",
     option: {},
     zIndex: 0,
   },
