@@ -16,6 +16,7 @@
     "@macaron-css/solid": "^1.4.1",
     "@macaron-css/vite": "^1.4.3",
     "chroma-js": "^2.4.2",
+    "obs-websocket-js": "^5.0.3",
     "solid-emoji-picker": "^0.2.0",
     "solid-icons": "^1.0.11",
     "solid-js": "^1.7.9"

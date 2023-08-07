@@ -10,6 +10,10 @@ import {
   type ColorWindowData,
 } from "../windowContents/Color";
 import {
+  type ControllerWindowData,
+  defaultControllerWindowData,
+} from "../windowContents/Controller";
+import {
   defaultEmptyWindowData,
   type EmptyWindowData,
 } from "../windowContents/Empty";
@@ -23,6 +27,7 @@ import { useWindow } from "./Windows";
 export const windowContentsMap = {
   clock: lazy(async () => await import("../windowContents/Clock")),
   color: lazy(async () => await import("../windowContents/Color")),
+  controller: lazy(async () => await import("../windowContents/Controller")),
   empty: lazy(async () => await import("../windowContents/Empty")),
   note: lazy(async () => await import("../windowContents/Note")),
 };
@@ -37,6 +42,7 @@ export interface WindowData {
 export const defaultWindowData: Record<WindowType, WindowData> = {
   clock: defaultClockWindowData,
   color: defaultColorWindowData,
+  controller: defaultControllerWindowData,
   empty: defaultEmptyWindowData,
   note: defaultNoteWindowData,
 };
@@ -44,6 +50,7 @@ export const defaultWindowData: Record<WindowType, WindowData> = {
 export type WindowDataConcrete =
   | ClockWindowData
   | ColorWindowData
+  | ControllerWindowData
   | EmptyWindowData
   | NoteWindowData;
 
