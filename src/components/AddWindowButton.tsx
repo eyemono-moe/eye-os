@@ -20,15 +20,6 @@ const Container = styled("div", {
   },
 });
 
-const Mark = styled("div", {
-  base: {
-    width: "24px",
-    height: "24px",
-    backgroundColor: primitiveColors.green[500],
-    borderRadius: "16px",
-  },
-});
-
 const AddWindowButton: Component = () => {
   const [state, { addWindow }] = useWindows();
 

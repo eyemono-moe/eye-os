@@ -3,11 +3,7 @@ import { keyframes } from "@macaron-css/core";
 import { styled } from "@macaron-css/solid";
 import { createSignal, onMount, type ParentComponent } from "solid-js";
 
-import {
-  type Position,
-  type WindowInfo,
-  useWindows,
-} from "../../contexts/useWindows";
+import { type Position } from "../../contexts/useWindows";
 import usePopup from "../../lib/usePopup";
 import { primitiveColors } from "../../theme/color";
 
@@ -16,6 +12,7 @@ import EditButton from "./EditButton";
 import EditPopup from "./EditPopup";
 import MinimizeButton from "./MinimizeButton";
 import WindowContent from "./WindowContent";
+import { useWindow } from "./Windows";
 
 const MIN_WIDTH = 100;
 const MIN_HEIGHT = 100;
@@ -157,12 +154,7 @@ const ContentWrapper = styled("div", {
   },
 });
 
-interface WindowProps {
-  windowInfo: WindowInfo;
-  index: () => number;
-}
-
-const Window: ParentComponent<WindowProps> = (props) => {
+const Window: ParentComponent = () => {
   let headerRef: HTMLDivElement;
   let topLeftRef: HTMLDivElement;
   let topRef: HTMLDivElement;
@@ -173,7 +165,7 @@ const Window: ParentComponent<WindowProps> = (props) => {
   let bottomRef: HTMLDivElement;
   let bottomRightRef: HTMLDivElement;
 
-  const [_, { setState, setTop, removeWindow }] = useWindows();
+  const [windowInfo, { setState, setTop, removeWindow, index }] = useWindow()!;
   const { Popup, open } = usePopup();
 
   const [offsetPosition, setOffsetPosition] = createSignal<Position>({
@@ -183,45 +175,45 @@ const Window: ParentComponent<WindowProps> = (props) => {
 
   const handlePointerMoveOnLeft = (e: PointerEvent) => {
     let newX = e.pageX - offsetPosition().x;
-    if (props.windowInfo.bottomRight.x - newX < MIN_WIDTH) {
-      newX = props.windowInfo.bottomRight.x - MIN_WIDTH;
+    if (windowInfo.bottomRight.x - newX < MIN_WIDTH) {
+      newX = windowInfo.bottomRight.x - MIN_WIDTH;
     }
-    setState("windows", props.index(), "topLeft", "x", newX);
+    setState("windows", index(), "topLeft", "x", newX);
   };
 
   const handlePointerMoveOnTop = (e: PointerEvent) => {
     let newY = e.pageY - offsetPosition().y;
-    if (props.windowInfo.bottomRight.y - newY < MIN_HEIGHT) {
-      newY = props.windowInfo.bottomRight.y - MIN_HEIGHT;
+    if (windowInfo.bottomRight.y - newY < MIN_HEIGHT) {
+      newY = windowInfo.bottomRight.y - MIN_HEIGHT;
     }
-    setState("windows", props.index(), "topLeft", "y", newY);
+    setState("windows", index(), "topLeft", "y", newY);
   };
 
   const handlePointerMoveOnRight = (e: PointerEvent) => {
     let newX = e.pageX - offsetPosition().x + edgeWidth;
-    if (newX - props.windowInfo.topLeft.x < MIN_WIDTH) {
-      newX = props.windowInfo.topLeft.x + MIN_WIDTH;
+    if (newX - windowInfo.topLeft.x < MIN_WIDTH) {
+      newX = windowInfo.topLeft.x + MIN_WIDTH;
     }
-    setState("windows", props.index(), "bottomRight", "x", newX);
+    setState("windows", index(), "bottomRight", "x", newX);
   };
 
   const handlePointerMoveOnBottom = (e: PointerEvent) => {
     let newY = e.pageY - offsetPosition().y + edgeWidth;
-    if (newY - props.windowInfo.topLeft.y < MIN_WIDTH) {
-      newY = props.windowInfo.topLeft.y + MIN_WIDTH;
+    if (newY - windowInfo.topLeft.y < MIN_WIDTH) {
+      newY = windowInfo.topLeft.y + MIN_WIDTH;
     }
-    setState("windows", props.index(), "bottomRight", "y", newY);
+    setState("windows", index(), "bottomRight", "y", newY);
   };
 
   const handleHeaderMove = (e: PointerEvent) => {
     const deltaX =
-      e.pageX - props.windowInfo.topLeft.x - offsetPosition().x - edgeWidth;
+      e.pageX - windowInfo.topLeft.x - offsetPosition().x - edgeWidth;
     const deltaY =
-      e.pageY - props.windowInfo.topLeft.y - offsetPosition().y - edgeWidth;
-    setState("windows", props.index(), "topLeft", "x", (p) => p + deltaX);
-    setState("windows", props.index(), "topLeft", "y", (p) => p + deltaY);
-    setState("windows", props.index(), "bottomRight", "x", (p) => p + deltaX);
-    setState("windows", props.index(), "bottomRight", "y", (p) => p + deltaY);
+      e.pageY - windowInfo.topLeft.y - offsetPosition().y - edgeWidth;
+    setState("windows", index(), "topLeft", "x", (p) => p + deltaX);
+    setState("windows", index(), "topLeft", "y", (p) => p + deltaY);
+    setState("windows", index(), "bottomRight", "x", (p) => p + deltaX);
+    setState("windows", index(), "bottomRight", "y", (p) => p + deltaY);
   };
 
   const handlePointerDown = (
@@ -282,26 +274,20 @@ const Window: ParentComponent<WindowProps> = (props) => {
   return (
     <Container
       style={{
-        height: `${
-          props.windowInfo.bottomRight.y - props.windowInfo.topLeft.y
-        }px`,
-        left: `${props.windowInfo.topLeft.x}px`,
-        top: `${props.windowInfo.topLeft.y}px`,
-        width: `${
-          props.windowInfo.bottomRight.x - props.windowInfo.topLeft.x
-        }px`,
-        "animation-name": props.windowInfo.minimized
+        height: `${windowInfo.bottomRight.y - windowInfo.topLeft.y}px`,
+        left: `${windowInfo.topLeft.x}px`,
+        top: `${windowInfo.topLeft.y}px`,
+        width: `${windowInfo.bottomRight.x - windowInfo.topLeft.x}px`,
+        "animation-name": windowInfo.minimized
           ? MinimizeAnimation
           : MaximizeAnimation,
-        "z-index": props.windowInfo.zIndex,
+        "z-index": windowInfo.zIndex,
       }}
-      onPointerDown={() => {
-        setTop(props.index());
-      }}
+      onPointerDown={setTop}
     >
       <Background
         style={{
-          "outline-color": props.windowInfo.color,
+          "outline-color": windowInfo.color,
         }}
       />
       <Edge ref={topLeftRef!} direction="topLeft" />
@@ -314,11 +300,11 @@ const Window: ParentComponent<WindowProps> = (props) => {
       <Edge ref={bottomRightRef!} direction="bottomRight" />
       <HeaderWrapper
         style={{
-          "background-color": props.windowInfo.color,
+          "background-color": windowInfo.color,
         }}
       >
         <Header ref={headerRef!}>
-          <HeaderTitle>{props.windowInfo.title}</HeaderTitle>
+          <HeaderTitle>{windowInfo.title}</HeaderTitle>
         </Header>
         <EditButton
           onClick={(e) => {
@@ -329,21 +315,17 @@ const Window: ParentComponent<WindowProps> = (props) => {
           }}
         />
         <Popup>
-          <EditPopup index={props.index} />
+          <EditPopup />
         </Popup>
         <MinimizeButton
           onClick={() => {
-            setState("windows", props.index(), "minimized", true);
+            setState("windows", index(), "minimized", true);
           }}
         />
-        <CloseButton
-          onClick={() => {
-            removeWindow(props.index());
-          }}
-        />
+        <CloseButton onClick={removeWindow} />
       </HeaderWrapper>
       <ContentWrapper>
-        <WindowContent type={props.windowInfo.type} />
+        <WindowContent />
       </ContentWrapper>
     </Container>
   );

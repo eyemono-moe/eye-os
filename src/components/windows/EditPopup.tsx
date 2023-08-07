@@ -1,10 +1,10 @@
 import { styled } from "@macaron-css/solid";
 import { For, type Component } from "solid-js";
 
-import { useWindows } from "../../contexts/useWindows";
 import { primitiveColors } from "../../theme/color";
 
-import { windowContentsMap } from "./WindowContent";
+import { type WindowType, windowContentsMap } from "./WindowContent";
+import { useWindow } from "./Windows";
 
 const Container = styled("div", {
   base: {
@@ -23,12 +23,8 @@ export const Setting = styled("div", {
   },
 });
 
-interface EditPopupProps {
-  index: () => number;
-}
-
-const EditPopup: Component<EditPopupProps> = (props) => {
-  const [store, { setState }] = useWindows();
+const EditPopup: Component = () => {
+  const [store, { setState, index }] = useWindow();
 
   return (
     <Container>
@@ -38,9 +34,9 @@ const EditPopup: Component<EditPopupProps> = (props) => {
             <div>title</div>
             <input
               type="text"
-              value={store.windows[props.index()].title}
+              value={store.title}
               onChange={(e) => {
-                setState("windows", props.index(), "title", e.target.value);
+                setState("windows", index(), "title", e.target.value);
               }}
             />
           </Setting>
@@ -49,13 +45,13 @@ const EditPopup: Component<EditPopupProps> = (props) => {
           <Setting>
             <div>type</div>
             <select
-              value={store.windows[props.index()].type}
+              value={store.type}
               onChange={(e) => {
                 setState(
                   "windows",
-                  props.index(),
+                  index(),
                   "type",
-                  e.target.value as keyof typeof windowContentsMap,
+                  e.target.value as WindowType,
                 );
               }}
             >

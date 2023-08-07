@@ -1,7 +1,7 @@
 import { createContext, useContext, type ParentComponent } from "solid-js";
 import { produce, type SetStoreFunction } from "solid-js/store";
 
-import { type WindowContentProps } from "../components/windows/WindowContent";
+import { type WindowDataConcrete } from "../components/windows/WindowContent";
 import { createLocalStore } from "../lib/createLocalStore";
 import generateWindowColor from "../lib/generateWindowColor";
 
@@ -10,21 +10,20 @@ export interface Position {
   y: number;
 }
 
-export interface WindowInfo {
+export type WindowInfo = {
   title: string;
   topLeft: Position;
   bottomRight: Position;
   color: string;
   minimized: boolean;
-  type: WindowContentProps["type"];
   zIndex: number;
-}
+} & WindowDataConcrete;
 
 export interface WindowsContextState {
   windows: WindowInfo[];
 }
 
-export type ThemeContextValue = [
+export type WindowsContextValue = [
   state: WindowsContextState,
   actions: {
     setState: SetStoreFunction<WindowsContextState>;
@@ -49,7 +48,10 @@ const defaultState: WindowsContextState = {
       },
       color: generateWindowColor(),
       minimized: false,
-      type: "bb",
+      type: "color",
+      option: {
+        color: "#0000ff",
+      },
       zIndex: 0,
     },
     {
@@ -95,12 +97,17 @@ const defaultState: WindowsContextState = {
       color: generateWindowColor(),
       minimized: false,
       type: "note",
+      option: {
+        content: "Hello, World!",
+        alignment: "left",
+        fontSize: 24,
+      },
       zIndex: 0,
     },
   ],
 };
 
-const WindowsContext = createContext<ThemeContextValue>([
+const WindowsContext = createContext<WindowsContextValue>([
   defaultState,
   {
     setState: () => {},

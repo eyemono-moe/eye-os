@@ -3,6 +3,11 @@ import { type Component } from "solid-js";
 
 import useClock from "../../lib/useClock";
 import { primitiveColors } from "../../theme/color";
+import { type WindowData } from "../windows/WindowContent";
+
+export interface ClockWindowOptions extends WindowData {
+  type: "clock";
+}
 
 const Container = styled("div", {
   base: {

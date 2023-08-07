@@ -1,7 +1,12 @@
 import { styled } from "@macaron-css/solid";
-import { For, type Component } from "solid-js";
+import { For, type Component, createContext, useContext } from "solid-js";
+import { type SetStoreFunction } from "solid-js/store";
 
-import { useWindows } from "../../contexts/useWindows";
+import {
+  type WindowInfo,
+  useWindows,
+  type WindowsContextState,
+} from "../../contexts/useWindows";
 
 import Window from "./Window";
 
@@ -17,15 +22,72 @@ const Container = styled("div", {
   },
 });
 
+export type WindowContextValue = [
+  state: WindowInfo,
+  actions: {
+    setState: SetStoreFunction<WindowsContextState>;
+    setTop: () => void;
+    removeWindow: () => void;
+    index: () => number;
+  },
+];
+
+const WindowContext = createContext<WindowContextValue>([
+  {
+    title: "",
+    topLeft: {
+      x: 0,
+      y: 0,
+    },
+    bottomRight: {
+      x: 0,
+      y: 0,
+    },
+    color: "",
+    minimized: false,
+    type: "default",
+    option: {},
+    zIndex: 0,
+  },
+  {
+    setState: () => {},
+    setTop: () => {},
+    removeWindow: () => {},
+    index: () => 0,
+  },
+]);
+
 const Windows: Component = () => {
-  const [state] = useWindows();
+  const [state, { setState, removeWindow, setTop }] = useWindows();
   return (
     <Container>
       <For each={state.windows}>
-        {(window, i) => <Window windowInfo={window} index={i} />}
+        {(window, i) => {
+          return (
+            <WindowContext.Provider
+              value={[
+                window,
+                {
+                  setState,
+                  setTop: () => {
+                    setTop(i());
+                  },
+                  removeWindow: () => {
+                    removeWindow(i());
+                  },
+                  index: i,
+                },
+              ]}
+            >
+              <Window />;
+            </WindowContext.Provider>
+          );
+        }}
       </For>
     </Container>
   );
 };
+
+export const useWindow = () => useContext(WindowContext);
 
 export default Windows;

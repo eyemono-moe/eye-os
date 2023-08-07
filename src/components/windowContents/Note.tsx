@@ -6,9 +6,24 @@ import {
   FaSolidAlignCenter,
   FaSolidAlignLeft,
 } from "solid-icons/fa";
-import { createSignal, type Component, Show } from "solid-js";
+import { type Component, Show, onMount } from "solid-js";
+import { type SetStoreFunction } from "solid-js/store";
 
+import { type WindowInfo } from "../../contexts/useWindows";
 import { primitiveColors } from "../../theme/color";
+import { type WindowData } from "../windows/WindowContent";
+import { useWindow } from "../windows/Windows";
+
+type Alignment = "center" | "left";
+
+export interface NoteWindowOptions extends WindowData {
+  type: "note";
+  option: {
+    content: string;
+    alignment: Alignment;
+    fontSize: number;
+  };
+}
 
 const Container = styled("div", {
   base: {
@@ -33,6 +48,7 @@ const TextArea = styled("div", {
     fontFamily: `'JetBrainsMono Nerd Font', 'Noto Sans JP Thin', monospace`,
     color: primitiveColors.white,
     userSelect: "text",
+    backgroundColor: "transparent",
   },
 });
 
@@ -40,7 +56,7 @@ const Buttons = styled("div", {
   base: {
     position: "absolute",
     top: "0",
-    right: "0",
+    left: "0",
     display: "flex",
     flexDirection: "row",
   },
@@ -62,21 +78,41 @@ const Button = styled("div", {
 });
 
 const Note: Component = () => {
-  const [fontSize, setFontSize] = createSignal(24);
-  const [alignment, setAlignment] = createSignal<"center" | "left">("left");
-  let noteRef: HTMLDivElement;
+  const [state, { setState, index }] = useWindow() as [
+    WindowInfo & NoteWindowOptions,
+    {
+      setState: SetStoreFunction<{
+        windows: Array<WindowInfo & NoteWindowOptions>;
+      }>;
+      index: () => number;
+    },
+  ];
+
+  if (state.type !== "note") {
+    throw new Error("Invalid window type");
+  }
+
   const increaseFontSize = () => {
-    setFontSize((s) => s + 4);
+    setState("windows", index(), "option", "fontSize", (s) => s + 8);
   };
   const decreaseFontSize = () => {
-    setFontSize((s) => Math.max(s - 4, 16));
+    setState("windows", index(), "option", "fontSize", (s) =>
+      Math.max(s - 8, 16),
+    );
   };
   const clearContent = () => {
-    noteRef.innerHTML = "";
+    setState("windows", index(), "option", "content", "");
   };
   const toggleAlignment = () => {
-    setAlignment((a) => (a === "center" ? "left" : "center"));
+    setState("windows", index(), "option", "alignment", (a) =>
+      a === "center" ? "left" : "center",
+    );
   };
+
+  let ref: HTMLDivElement;
+  onMount(() => {
+    ref.innerText = state.option.content;
+  });
 
   return (
     <Container>
@@ -89,7 +125,7 @@ const Note: Component = () => {
         </Button>
         <Button onClick={toggleAlignment}>
           <Show
-            when={alignment() === "center"}
+            when={state.option.alignment === "center"}
             fallback={
               <FaSolidAlignLeft fill={primitiveColors.white} size={24} />
             }
@@ -102,13 +138,22 @@ const Note: Component = () => {
         </Button>
       </Buttons>
       <TextArea
-        contentEditable
         style={{
-          "font-size": `${fontSize()}px`,
-          "text-align": alignment(),
+          "font-size": `${state.option.fontSize}px`,
+          "text-align": state.option.alignment,
         }}
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        ref={noteRef!}
+        ref={ref!}
+        onInput={(e) => {
+          setState(
+            "windows",
+            index(),
+            "option",
+            "content",
+            e.currentTarget.innerText,
+          );
+        }}
+        contentEditable
       />
     </Container>
   );

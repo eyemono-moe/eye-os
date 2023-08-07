@@ -1,6 +1,15 @@
 import { styled } from "@macaron-css/solid";
 
 import { primitiveColors } from "../../theme/color";
+import { type WindowData } from "../windows/WindowContent";
+
+export interface DefaultWindowOptions extends WindowData {
+  type: "default";
+}
+
+export const defaultOptions: DefaultWindowOptions = {
+  type: "default",
+};
 
 const Default = styled("div", {
   base: {
