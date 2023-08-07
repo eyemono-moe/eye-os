@@ -127,23 +127,23 @@ const Note: Component = () => {
     <Container>
       <Buttons>
         <Button onClick={increaseFontSize}>
-          <FaSolidPlus fill={primitiveColors.white} size={24} />
+          <FaSolidPlus fill={primitiveColors.gray[700]} size={24} />
         </Button>
         <Button onClick={decreaseFontSize}>
-          <FaSolidMinus fill={primitiveColors.white} size={24} />
+          <FaSolidMinus fill={primitiveColors.gray[700]} size={24} />
         </Button>
         <Button onClick={toggleAlignment}>
           <Show
             when={state.option.alignment === "center"}
             fallback={
-              <FaSolidAlignLeft fill={primitiveColors.white} size={24} />
+              <FaSolidAlignLeft fill={primitiveColors.gray[700]} size={24} />
             }
           >
-            <FaSolidAlignCenter fill={primitiveColors.white} size={24} />
+            <FaSolidAlignCenter fill={primitiveColors.gray[700]} size={24} />
           </Show>
         </Button>
         <Button onClick={clearContent}>
-          <FaRegularTrashCan fill={primitiveColors.white} size={24} />
+          <FaRegularTrashCan fill={primitiveColors.gray[700]} size={24} />
         </Button>
       </Buttons>
       <TextArea

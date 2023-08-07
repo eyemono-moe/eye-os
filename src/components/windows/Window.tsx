@@ -215,7 +215,7 @@ const Window: ParentComponent = () => {
 
   const handleHeaderMove = (e: PointerEvent) => {
     const deltaX =
-      e.pageX - windowInfo.topLeft.x - offsetPosition().x - edgeWidth;
+      e.pageX - windowInfo.topLeft.x - offsetPosition().x - edgeWidth - 32;
     const deltaY =
       e.pageY - windowInfo.topLeft.y - offsetPosition().y - edgeWidth;
     setState("windows", index(), "topLeft", "x", (p) => p + deltaX);

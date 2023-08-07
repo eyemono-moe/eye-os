@@ -3,7 +3,6 @@ import { produce, type SetStoreFunction } from "solid-js/store";
 
 import { type WindowDataConcrete } from "../components/windows/WindowContent";
 import { createLocalStore } from "../lib/createLocalStore";
-import generateWindowColor from "../lib/generateWindowColor";
 
 export interface Position {
   x: number;
@@ -45,29 +44,29 @@ const defaultState: WindowsContextState = {
         y: 16,
       },
       bottomRight: {
-        x: 1107,
-        y: 708,
+        x: 1416,
+        y: 803,
       },
-      color: generateWindowColor(),
+      color: "#db33ea",
       minimized: false,
       type: "color",
       option: {
         color: "#0000ff",
       },
-      zIndex: 0,
+      zIndex: 1,
     },
     {
       title: "Clock",
       icon: "🕑",
       topLeft: {
-        x: 1128,
-        y: 16,
+        x: 1503,
+        y: 19.5,
       },
       bottomRight: {
-        x: 1423,
-        y: 132,
+        x: 1890,
+        y: 194.5,
       },
-      color: generateWindowColor(),
+      color: "#da33eb",
       minimized: false,
       type: "clock",
       zIndex: 0,
@@ -76,38 +75,76 @@ const defaultState: WindowsContextState = {
       title: "Comments",
       icon: "💬",
       topLeft: {
-        x: 1143,
-        y: 136,
+        x: 1443,
+        y: 210,
       },
       bottomRight: {
-        x: 1422,
-        y: 787,
+        x: 1889,
+        y: 682,
       },
-      color: generateWindowColor(),
+      color: "#f133ca",
       minimized: false,
-      type: "empty",
+      type: "color",
       zIndex: 0,
+      option: {
+        color: "#0000ff",
+      },
     },
     {
-      title: "Notes",
-      icon: "📝",
+      title: "Info",
+      icon: "ℹ️",
       topLeft: {
-        x: 483,
-        y: 717,
+        x: 470,
+        y: 825,
       },
       bottomRight: {
-        x: 1131,
-        y: 951,
+        x: 931,
+        y: 1014,
       },
-      color: generateWindowColor(),
+      color: "#f233ca",
       minimized: false,
       type: "note",
       option: {
-        content: "Hello, World!",
+        content: "- Twetter:@eyemono_moe\n- hashtag:#四十物さんは見ている",
         alignment: "left",
         fontSize: 24,
       },
-      zIndex: 0,
+      zIndex: 5,
+    },
+    {
+      title: "Note",
+      icon: "📝",
+      minimized: false,
+      zIndex: 4,
+      topLeft: {
+        x: 928,
+        y: 744,
+      },
+      bottomRight: {
+        x: 1497,
+        y: 1031,
+      },
+      color: "#e133e1",
+      type: "empty",
+    },
+    {
+      title: "Icon.svg",
+      icon: "😃",
+      minimized: false,
+      zIndex: 3,
+      topLeft: {
+        x: 1502,
+        y: 670,
+      },
+      bottomRight: {
+        x: 1861,
+        y: 1054,
+      },
+      color: "#de33e5",
+      type: "color",
+      option: {
+        color: "#0000ff",
+      },
     },
   ],
 };
