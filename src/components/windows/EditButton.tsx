@@ -1,5 +1,5 @@
 import { styled } from "@macaron-css/solid";
-import { FaSolidPen } from "solid-icons/fa";
+import { FaSolidBars } from "solid-icons/fa";
 import { type JSX, type Component } from "solid-js";
 
 import { primitiveColors, semanticColors } from "../../theme/color";
@@ -33,7 +33,7 @@ const EditButton: Component<{
   return (
     <Container onClick={props.onClick}>
       <Button>
-        <FaSolidPen size={24} fill={semanticColors.text.white} />
+        <FaSolidBars size={24} fill={semanticColors.text.white} />
       </Button>
     </Container>
   );

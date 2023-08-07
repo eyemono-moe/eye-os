@@ -79,7 +79,7 @@ const Windows: Component = () => {
                 },
               ]}
             >
-              <Window />;
+              <Window />
             </WindowContext.Provider>
           );
         }}
