@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { keyframes } from "@macaron-css/core";
 import { styled } from "@macaron-css/solid";
-import { createSignal, onMount, type ParentComponent } from "solid-js";
+import {
+  createSignal,
+  ErrorBoundary,
+  onMount,
+  type ParentComponent,
+} from "solid-js";
 
 import { type Position } from "../../contexts/useWindows";
 import usePopup from "../../lib/usePopup";
@@ -10,6 +15,7 @@ import { primitiveColors } from "../../theme/color";
 import CloseButton from "./CloseButton";
 import EditButton from "./EditButton";
 import EditPopup from "./EditPopup";
+import LoadingScreen from "./LoadingScreen";
 import MinimizeButton from "./MinimizeButton";
 import WindowContent from "./WindowContent";
 import { useWindow } from "./Windows";
@@ -326,7 +332,9 @@ const Window: ParentComponent = () => {
         <CloseButton onClick={removeWindow} />
       </HeaderWrapper>
       <ContentWrapper>
-        <WindowContent />
+        <ErrorBoundary fallback={<LoadingScreen />}>
+          <WindowContent />
+        </ErrorBoundary>
       </ContentWrapper>
     </Container>
   );

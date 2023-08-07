@@ -16,7 +16,7 @@ const Default = styled("div", {
     width: "100%",
     height: "100%",
     backgroundColor: primitiveColors.black,
-    backgroundImage: `repeating-linear-gradient(-45deg, ${primitiveColors.gray[50]}, ${primitiveColors.gray[50]} 10px, transparent 0, transparent 20px)`,
+    backgroundImage: `repeating-linear-gradient(-45deg, ${primitiveColors.gray[900]}, ${primitiveColors.gray[900]} 10px, transparent 0, transparent 20px)`,
   },
 });
 

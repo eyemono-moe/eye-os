@@ -5,8 +5,8 @@ import chroma from "chroma-js";
 // };
 
 export const mix = (color1: string, color2: string, weight: number) => {
-  return chroma(color1)
-    .mix(color2, weight / 100, "rgb")
+  return chroma(color2)
+    .mix(color1, weight / 100, "rgb")
     .hex();
 };
 
