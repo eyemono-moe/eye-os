@@ -15,7 +15,6 @@
     "@macaron-css/core": "^1.2.0",
     "@macaron-css/solid": "^1.4.1",
     "@macaron-css/vite": "^1.4.3",
-    "@solid-primitives/mouse": "^2.0.15",
     "chroma-js": "^2.4.2",
     "solid-emoji-picker": "^0.2.0",
     "solid-icons": "^1.0.11",

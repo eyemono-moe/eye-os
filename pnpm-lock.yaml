@@ -14,9 +14,6 @@ dependencies:
   '@macaron-css/vite':
     specifier: ^1.4.3
     version: 1.4.3(vite@4.4.8)
-  '@solid-primitives/mouse':
-    specifier: ^2.0.15
-    version: 2.0.15(solid-js@1.7.9)
   chroma-js:
     specifier: ^2.4.2
     version: 2.4.2
@@ -955,53 +952,6 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
     dev: true
-
-  /@solid-primitives/event-listener@2.2.14(solid-js@1.7.9):
-    resolution: {integrity: sha512-lmp64jDT6xY5/Y557HNykDgxkNfT6MgQOp6PsvChMKX4/HHcTGjv1VhzMmQj//oABDKRlITrmwh9DOJPamliqA==}
-    peerDependencies:
-      solid-js: ^1.6.12
-    dependencies:
-      '@solid-primitives/utils': 6.2.1(solid-js@1.7.9)
-      solid-js: 1.7.9
-    dev: false
-
-  /@solid-primitives/mouse@2.0.15(solid-js@1.7.9):
-    resolution: {integrity: sha512-6r0yNXwcut2X7LaHucG7QBv1r+P7ruv1Bf/WeAgHItzInTSeFf0AHEKCmW8cq7vJDpkPHlKYs6uUpQzrg2wiMQ==}
-    peerDependencies:
-      solid-js: ^1.6.12
-    dependencies:
-      '@solid-primitives/event-listener': 2.2.14(solid-js@1.7.9)
-      '@solid-primitives/rootless': 1.4.2(solid-js@1.7.9)
-      '@solid-primitives/static-store': 0.0.5(solid-js@1.7.9)
-      '@solid-primitives/utils': 6.2.1(solid-js@1.7.9)
-      solid-js: 1.7.9
-    dev: false
-
-  /@solid-primitives/rootless@1.4.2(solid-js@1.7.9):
-    resolution: {integrity: sha512-ynI/2aEOPyc14IKCX6yDBqnsAYCoLbaP9V/jejEWMVKOT2ZdV2ZxdftaLimOpWPpvjyti5DUJIGTOfLaNb7jlg==}
-    peerDependencies:
-      solid-js: ^1.6.12
-    dependencies:
-      '@solid-primitives/utils': 6.2.1(solid-js@1.7.9)
-      solid-js: 1.7.9
-    dev: false
-
-  /@solid-primitives/static-store@0.0.5(solid-js@1.7.9):
-    resolution: {integrity: sha512-ssQ+s/wrlFAEE4Zw8GV499yBfvWx7SMm+ZVc11wvao4T5xg9VfXCL9Oa+x4h+vPMvSV/Knv5LrsLiUa+wlJUXQ==}
-    peerDependencies:
-      solid-js: ^1.6.12
-    dependencies:
-      '@solid-primitives/utils': 6.2.1(solid-js@1.7.9)
-      solid-js: 1.7.9
-    dev: false
-
-  /@solid-primitives/utils@6.2.1(solid-js@1.7.9):
-    resolution: {integrity: sha512-TsecNzxiO5bLfzqb4OOuzfUmdOROcssuGqgh5rXMMaasoFZ3GoveUgdY1wcf17frMJM7kCNGNuK34EjErneZkg==}
-    peerDependencies:
-      solid-js: ^1.6.12
-    dependencies:
-      solid-js: 1.7.9
-    dev: false
 
   /@types/babel__core@7.20.1:
     resolution: {integrity: sha512-aACu/U/omhdk15O4Nfb+fHgH/z3QsfQzpnvRZhYhThms83ZnAOZz7zZAWO7mn2yyNQaA4xTO8GLK3uqFU4bYYw==}
