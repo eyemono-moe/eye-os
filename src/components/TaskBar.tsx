@@ -2,7 +2,6 @@ import { styled } from "@macaron-css/solid";
 import { For, type Component } from "solid-js";
 
 import { useWindows } from "../contexts/useWindows";
-import firstChar from "../lib/firstChar";
 import { primitiveColors } from "../theme/color";
 
 import AddWindowButton from "./AddWindowButton";
@@ -15,7 +14,7 @@ const Container = styled("div", {
   },
 });
 
-const TaskBaritems = styled("div", {
+const TaskBarItems = styled("div", {
   base: {
     display: "flex",
     flexDirection: "row",
@@ -54,7 +53,7 @@ const TaskBar: Component = () => {
 
   return (
     <Container>
-      <TaskBaritems>
+      <TaskBarItems>
         <OsButton />
         <For each={state.windows}>
           {(window, i) => (
@@ -65,12 +64,12 @@ const TaskBar: Component = () => {
                 setTop(i());
               }}
             >
-              {firstChar(window.title)}
+              {window.icon}
             </TaskBarItem>
           )}
         </For>
         <AddWindowButton />
-      </TaskBaritems>
+      </TaskBarItems>
     </Container>
   );
 };

@@ -20,6 +20,9 @@ dependencies:
   chroma-js:
     specifier: ^2.4.2
     version: 2.4.2
+  solid-emoji-picker:
+    specifier: ^0.2.0
+    version: 0.2.0(solid-js@1.7.9)
   solid-icons:
     specifier: ^1.0.11
     version: 1.0.11(solid-js@1.7.9)
@@ -3189,6 +3192,15 @@ packages:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
     engines: {node: '>=8'}
     dev: true
+
+  /solid-emoji-picker@0.2.0(solid-js@1.7.9):
+    resolution: {integrity: sha512-cLPevMIevKPs06UOjFakYP+TXKFcvwhD0cF9d3ivrqXUIOt/0bgXHnxPQlbFXtOr6mYXVngrNhzHBGdNi1fVNQ==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      solid-js: ^1.2
+    dependencies:
+      solid-js: 1.7.9
+    dev: false
 
   /solid-icons@1.0.11(solid-js@1.7.9):
     resolution: {integrity: sha512-shEL5Otrl73LPZukpanJKi6ISnQhpIvhqqAb8haKyCGrixHOYC6yGfNkSE7jpkKSikZ0rGtSMRiFETRrec2Uzw==}

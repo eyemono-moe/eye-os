@@ -27,7 +27,8 @@ const AddWindowButton: Component = () => {
     <Container
       onClick={() => {
         addWindow({
-          title: "📝 New Window",
+          title: "New Window",
+          icon: "📄",
           minimized: false,
           zIndex: state.windows.length - 1,
           topLeft: {

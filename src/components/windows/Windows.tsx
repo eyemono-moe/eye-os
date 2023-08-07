@@ -35,6 +35,7 @@ export type WindowContextValue = [
 const WindowContext = createContext<WindowContextValue>([
   {
     title: "",
+    icon: "",
     topLeft: {
       x: 0,
       y: 0,

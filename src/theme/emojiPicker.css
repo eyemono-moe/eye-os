@@ -1,0 +1,33 @@
+.emoji-picker {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.emoji-section {
+}
+
+.emoji-section-title {
+}
+
+.emoji-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.emoji-button {
+  font-size: 24px;
+  width: 32px;
+  height: 32px;
+  text-align: center;
+  background: none;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.emoji-button:hover {
+  background: #aaa;
+}

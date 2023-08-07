@@ -12,6 +12,7 @@ export interface Position {
 
 export type WindowInfo = {
   title: string;
+  icon: string;
   topLeft: Position;
   bottomRight: Position;
   color: string;
@@ -37,7 +38,8 @@ export type WindowsContextValue = [
 const defaultState: WindowsContextState = {
   windows: [
     {
-      title: "🎮 Game",
+      title: "Game",
+      icon: "🎮",
       topLeft: {
         x: 16,
         y: 16,
@@ -55,7 +57,8 @@ const defaultState: WindowsContextState = {
       zIndex: 0,
     },
     {
-      title: "🕑 Clock",
+      title: "Clock",
+      icon: "🕑",
       topLeft: {
         x: 1128,
         y: 16,
@@ -70,7 +73,8 @@ const defaultState: WindowsContextState = {
       zIndex: 0,
     },
     {
-      title: "🗨️ Comments",
+      title: "Comments",
+      icon: "💬",
       topLeft: {
         x: 1143,
         y: 136,
@@ -85,7 +89,8 @@ const defaultState: WindowsContextState = {
       zIndex: 0,
     },
     {
-      title: "📝 Notes",
+      title: "Notes",
+      icon: "📝",
       topLeft: {
         x: 483,
         y: 717,

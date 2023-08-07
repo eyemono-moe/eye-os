@@ -15,6 +15,7 @@ import { primitiveColors } from "../../theme/color";
 import CloseButton from "./CloseButton";
 import EditButton from "./EditButton";
 import EditPopup from "./EditPopup";
+import EmojiButton from "./EmojiButton";
 import LoadingScreen from "./LoadingScreen";
 import MinimizeButton from "./MinimizeButton";
 import WindowContent from "./WindowContent";
@@ -310,6 +311,7 @@ const Window: ParentComponent = () => {
           "background-color": windowInfo.color,
         }}
       >
+        <EmojiButton />
         <Header ref={headerRef!}>
           <HeaderTitle>{windowInfo.title}</HeaderTitle>
         </Header>
