@@ -10,7 +10,7 @@ import { type Component, Show, onMount } from "solid-js";
 import { type SetStoreFunction } from "solid-js/store";
 
 import { type WindowInfo } from "../../contexts/useWindows";
-import { primitiveColors } from "../../theme/color";
+import { primitiveColors, semanticColors } from "../../theme/color";
 import { type WindowData } from "../windows/WindowContent";
 import { useWindow } from "../windows/Windows";
 
@@ -39,8 +39,7 @@ const Container = styled("div", {
     width: "100%",
     height: "100%",
     position: "relative",
-    backgroundColor: primitiveColors.black,
-    backgroundImage: `repeating-linear-gradient(-45deg, ${primitiveColors.gray[900]}, ${primitiveColors.gray[900]} 10px, transparent 0, transparent 20px)`,
+    background: semanticColors.ui.background,
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",

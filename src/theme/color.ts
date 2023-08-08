@@ -107,6 +107,7 @@ export const semanticColors = {
   },
   ui: {
     border: primitiveColors.gray[300],
-    background: primitiveColors.green[400],
+    hoverWhite: primitiveColors.whiteAlpha[400],
+    background: `repeating-linear-gradient(-45deg, #202626, #202626 10px, ${primitiveColors.black} 0, ${primitiveColors.black} 20px)`,
   },
 };

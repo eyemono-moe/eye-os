@@ -1,8 +1,7 @@
-import { mix, primitiveColors } from "../theme/color";
+import chroma from "chroma-js";
 
 const generateWindowColor = () => {
-  const random1 = Math.floor(Math.random() * 100);
-  return mix(primitiveColors.purple[400], primitiveColors.pink[400], random1);
+  return chroma.hsl(Math.floor(Math.random() * 360), 0.9, 0.6).hex();
 };
 
 export default generateWindowColor;

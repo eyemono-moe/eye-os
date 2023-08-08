@@ -1,4 +1,4 @@
-import { lazy, type Component, Suspense } from "solid-js";
+import { lazy, type Component, ErrorBoundary } from "solid-js";
 import { Dynamic } from "solid-js/web";
 
 import {
@@ -22,7 +22,7 @@ import {
   type NoteWindowData,
 } from "../windowContents/Note";
 
-import LoadingScreen from "./LoadingScreen";
+import ErrorScreen from "./ErrorScreen";
 import { useWindow } from "./Windows";
 
 export const windowContentsMap = {
@@ -58,9 +58,11 @@ export type WindowDataConcrete =
 const WindowContent: Component = () => {
   const [state] = useWindow();
   return (
-    <Suspense fallback={<LoadingScreen />}>
-      <Dynamic component={windowContentsMap[state.type]} />;
-    </Suspense>
+    <ErrorBoundary fallback={(err) => <ErrorScreen message={err} />}>
+      {/* <Suspense fallback={<LoadingScreen />}> */}
+        <Dynamic component={windowContentsMap[state.type]} />
+      {/* </Suspense> */}
+    </ErrorBoundary>
   );
 };
 

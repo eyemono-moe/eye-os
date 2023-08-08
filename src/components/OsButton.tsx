@@ -2,7 +2,7 @@ import { styled } from "@macaron-css/solid";
 import { type Component } from "solid-js";
 
 import { useWindows } from "../contexts/useWindows";
-import { primitiveColors } from "../theme/color";
+import { primitiveColors, semanticColors } from "../theme/color";
 
 const Container = styled("div", {
   base: {
@@ -12,7 +12,7 @@ const Container = styled("div", {
     cursor: "pointer",
     selectors: {
       "&:hover": {
-        backgroundColor: primitiveColors.whiteAlpha[400],
+        backgroundColor: semanticColors.ui.hoverWhite,
       },
     },
   },

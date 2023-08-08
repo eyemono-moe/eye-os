@@ -2,7 +2,7 @@ import { styled } from "@macaron-css/solid";
 import { type Component } from "solid-js";
 
 import useClock from "../../lib/useClock";
-import { primitiveColors } from "../../theme/color";
+import { primitiveColors, semanticColors } from "../../theme/color";
 import { type WindowData } from "../windows/WindowContent";
 
 export interface ClockWindowData extends WindowData {
@@ -25,8 +25,7 @@ const Container = styled("div", {
     width: "100%",
     height: "100%",
     lineHeight: "100%",
-    backgroundColor: primitiveColors.black,
-    backgroundImage: `repeating-linear-gradient(-45deg, ${primitiveColors.gray[900]}, ${primitiveColors.gray[900]} 10px, transparent 0, transparent 20px)`,
+    background: semanticColors.ui.background,
     color: primitiveColors.pink[400],
   },
 });

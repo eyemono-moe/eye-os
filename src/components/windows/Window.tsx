@@ -62,7 +62,6 @@ const Container = styled("div", {
     animationIterationCount: 1,
     animationFillMode: "forwards",
     pointerEvents: "auto",
-    userSelect: "none",
   },
 });
 

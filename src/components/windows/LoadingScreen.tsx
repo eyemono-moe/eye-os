@@ -1,14 +1,13 @@
 import { styled } from "@macaron-css/solid";
 import { type Component } from "solid-js";
 
-import { primitiveColors } from "../../theme/color";
+import { primitiveColors, semanticColors } from "../../theme/color";
 
 const Container = styled("div", {
   base: {
     width: "100%",
     height: "100%",
-    backgroundColor: primitiveColors.black,
-    backgroundImage: `repeating-linear-gradient(-45deg, ${primitiveColors.gray[900]}, ${primitiveColors.gray[900]} 10px, transparent 0, transparent 20px)`,
+    background: semanticColors.ui.background,
     display: "grid",
     placeItems: "center",
   },

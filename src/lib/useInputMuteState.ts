@@ -2,12 +2,10 @@ import { createResource } from "solid-js";
 
 import type OBSWebSocket from "obs-websocket-js";
 
-const MIC_INPUT_NAME = "マイク";
-
-const useMicMuteState = (obs: OBSWebSocket) => {
-  const getMicMuted = async (): Promise<boolean> => {
+const useMicMuteState = (obs: OBSWebSocket, inputName: string = "マイク") => {
+  const getInputMuted = async (): Promise<boolean> => {
     const res = await obs.call("GetInputMute", {
-      inputName: MIC_INPUT_NAME,
+      inputName,
     });
     if (res == null) {
       throw new Error("Failed to get mic mute status");
@@ -15,11 +13,11 @@ const useMicMuteState = (obs: OBSWebSocket) => {
     return res.inputMuted;
   };
 
-  const [isMuted, { refetch, mutate }] = createResource(getMicMuted);
+  const [isMuted, { refetch, mutate }] = createResource(getInputMuted);
 
-  const toggleMicMute = async () => {
+  const toggleMute = async () => {
     const res = await obs.call("ToggleInputMute", {
-      inputName: MIC_INPUT_NAME,
+      inputName,
     });
     if (res == null) {
       throw new Error("Failed to toggle mic mute");
@@ -31,14 +29,14 @@ const useMicMuteState = (obs: OBSWebSocket) => {
     inputName: string;
     inputMuted: boolean;
   }) => {
-    if (data.inputName === MIC_INPUT_NAME) {
+    if (data.inputName === inputName) {
       mutate(data.inputMuted);
     }
   };
 
   obs.on("InputMuteStateChanged", handleInputMuteStateChanged);
 
-  return { isMuted, toggleMicMute };
+  return { isMuted, toggleMute };
 };
 
 export default useMicMuteState;

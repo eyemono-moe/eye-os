@@ -4,7 +4,7 @@ import { type Component } from "solid-js";
 
 import { useWindows } from "../contexts/useWindows";
 import generateWindowColor from "../lib/generateWindowColor";
-import { primitiveColors } from "../theme/color";
+import { semanticColors } from "../theme/color";
 
 const Container = styled("div", {
   base: {
@@ -14,7 +14,7 @@ const Container = styled("div", {
     cursor: "pointer",
     selectors: {
       "&:hover": {
-        backgroundColor: primitiveColors.whiteAlpha[400],
+        backgroundColor: semanticColors.ui.hoverWhite,
       },
     },
   },
@@ -44,7 +44,7 @@ const AddWindowButton: Component = () => {
         });
       }}
     >
-      <FaSolidPlus fill={primitiveColors.white} size={24} />
+      <FaSolidPlus fill={semanticColors.text.white} size={24} />
     </Container>
   );
 };

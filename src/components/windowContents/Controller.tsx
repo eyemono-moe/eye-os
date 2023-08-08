@@ -1,14 +1,18 @@
 import { styled } from "@macaron-css/solid";
 import {
+  FaSolidArrowRotateRight,
   FaSolidMicrophone,
   FaSolidMicrophoneSlash,
-  FaSolidArrowRotateRight,
+  FaSolidVolumeHigh,
+  FaSolidVolumeXmark,
 } from "solid-icons/fa";
 import { Show, type Component, type ResourceActions } from "solid-js";
 
 import { useController } from "../../contexts/useObsWebSocket";
-import useMicMuteState from "../../lib/useMicMuteState";
-import { primitiveColors } from "../../theme/color";
+import useInputMuteState from "../../lib/useInputMuteState";
+import useInputVolume from "../../lib/useInputVolume";
+import { primitiveColors, semanticColors } from "../../theme/color";
+import RoundSlider from "../RoundSlider";
 import LoadingScreen from "../windows/LoadingScreen";
 import { type WindowData } from "../windows/WindowContent";
 
@@ -27,8 +31,7 @@ const Container = styled("div", {
     width: "100%",
     height: "100%",
     position: "relative",
-    backgroundColor: primitiveColors.black,
-    backgroundImage: `repeating-linear-gradient(-45deg, ${primitiveColors.gray[900]}, ${primitiveColors.gray[900]} 10px, transparent 0, transparent 20px)`,
+    background: semanticColors.ui.background,
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
@@ -42,13 +45,32 @@ const Button = styled("button", {
     width: "64px",
     height: "64px",
     borderRadius: "50%",
-    backgroundColor: primitiveColors.gray[900],
-    border: "none",
+    backgroundColor: primitiveColors.black,
+    borderColor: primitiveColors.pink[400],
+    borderWidth: "4px",
     outline: "none",
     cursor: "pointer",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    zIndex: "1",
+    selectors: {
+      "&:hover": {
+        backgroundColor: primitiveColors.gray[900],
+      },
+    },
+  },
+});
+
+const SliderContainer = styled("div", {
+  base: {
+    width: "128px",
+    height: "128px",
+    position: "relative",
+    display: "grid",
+    placeItems: "center",
+    gridTemplateColumns: "1fr",
+    gridTemplateRows: "1fr",
   },
 });
 
@@ -66,24 +88,78 @@ const Controller: Component<{
   obs: OBSWebSocket;
   refetch: ResourceActions<OBSWebSocket | unknown, unknown>["refetch"];
 }> = (props) => {
-  const { isMuted, toggleMicMute } = useMicMuteState(props.obs);
+  const { isMuted: isMicMuted, toggleMute: toggleMicMute } = useInputMuteState(
+    props.obs,
+    "マイク",
+  );
+  const { volume: micVolume, setVolume: setMicVolume } = useInputVolume(
+    props.obs,
+    "マイク",
+  );
+  const { isMuted: isDesktopMuted, toggleMute: toggleDesktopMute } =
+    useInputMuteState(props.obs, "デスクトップ音声");
+  const { volume: desktopVolume, setVolume: setdesktopVolume } = useInputVolume(
+    props.obs,
+    "デスクトップ音声",
+  );
 
   return (
     <Container>
-      <Button
-        onClick={() => {
-          void toggleMicMute();
-        }}
-      >
-        <Show
-          when={isMuted()}
-          fallback={
-            <FaSolidMicrophone size={36} fill={primitiveColors.green[400]} />
-          }
+      <SliderContainer>
+        <RoundSlider
+          value={() => desktopVolume()!}
+          setter={(value) => {
+            void setdesktopVolume(value);
+          }}
+          min={-100}
+          max={26}
+          step={1}
+          startAngle={45}
+        />
+        <Button
+          onClick={() => {
+            void toggleDesktopMute();
+          }}
         >
-          <FaSolidMicrophoneSlash size={46} fill={primitiveColors.pink[400]} />
-        </Show>
-      </Button>
+          <Show
+            when={isDesktopMuted()}
+            fallback={
+              <FaSolidVolumeHigh size={46} fill={primitiveColors.green[400]} />
+            }
+          >
+            <FaSolidVolumeXmark size={44} fill={primitiveColors.pink[400]} />
+          </Show>
+        </Button>
+      </SliderContainer>
+      <SliderContainer>
+        <RoundSlider
+          value={() => micVolume()!}
+          setter={(value) => {
+            void setMicVolume(value);
+          }}
+          min={-100}
+          max={26}
+          step={1}
+          startAngle={45}
+        />
+        <Button
+          onClick={() => {
+            void toggleMicMute();
+          }}
+        >
+          <Show
+            when={isMicMuted()}
+            fallback={
+              <FaSolidMicrophone size={36} fill={primitiveColors.green[400]} />
+            }
+          >
+            <FaSolidMicrophoneSlash
+              size={46}
+              fill={primitiveColors.pink[400]}
+            />
+          </Show>
+        </Button>
+      </SliderContainer>
       <Button
         onClick={() => {
           void props.refetch();
