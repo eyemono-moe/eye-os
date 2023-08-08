@@ -102,11 +102,11 @@ const Note: Component = () => {
   }
 
   const increaseFontSize = () => {
-    setState("windows", index(), "option", "fontSize", (s) => s + 8);
+    setState("windows", index(), "option", "fontSize", (s) => s + 4);
   };
   const decreaseFontSize = () => {
     setState("windows", index(), "option", "fontSize", (s) =>
-      Math.max(s - 8, 16),
+      Math.max(s - 4, 16),
     );
   };
   const clearContent = () => {
