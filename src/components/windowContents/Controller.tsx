@@ -8,7 +8,8 @@ import {
 } from "solid-icons/fa";
 import { Show, type Component, type ResourceActions } from "solid-js";
 
-import { useController } from "../../contexts/useObsWebSocket";
+import { DESKTOP_INPUT_NAME, MIC_INPUT_NAME } from "../../consts";
+import { useObsWebSocket } from "../../contexts/useObsWebSocket";
 import useInputMuteState from "../../lib/useInputMuteState";
 import useInputVolume from "../../lib/useInputVolume";
 import { primitiveColors, semanticColors } from "../../theme/color";
@@ -75,14 +76,14 @@ const SliderContainer = styled("div", {
 });
 
 const OBSProvider: Component = () => {
-  const controller = useController();
+  const obsResource = useObsWebSocket();
   return (
     <Show
-      when={controller != null && controller[0].state === "ready"}
+      when={obsResource != null && obsResource[0].state === "ready"}
       fallback={<LoadingScreen />}
     >
       {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
-      <Controller obs={controller![0]()!} refetch={controller![1].refetch} />
+      <Controller obs={obsResource![0]()!} refetch={obsResource![1].refetch} />
     </Show>
   );
 };
@@ -93,17 +94,17 @@ const Controller: Component<{
 }> = (props) => {
   const { isMuted: isMicMuted, toggleMute: toggleMicMute } = useInputMuteState(
     props.obs,
-    "マイク",
+    MIC_INPUT_NAME,
   );
   const { volume: micVolume, setVolume: setMicVolume } = useInputVolume(
     props.obs,
-    "マイク",
+    MIC_INPUT_NAME,
   );
   const { isMuted: isDesktopMuted, toggleMute: toggleDesktopMute } =
     useInputMuteState(props.obs, "デスクトップ音声");
   const { volume: desktopVolume, setVolume: setDesktopVolume } = useInputVolume(
     props.obs,
-    "デスクトップ音声",
+    DESKTOP_INPUT_NAME,
   );
 
   return (

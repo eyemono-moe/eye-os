@@ -1,4 +1,4 @@
-import OBSWebSocket from "obs-websocket-js";
+import OBSWebSocket, { EventSubscription } from "obs-websocket-js";
 import {
   type ParentComponent,
   createContext,
@@ -18,6 +18,7 @@ const connect = async () => {
       "9768oIJoX4OUlvnW",
       {
         rpcVersion: 1,
+        eventSubscriptions: EventSubscription.SceneItemTransformChanged,
       },
     );
     logger.log(
@@ -29,18 +30,18 @@ const connect = async () => {
   return obs;
 };
 
-export type ControllerContextValue = ResourceReturn<OBSWebSocket>;
+export type ObsWebSocketContextValue = ResourceReturn<OBSWebSocket>;
 
-const ControllerContext = createContext<ControllerContextValue>();
+const ObsWebSocketContext = createContext<ObsWebSocketContextValue>();
 
-export const ControllerProvider: ParentComponent = (props) => {
+export const ObsWebSocketProvider: ParentComponent = (props) => {
   const obsResource = createResource(async () => await connect());
 
   return (
-    <ControllerContext.Provider value={obsResource}>
+    <ObsWebSocketContext.Provider value={obsResource}>
       {props.children}
-    </ControllerContext.Provider>
+    </ObsWebSocketContext.Provider>
   );
 };
 
-export const useController = () => useContext(ControllerContext);
+export const useObsWebSocket = () => useContext(ObsWebSocketContext);
