@@ -125,7 +125,12 @@ const defaultState: WindowsContextState = {
         y: 1031,
       },
       color: "#e133e1",
-      type: "empty",
+      type: "note",
+      option: {
+        alignment: "center",
+        content: "",
+        fontSize: 24,
+      },
     },
     {
       title: "Icon.svg",
