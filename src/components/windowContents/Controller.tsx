@@ -75,11 +75,14 @@ const SliderContainer = styled("div", {
 });
 
 const OBSProvider: Component = () => {
-  const [obs, { refetch }] = useController();
+  const controller = useController();
   return (
-    <Show when={obs.state === "ready"} fallback={<LoadingScreen />}>
+    <Show
+      when={controller != null && controller[0].state === "ready"}
+      fallback={<LoadingScreen />}
+    >
       {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
-      <Controller obs={obs()!} refetch={refetch} />
+      <Controller obs={controller![0]()!} refetch={controller![1].refetch} />
     </Show>
   );
 };
