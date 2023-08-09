@@ -7,8 +7,10 @@ import {
   useContext,
 } from "solid-js";
 
+import { logger } from "../lib/useLog";
+
 const connect = async () => {
-  console.log("Connecting to OBS WebSocket");
+  logger.log("Connecting to OBS WebSocket");
   const obs = new OBSWebSocket();
   try {
     const { obsWebSocketVersion, negotiatedRpcVersion } = await obs.connect(
@@ -18,21 +20,18 @@ const connect = async () => {
         rpcVersion: 1,
       },
     );
-    console.log(
+    logger.log(
       `Connected to server ${obsWebSocketVersion} (using RPC ${negotiatedRpcVersion})`,
     );
   } catch (error) {
-    console.error("Failed to connect");
-    console.error(error);
+    logger.error("Failed to connect");
   }
   return obs;
 };
 
 export type ControllerContextValue = ResourceReturn<OBSWebSocket>;
 
-const ControllerContext = createContext<ControllerContextValue>(
-  createResource(async () => await connect()),
-);
+const ControllerContext = createContext<ControllerContextValue>();
 
 export const ControllerProvider: ParentComponent = (props) => {
   const obsResource = createResource(async () => await connect());

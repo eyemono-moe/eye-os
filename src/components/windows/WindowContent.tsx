@@ -18,6 +18,10 @@ import {
   type EmptyWindowData,
 } from "../windowContents/Empty";
 import {
+  type LogWindowData,
+  defaultLogWindowData,
+} from "../windowContents/Log";
+import {
   defaultNoteWindowData,
   type NoteWindowData,
 } from "../windowContents/Note";
@@ -30,6 +34,7 @@ export const windowContentsMap = {
   color: lazy(async () => await import("../windowContents/Color")),
   controller: lazy(async () => await import("../windowContents/Controller")),
   empty: lazy(async () => await import("../windowContents/Empty")),
+  log: lazy(async () => await import("../windowContents/Log")),
   note: lazy(async () => await import("../windowContents/Note")),
 };
 
@@ -45,6 +50,7 @@ export const defaultWindowData: Record<WindowType, WindowData> = {
   color: defaultColorWindowData,
   controller: defaultControllerWindowData,
   empty: defaultEmptyWindowData,
+  log: defaultLogWindowData,
   note: defaultNoteWindowData,
 };
 
@@ -53,6 +59,7 @@ export type WindowDataConcrete =
   | ColorWindowData
   | ControllerWindowData
   | EmptyWindowData
+  | LogWindowData
   | NoteWindowData;
 
 const WindowContent: Component = () => {
@@ -60,7 +67,7 @@ const WindowContent: Component = () => {
   return (
     <ErrorBoundary fallback={(err) => <ErrorScreen message={err} />}>
       {/* <Suspense fallback={<LoadingScreen />}> */}
-        <Dynamic component={windowContentsMap[state.type]} />
+      <Dynamic component={windowContentsMap[state.type]} />
       {/* </Suspense> */}
     </ErrorBoundary>
   );
