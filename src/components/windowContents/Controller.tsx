@@ -98,7 +98,7 @@ const Controller: Component<{
   );
   const { isMuted: isDesktopMuted, toggleMute: toggleDesktopMute } =
     useInputMuteState(props.obs, "デスクトップ音声");
-  const { volume: desktopVolume, setVolume: setdesktopVolume } = useInputVolume(
+  const { volume: desktopVolume, setVolume: setDesktopVolume } = useInputVolume(
     props.obs,
     "デスクトップ音声",
   );
@@ -107,9 +107,9 @@ const Controller: Component<{
     <Container>
       <SliderContainer>
         <RoundSlider
-          value={() => desktopVolume()!}
+          value={() => desktopVolume() ?? 0}
           setter={(value) => {
-            void setdesktopVolume(value);
+            void setDesktopVolume(value);
           }}
           min={-100}
           max={26}
@@ -133,7 +133,7 @@ const Controller: Component<{
       </SliderContainer>
       <SliderContainer>
         <RoundSlider
-          value={() => micVolume()!}
+          value={() => micVolume() ?? 0}
           setter={(value) => {
             void setMicVolume(value);
           }}
