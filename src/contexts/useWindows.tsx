@@ -4,19 +4,17 @@ import { produce, type SetStoreFunction } from "solid-js/store";
 import { type WindowDataConcrete } from "../components/windows/WindowContent";
 import { createLocalStore } from "../lib/createLocalStore";
 
-export interface Position {
-  x: number;
-  y: number;
-}
-
 export type WindowInfo = {
   title: string;
   icon: string;
-  topLeft: Position;
-  bottomRight: Position;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
   color: string;
   minimized: boolean;
   zIndex: number;
+  linkSceneItemId?: number;
 } & WindowDataConcrete;
 
 export interface WindowsContextState {
@@ -39,14 +37,10 @@ const defaultState: WindowsContextState = {
     {
       title: "Game",
       icon: "🎮",
-      topLeft: {
-        x: 16,
-        y: 16,
-      },
-      bottomRight: {
-        x: 1416,
-        y: 803,
-      },
+      x: 16,
+      y: 16,
+      width: 1600,
+      height: 900,
       color: "#db33ea",
       minimized: false,
       type: "color",
@@ -58,14 +52,10 @@ const defaultState: WindowsContextState = {
     {
       title: "Clock",
       icon: "🕑",
-      topLeft: {
-        x: 1503,
-        y: 19.5,
-      },
-      bottomRight: {
-        x: 1890,
-        y: 194.5,
-      },
+      x: 1500,
+      y: 20,
+      width: 300,
+      height: 160,
       color: "#da33eb",
       minimized: false,
       type: "clock",
@@ -74,14 +64,10 @@ const defaultState: WindowsContextState = {
     {
       title: "Comments",
       icon: "💬",
-      topLeft: {
-        x: 1443,
-        y: 210,
-      },
-      bottomRight: {
-        x: 1889,
-        y: 682,
-      },
+      x: 1443,
+      y: 210,
+      width: 400,
+      height: 400,
       color: "#f133ca",
       minimized: false,
       type: "color",
@@ -93,14 +79,10 @@ const defaultState: WindowsContextState = {
     {
       title: "Info",
       icon: "ℹ️",
-      topLeft: {
-        x: 470,
-        y: 825,
-      },
-      bottomRight: {
-        x: 931,
-        y: 1014,
-      },
+      x: 470,
+      y: 825,
+      width: 500,
+      height: 200,
       color: "#f233ca",
       minimized: false,
       type: "note",
@@ -116,14 +98,10 @@ const defaultState: WindowsContextState = {
       icon: "📝",
       minimized: false,
       zIndex: 4,
-      topLeft: {
-        x: 928,
-        y: 744,
-      },
-      bottomRight: {
-        x: 1497,
-        y: 1031,
-      },
+      x: 928,
+      y: 744,
+      width: 500,
+      height: 300,
       color: "#e133e1",
       type: "note",
       option: {
@@ -137,14 +115,10 @@ const defaultState: WindowsContextState = {
       icon: "😃",
       minimized: false,
       zIndex: 3,
-      topLeft: {
-        x: 1502,
-        y: 670,
-      },
-      bottomRight: {
-        x: 1861,
-        y: 1054,
-      },
+      x: 1502,
+      y: 670,
+      width: 300,
+      height: 300,
       color: "#de33e5",
       type: "color",
       option: {

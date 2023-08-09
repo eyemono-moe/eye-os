@@ -8,7 +8,6 @@ import {
   type ParentComponent,
 } from "solid-js";
 
-import { type Position } from "../../contexts/useWindows";
 import usePopup from "../../lib/usePopup";
 import { primitiveColors } from "../../theme/color";
 
@@ -175,52 +174,57 @@ const Window: ParentComponent = () => {
   const [windowInfo, { setState, setTop, removeWindow, index }] = useWindow()!;
   const { Popup, open } = usePopup();
 
-  const [offsetPosition, setOffsetPosition] = createSignal<Position>({
+  const [offsetPosition, setOffsetPosition] = createSignal<{
+    x: number;
+    y: number;
+  }>({
     x: 0,
     y: 0,
   });
 
   const handlePointerMoveOnLeft = (e: PointerEvent) => {
     let newX = e.pageX - offsetPosition().x;
-    if (windowInfo.bottomRight.x - newX < MIN_WIDTH) {
-      newX = windowInfo.bottomRight.x - MIN_WIDTH;
+    let newWidth = windowInfo.width + windowInfo.x - newX;
+    if (newWidth < MIN_WIDTH) {
+      newX = windowInfo.x + windowInfo.width - MIN_WIDTH;
+      newWidth = MIN_WIDTH;
     }
-    setState("windows", index(), "topLeft", "x", newX);
+    setState("windows", index(), "x", newX);
+    setState("windows", index(), "width", newWidth);
   };
 
   const handlePointerMoveOnTop = (e: PointerEvent) => {
     let newY = e.pageY - offsetPosition().y;
-    if (windowInfo.bottomRight.y - newY < MIN_HEIGHT) {
-      newY = windowInfo.bottomRight.y - MIN_HEIGHT;
+    let newHeight = windowInfo.height + windowInfo.y - newY;
+    if (newHeight < MIN_HEIGHT) {
+      newY = windowInfo.y + windowInfo.height - MIN_HEIGHT;
+      newHeight = MIN_HEIGHT;
     }
-    setState("windows", index(), "topLeft", "y", newY);
+    setState("windows", index(), "y", newY);
+    setState("windows", index(), "height", newHeight);
   };
 
   const handlePointerMoveOnRight = (e: PointerEvent) => {
-    let newX = e.pageX - offsetPosition().x + edgeWidth;
-    if (newX - windowInfo.topLeft.x < MIN_WIDTH) {
-      newX = windowInfo.topLeft.x + MIN_WIDTH;
+    let newWidth = e.pageX - windowInfo.x - offsetPosition().x;
+    if (newWidth < MIN_WIDTH) {
+      newWidth = MIN_WIDTH;
     }
-    setState("windows", index(), "bottomRight", "x", newX);
+    setState("windows", index(), "width", newWidth);
   };
 
   const handlePointerMoveOnBottom = (e: PointerEvent) => {
-    let newY = e.pageY - offsetPosition().y + edgeWidth;
-    if (newY - windowInfo.topLeft.y < MIN_WIDTH) {
-      newY = windowInfo.topLeft.y + MIN_WIDTH;
+    let newHeight = e.pageY - windowInfo.y - offsetPosition().y;
+    if (newHeight < MIN_HEIGHT) {
+      newHeight = MIN_HEIGHT;
     }
-    setState("windows", index(), "bottomRight", "y", newY);
+    setState("windows", index(), "height", newHeight);
   };
 
   const handleHeaderMove = (e: PointerEvent) => {
-    const deltaX =
-      e.pageX - windowInfo.topLeft.x - offsetPosition().x - edgeWidth - 32;
-    const deltaY =
-      e.pageY - windowInfo.topLeft.y - offsetPosition().y - edgeWidth;
-    setState("windows", index(), "topLeft", "x", (p) => p + deltaX);
-    setState("windows", index(), "topLeft", "y", (p) => p + deltaY);
-    setState("windows", index(), "bottomRight", "x", (p) => p + deltaX);
-    setState("windows", index(), "bottomRight", "y", (p) => p + deltaY);
+    const deltaX = e.pageX - windowInfo.x - offsetPosition().x - edgeWidth - 32;
+    const deltaY = e.pageY - windowInfo.y - offsetPosition().y - edgeWidth;
+    setState("windows", index(), "x", (p) => p + deltaX);
+    setState("windows", index(), "y", (p) => p + deltaY);
   };
 
   const handlePointerDown = (
@@ -281,10 +285,10 @@ const Window: ParentComponent = () => {
   return (
     <Container
       style={{
-        height: `${windowInfo.bottomRight.y - windowInfo.topLeft.y}px`,
-        left: `${windowInfo.topLeft.x}px`,
-        top: `${windowInfo.topLeft.y}px`,
-        width: `${windowInfo.bottomRight.x - windowInfo.topLeft.x}px`,
+        height: `${windowInfo.height}px`,
+        left: `${windowInfo.x}px`,
+        top: `${windowInfo.y}px`,
+        width: `${windowInfo.width}px`,
         "animation-name": windowInfo.minimized
           ? MinimizeAnimation
           : MaximizeAnimation,

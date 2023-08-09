@@ -31,14 +31,10 @@ const AddWindowButton: Component = () => {
           icon: "📄",
           minimized: false,
           zIndex: state.windows.length - 1,
-          topLeft: {
-            x: 100,
-            y: 100,
-          },
-          bottomRight: {
-            x: 420,
-            y: 280,
-          },
+          x: 100,
+          y: 100,
+          width: 420,
+          height: 280,
           color: generateWindowColor(),
           type: "empty",
         });

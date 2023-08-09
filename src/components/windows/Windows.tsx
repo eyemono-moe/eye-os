@@ -36,14 +36,10 @@ const WindowContext = createContext<WindowContextValue>([
   {
     title: "",
     icon: "",
-    topLeft: {
-      x: 0,
-      y: 0,
-    },
-    bottomRight: {
-      x: 0,
-      y: 0,
-    },
+    x: 0,
+    y: 0,
+    width: 300,
+    height: 200,
     color: "",
     minimized: false,
     type: "empty",
