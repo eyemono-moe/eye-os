@@ -18,8 +18,8 @@ const Container = styled("div", {
 const NamePlateContainer = styled("div", {
   base: {
     position: "absolute",
-    bottom: "16px",
-    left: "16px",
+    bottom: "8px",
+    left: "8px",
   },
 });
 
