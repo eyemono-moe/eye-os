@@ -42,11 +42,15 @@ const Color: Component = () => {
 
   return (
     <Container
-      onClick={(e) => {
+      onPointerDown={(e) => {
+        if (e.button !== 2) return;
         open({
           x: e.clientX,
           y: e.clientY,
         });
+      }}
+      onContextMenu={(e) => {
+        e.preventDefault();
       }}
       style={{
         "background-color": state.option.color,
