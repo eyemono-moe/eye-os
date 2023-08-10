@@ -3,7 +3,7 @@ import { globalStyle } from "@macaron-css/core";
 import { render } from "solid-js/web";
 
 import App from "./App";
-import { semanticColors } from "./theme/color";
+import { primitiveColors, semanticColors } from "./theme/color";
 import { fontFamily } from "./theme/font";
 
 const root = document.getElementById("root");
@@ -21,4 +21,8 @@ globalStyle("*, *:before, *:after", {
   boxSizing: "border-box",
   margin: "0",
   padding: "0",
+});
+
+globalStyle("::selection", {
+  backgroundColor: `${primitiveColors.pink[400]}80`,
 });
