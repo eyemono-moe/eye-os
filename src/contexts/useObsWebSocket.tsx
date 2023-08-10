@@ -5,6 +5,7 @@ import {
   createResource,
   type ResourceReturn,
   useContext,
+  Show,
 } from "solid-js";
 
 import { logger } from "../lib/useLog";
@@ -36,11 +37,11 @@ export type ObsWebSocketContextValue = ResourceReturn<OBSWebSocket>;
 const ObsWebSocketContext = createContext<ObsWebSocketContextValue>();
 
 export const ObsWebSocketProvider: ParentComponent = (props) => {
-  const obsResource = createResource(async () => await connect());
+  const [obs, actions] = createResource(async () => await connect());
 
   return (
-    <ObsWebSocketContext.Provider value={obsResource}>
-      {props.children}
+    <ObsWebSocketContext.Provider value={[obs, actions]}>
+      <Show when={obs.state === "ready"}>{props.children}</Show>
     </ObsWebSocketContext.Provider>
   );
 };

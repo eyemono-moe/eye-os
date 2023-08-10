@@ -2,13 +2,11 @@
 import { keyframes } from "@macaron-css/core";
 import { styled } from "@macaron-css/solid";
 import {
-  type Component,
   createSignal,
   ErrorBoundary,
   onMount,
-  Show,
-  type ParentComponent,
   createEffect,
+  type Component,
 } from "solid-js";
 
 import { MAIN_SCENE_NAME } from "../../consts";
@@ -25,8 +23,6 @@ import LoadingScreen from "./LoadingScreen";
 import MinimizeButton from "./MinimizeButton";
 import WindowContent from "./WindowContent";
 import { useWindow } from "./Windows";
-
-import type OBSWebSocket from "obs-websocket-js";
 
 const MIN_WIDTH = 100;
 const MIN_HEIGHT = 100;
@@ -168,22 +164,7 @@ const ContentWrapper = styled("div", {
   },
 });
 
-const OBSProvider: Component = () => {
-  const obsResource = useObsWebSocket();
-  return (
-    <Show
-      when={obsResource != null && obsResource[0].state === "ready"}
-      fallback={<LoadingScreen />}
-    >
-      {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
-      <Window obs={obsResource![0]()!} />
-    </Show>
-  );
-};
-
-const Window: ParentComponent<{
-  obs: OBSWebSocket;
-}> = (props) => {
+const Window: Component = () => {
   let headerRef: HTMLDivElement;
   let topLeftRef: HTMLDivElement;
   let topRef: HTMLDivElement;
@@ -205,7 +186,8 @@ const Window: ParentComponent<{
     y: 0,
   });
 
-  const transformFactory = useSceneItemTransform(props.obs, MAIN_SCENE_NAME);
+  const [obs] = useObsWebSocket()!;
+  const transformFactory = useSceneItemTransform(obs()!, MAIN_SCENE_NAME);
   const { transform, setTransform } = transformFactory(
     () => windowInfo.linkSceneItemId ?? 999,
   );
@@ -380,6 +362,7 @@ const Window: ParentComponent<{
           : MaximizeAnimation,
         "z-index": windowInfo.zIndex,
       }}
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       onPointerDown={setTop}
     >
       <Background
@@ -431,4 +414,4 @@ const Window: ParentComponent<{
   );
 };
 
-export default OBSProvider;
+export default Window;

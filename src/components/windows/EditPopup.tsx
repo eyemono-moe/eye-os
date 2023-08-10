@@ -1,16 +1,14 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { styled } from "@macaron-css/solid";
-import { For, type Component, Show } from "solid-js";
+import { For, Show } from "solid-js";
 
 import { MAIN_SCENE_NAME } from "../../consts";
 import { useObsWebSocket } from "../../contexts/useObsWebSocket";
 import useSceneItems from "../../lib/useSceneItems";
 import { primitiveColors } from "../../theme/color";
 
-import LoadingScreen from "./LoadingScreen";
 import { type WindowType, defaultWindowData } from "./WindowContent";
 import { useWindow } from "./Windows";
-
-import type OBSWebSocket from "obs-websocket-js";
 
 const Container = styled("div", {
   base: {
@@ -35,24 +33,10 @@ const Ul = styled("ul", {
   },
 });
 
-const OBSProvider: Component = () => {
-  const obsResource = useObsWebSocket();
-  return (
-    <Show
-      when={obsResource != null && obsResource[0].state === "ready"}
-      fallback={<LoadingScreen />}
-    >
-      {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
-      <EditPopup obs={obsResource![0]()!} />
-    </Show>
-  );
-};
-
-const EditPopup: Component<{
-  obs: OBSWebSocket;
-}> = (props) => {
+const EditPopup = () => {
   const [store, { setState, index }] = useWindow();
-  const { sceneItems } = useSceneItems(props.obs, MAIN_SCENE_NAME);
+  const [obs] = useObsWebSocket()!;
+  const { sceneItems } = useSceneItems(obs()!, MAIN_SCENE_NAME);
 
   return (
     <Container>
@@ -127,4 +111,4 @@ const EditPopup: Component<{
   );
 };
 
-export default OBSProvider;
+export default EditPopup;

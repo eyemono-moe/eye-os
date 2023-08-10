@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { styled } from "@macaron-css/solid";
-import { For, type Component, createContext, useContext, Show } from "solid-js";
+import { For, type Component, createContext, useContext } from "solid-js";
 import { type SetStoreFunction } from "solid-js/store";
 
 import { MAIN_SCENE_NAME } from "../../consts";
@@ -12,10 +13,7 @@ import {
 import useSceneItemIndex from "../../lib/useSceneItemIndex";
 import useSceneItems from "../../lib/useSceneItems";
 
-import LoadingScreen from "./LoadingScreen";
 import Window from "./Window";
-
-import type OBSWebSocket from "obs-websocket-js";
 
 const Container = styled("div", {
   base: {
@@ -63,25 +61,11 @@ const WindowContext = createContext<WindowContextValue>([
   },
 ]);
 
-const OBSProvider: Component = () => {
-  const obsResource = useObsWebSocket();
-  return (
-    <Show
-      when={obsResource != null && obsResource[0].state === "ready"}
-      fallback={<LoadingScreen />}
-    >
-      {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
-      <Windows obs={obsResource![0]()!} />
-    </Show>
-  );
-};
-
-const Windows: Component<{
-  obs: OBSWebSocket;
-}> = (props) => {
+const Windows: Component = () => {
   const [state, { setState, removeWindow, setTop }] = useWindows();
-  const sceneItemIndexFactory = useSceneItemIndex(props.obs, MAIN_SCENE_NAME);
-  const { sceneItems } = useSceneItems(props.obs, MAIN_SCENE_NAME);
+  const [obs] = useObsWebSocket()!;
+  const sceneItemIndexFactory = useSceneItemIndex(obs()!, MAIN_SCENE_NAME);
+  const { sceneItems } = useSceneItems(obs()!, MAIN_SCENE_NAME);
   const setTopInObs = async (index: number) => {
     const { setIndex } = sceneItemIndexFactory(() => index);
     if (sceneItems.state === "ready") {
@@ -123,4 +107,4 @@ const Windows: Component<{
 
 export const useWindow = () => useContext(WindowContext);
 
-export default OBSProvider;
+export default Windows;

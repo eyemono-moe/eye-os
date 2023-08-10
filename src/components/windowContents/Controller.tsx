@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { styled } from "@macaron-css/solid";
 import {
   FaSolidArrowRotateRight,
@@ -6,7 +7,7 @@ import {
   FaSolidVolumeHigh,
   FaSolidVolumeXmark,
 } from "solid-icons/fa";
-import { Show, type Component, type ResourceActions } from "solid-js";
+import { Show, type Component } from "solid-js";
 
 import { DESKTOP_INPUT_NAME, MIC_INPUT_NAME } from "../../consts";
 import { useObsWebSocket } from "../../contexts/useObsWebSocket";
@@ -14,10 +15,7 @@ import useInputMuteState from "../../lib/useInputMuteState";
 import useInputVolume from "../../lib/useInputVolume";
 import { primitiveColors, semanticColors } from "../../theme/color";
 import RoundSlider from "../RoundSlider";
-import LoadingScreen from "../windows/LoadingScreen";
 import { type WindowData } from "../windows/WindowContent";
-
-import type OBSWebSocket from "obs-websocket-js";
 
 export interface ControllerWindowData extends WindowData {
   type: "controller";
@@ -85,35 +83,20 @@ const SliderWrapper = styled("div", {
   },
 });
 
-const OBSProvider: Component = () => {
-  const obsResource = useObsWebSocket();
-  return (
-    <Show
-      when={obsResource != null && obsResource[0].state === "ready"}
-      fallback={<LoadingScreen />}
-    >
-      {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
-      <Controller obs={obsResource![0]()!} refetch={obsResource![1].refetch} />
-    </Show>
-  );
-};
-
-const Controller: Component<{
-  obs: OBSWebSocket;
-  refetch: ResourceActions<OBSWebSocket | unknown, unknown>["refetch"];
-}> = (props) => {
+const Controller: Component = () => {
+  const [obs, { refetch }] = useObsWebSocket()!;
   const { isMuted: isMicMuted, toggleMute: toggleMicMute } = useInputMuteState(
-    props.obs,
+    obs()!,
     MIC_INPUT_NAME,
   );
   const { volume: micVolume, setVolume: setMicVolume } = useInputVolume(
-    props.obs,
+    obs()!,
     MIC_INPUT_NAME,
   );
   const { isMuted: isDesktopMuted, toggleMute: toggleDesktopMute } =
-    useInputMuteState(props.obs, "デスクトップ音声");
+    useInputMuteState(obs()!, "デスクトップ音声");
   const { volume: desktopVolume, setVolume: setDesktopVolume } = useInputVolume(
-    props.obs,
+    obs()!,
     DESKTOP_INPUT_NAME,
   );
 
@@ -182,7 +165,7 @@ const Controller: Component<{
       </SliderContainer>
       <Button
         onClick={() => {
-          void props.refetch();
+          void refetch();
         }}
       >
         <FaSolidArrowRotateRight size={24} fill={primitiveColors.white} />
@@ -191,4 +174,4 @@ const Controller: Component<{
   );
 };
 
-export default OBSProvider;
+export default Controller;
