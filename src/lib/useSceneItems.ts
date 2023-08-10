@@ -13,7 +13,7 @@ const useSceneItems = (obs: OBSWebSocket, sceneName: string) => {
     return res.sceneItems;
   };
 
-  const [sceneItems, { refetch, mutate }] = createResource(getSceneItems);
+  const [sceneItems] = createResource(getSceneItems);
 
   // obs.on("SceneItemCreated", (data) => {
   //   if (sceneItems.state === "ready") {

@@ -15,7 +15,7 @@ const useSceneItemIndex = (obs: OBSWebSocket, sceneName: string) => {
       return res.sceneItemIndex;
     };
 
-    const [sceneItemIndex, { refetch, mutate }] = createResource(
+    const [sceneItemIndex, { refetch }] = createResource(
       sceneItemId,
       getSceneItemIndex,
     );

@@ -16,7 +16,7 @@ const useSceneItemTransform = (obs: OBSWebSocket, sceneName: string) => {
       return res.sceneItemTransform;
     };
 
-    const [transform, { mutate, refetch }] = createResource(
+    const [transform, { refetch }] = createResource(
       sceneItemId,
       getSceneItemTransform,
     );
