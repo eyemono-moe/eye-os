@@ -1,5 +1,4 @@
-import { styled } from "@macaron-css/solid";
-import { type JSX, type Component } from "solid-js";
+import { type JSX, type Component, createMemo } from "solid-js";
 
 import { primitiveColors } from "../theme/color";
 
@@ -8,60 +7,28 @@ interface Props {
   setter: (value: number) => void;
   min: number;
   max: number;
-  step: number;
   startAngle: number;
+  size: number;
+  width: number;
 }
 
-const Output = styled("output", {
-  base: {
-    position: "absolute",
-    top: "0",
-    left: "50%",
-    transformOrigin: "bottom",
-    width: "16px",
-    height: "50%",
-    selectors: {
-      "&::before": {
-        content: "''",
-        position: "absolute",
-        top: "0",
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: "32px",
-        height: "32px",
-        background: primitiveColors.pink[400],
-        borderRadius: "50%",
-      },
-    },
-  },
-});
-
-const Slider = styled("div", {
-  base: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    borderRadius: "50%",
-    overflow: "hidden",
-  },
-});
-
 const RoundSlider: Component<Props> = (props) => {
-  const totalAngle = 2 * (180 - props.startAngle);
-  const vtoa = (v: number) =>
-    ((v - props.min) / (props.max - props.min)) * totalAngle + props.startAngle;
+  const startRad = createMemo(() => (props.startAngle / 180) * Math.PI);
+  const totalRad = createMemo(() => 2 * (Math.PI - startRad()));
+  const valueToRad = (v: number) =>
+    ((v - props.min) / (props.max - props.min)) * totalRad();
 
-  const atov = (a: number) =>
-    ((a - props.startAngle) / totalAngle) * (props.max - props.min) + props.min;
+  const radToValue = (r: number) =>
+    ((r - startRad()) / totalRad()) * (props.max - props.min) + props.min;
 
   const clip = (v: number) => {
     return Math.min(Math.max(v, props.min), props.max);
   };
 
-  let ref: HTMLDivElement;
+  let ref: SVGSVGElement;
 
-  const calcAngle = (
-    corsorPos: {
+  const calcRad = (
+    cursorPos: {
       x: number;
       y: number;
     },
@@ -70,10 +37,10 @@ const RoundSlider: Component<Props> = (props) => {
       y: number;
     },
   ) => {
-    const x = corsorPos.x - center.x;
-    const y = corsorPos.y - center.y;
-    const angle = Math.atan2(y, x) * (180 / Math.PI) + 270;
-    return angle % 360;
+    const x = cursorPos.x - center.x;
+    const y = cursorPos.y - center.y;
+    const rad = (Math.atan2(y, x) + (3 / 2) * Math.PI) % (2 * Math.PI);
+    return rad;
   };
 
   const center = () => {
@@ -83,63 +50,110 @@ const RoundSlider: Component<Props> = (props) => {
       y: rect.top + rect.height / 2,
     };
   };
+
   const onPointerMove = (e: PointerEvent) => {
     const cursorPosition = {
       x: e.clientX,
       y: e.clientY,
     };
     const centerPosition = center();
-    const angle = calcAngle(cursorPosition, centerPosition);
-    props.setter(clip(atov(angle)));
+    const rad = calcRad(cursorPosition, centerPosition);
+    props.setter(clip(radToValue(rad)));
   };
-  const handlePointerDown: JSX.EventHandlerUnion<HTMLElement, PointerEvent> = (
-    e,
-  ) => {
+
+  const handlePointerDown: JSX.EventHandlerUnion<
+    SVGPathElement,
+    PointerEvent
+  > = (e) => {
     e.currentTarget.setPointerCapture(e.pointerId);
     e.currentTarget.addEventListener("pointermove", onPointerMove);
   };
-  const handlePointerUp: JSX.EventHandlerUnion<HTMLElement, PointerEvent> = (
+  const handlePointerUp: JSX.EventHandlerUnion<SVGPathElement, PointerEvent> = (
     e,
   ) => {
     e.currentTarget.removeEventListener("pointermove", onPointerMove);
     e.currentTarget.releasePointerCapture(e.pointerId);
   };
 
+  const svgPath = (endRad: number) => {
+    const r = (props.size - props.width) / 2;
+
+    const largeArcFlag = endRad > Math.PI ? 1 : 0;
+    const sweepFlag = 1;
+
+    const fx = props.size / 2 + r * Math.sin(endRad);
+    const fy = props.size / 2 - r * Math.cos(endRad);
+
+    return `M ${props.size / 2},${
+      props.width / 2
+    } A ${r},${r} 0 ${largeArcFlag} ${sweepFlag} ${fx},${fy}`;
+  };
+
   return (
-    <>
-      <div
+    <div
+      style={{
+        width: "100%",
+        height: "auto",
+        "aspect-ratio": "1",
+      }}
+    >
+      <svg
+        viewBox={`0 0 ${props.size} ${props.size}`}
+        xmlns="http://www.w3.org/2000/svg"
         style={{
-          position: "absolute",
           width: "100%",
-          height: "auto",
-          "aspect-ratio": "1",
-          transform: "rotate(180deg)",
+          height: "100%",
         }}
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        ref={ref!}
       >
-        <Slider
-          style={{
-            "background-image": `conic-gradient(transparent 0deg, transparent ${
-              props.startAngle
-            }deg, ${primitiveColors.pink[900]} ${props.startAngle}deg, ${
-              primitiveColors.pink[900]
-            } ${vtoa(props.value())}deg, ${primitiveColors.gray[900]} ${vtoa(
-              props.value(),
-            )}deg, ${primitiveColors.gray[900]} ${
-              360 - props.startAngle
-            }deg, transparent ${360 - props.startAngle}deg)`,
-          }}
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          ref={ref!}
-        />
-        <Output
-          style={{
-            transform: `translateX(-50%) rotate(${vtoa(props.value())}deg)`,
-          }}
+        <path
+          d={svgPath(totalRad())}
+          stroke={primitiveColors.gray[800]}
+          fill="none"
+          stroke-width={props.width}
+          stroke-linecap="round"
+          transform={`rotate(${props.startAngle + 180} ${props.size / 2} ${
+            props.size / 2
+          })`}
           onPointerDown={handlePointerDown}
           onPointerUp={handlePointerUp}
+          style={{
+            cursor: "pointer",
+          }}
         />
-      </div>
-    </>
+        <path
+          d={svgPath(valueToRad(props.value()))}
+          stroke={primitiveColors.pink[700]}
+          fill="none"
+          stroke-width={props.width * 0.75}
+          stroke-linecap="round"
+          transform={`rotate(${props.startAngle + 180} ${props.size / 2} ${
+            props.size / 2
+          })`}
+          style={{
+            "pointer-events": "none",
+          }}
+        />
+        <circle
+          r={props.width / 2}
+          cx={
+            props.size / 2 +
+            ((props.size - props.width) / 2) *
+              Math.sin(valueToRad(props.value()) + startRad() + Math.PI)
+          }
+          cy={
+            props.size / 2 -
+            ((props.size - props.width) / 2) *
+              Math.cos(valueToRad(props.value()) + startRad() + Math.PI)
+          }
+          fill={primitiveColors.pink[400]}
+          style={{
+            "pointer-events": "none",
+          }}
+        />
+      </svg>
+    </div>
   );
 };
 

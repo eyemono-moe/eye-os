@@ -70,8 +70,18 @@ const SliderContainer = styled("div", {
     position: "relative",
     display: "grid",
     placeItems: "center",
-    gridTemplateColumns: "1fr",
-    gridTemplateRows: "1fr",
+  },
+});
+
+const SliderWrapper = styled("div", {
+  base: {
+    position: "absolute",
+    top: "0",
+    left: "0",
+    width: "100%",
+    height: "100%",
+    display: "grid",
+    placeItems: "center",
   },
 });
 
@@ -110,16 +120,19 @@ const Controller: Component<{
   return (
     <Container>
       <SliderContainer>
-        <RoundSlider
-          value={() => desktopVolume() ?? 0}
-          setter={(value) => {
-            void setDesktopVolume(value);
-          }}
-          min={-100}
-          max={26}
-          step={1}
-          startAngle={45}
-        />
+        <SliderWrapper>
+          <RoundSlider
+            value={() => desktopVolume() ?? 0}
+            setter={(value) => {
+              void setDesktopVolume(value);
+            }}
+            min={-100}
+            max={26}
+            size={100}
+            width={20}
+            startAngle={45}
+          />
+        </SliderWrapper>
         <Button
           onClick={() => {
             void toggleDesktopMute();
@@ -136,16 +149,19 @@ const Controller: Component<{
         </Button>
       </SliderContainer>
       <SliderContainer>
-        <RoundSlider
-          value={() => micVolume() ?? 0}
-          setter={(value) => {
-            void setMicVolume(value);
-          }}
-          min={-100}
-          max={26}
-          step={1}
-          startAngle={45}
-        />
+        <SliderWrapper>
+          <RoundSlider
+            value={() => micVolume() ?? 0}
+            setter={(value) => {
+              void setMicVolume(value);
+            }}
+            min={-100}
+            max={26}
+            size={100}
+            width={20}
+            startAngle={45}
+          />
+        </SliderWrapper>
         <Button
           onClick={() => {
             void toggleMicMute();
