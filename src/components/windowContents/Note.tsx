@@ -68,6 +68,13 @@ const Buttons = styled("div", {
     left: "0",
     display: "flex",
     flexDirection: "row",
+    transition: "opacity 0.2s ease",
+    opacity: "0.1",
+    selectors: {
+      "&:hover": {
+        opacity: "1",
+      },
+    },
   },
 });
 

@@ -31,6 +31,7 @@ const LogContainer = styled("div", {
     width: "100%",
     height: "100%",
     overflowY: "auto",
+    userSelect: "text",
   },
 });
 
@@ -56,6 +57,13 @@ const Buttons = styled("div", {
     display: "flex",
     flexDirection: "row",
     marginRight: "18px",
+    transition: "opacity 0.2s ease",
+    opacity: "0.1",
+    selectors: {
+      "&:hover": {
+        opacity: "1",
+      },
+    },
   },
 });
 
