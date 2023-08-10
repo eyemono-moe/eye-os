@@ -3,6 +3,7 @@ import { type Component } from "solid-js";
 
 import useClock from "../../lib/useClock";
 import { primitiveColors, semanticColors } from "../../theme/color";
+import { fontFamily } from "../../theme/font";
 import { type WindowData } from "../windows/WindowContent";
 
 export interface ClockWindowData extends WindowData {
@@ -19,7 +20,7 @@ const Container = styled("div", {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    fontFamily: "FOT-ラグランパンチ Std UB",
+    fontFamily: fontFamily.raglanPunch,
     fontSize: "48px",
     fontStyle: "normal",
     width: "100%",

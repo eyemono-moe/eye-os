@@ -6,6 +6,7 @@ import { isScrolledToBottom } from "../../lib/scroll";
 import toISOStringWithTimezone from "../../lib/toISOStringWithTimezone";
 import { logger, logs } from "../../lib/useLog";
 import { primitiveColors, semanticColors } from "../../theme/color";
+import { fontFamily } from "../../theme/font";
 import { type WindowData } from "../windows/WindowContent";
 
 export interface LogWindowData extends WindowData {
@@ -35,7 +36,7 @@ const LogContainer = styled("div", {
 
 const LogPre = styled("pre", {
   base: {
-    fontFamily: `'JetBrainsMono Nerd Font', 'Noto Sans JP Thin', monospace`,
+    fontFamily: fontFamily.mono,
     width: "100%",
     whiteSpace: "pre-wrap",
   },

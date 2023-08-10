@@ -3,13 +3,14 @@ import { styled } from "@macaron-css/solid";
 import { type Component } from "solid-js";
 
 import { semanticColors } from "../theme/color";
+import { fontFamily } from "../theme/font";
 
 const Container = styled("div", {
   base: {
     height: "fit-content",
     display: "grid",
     placeContent: "center",
-    fontFamily: "FOT-ラグランパンチ Std UB",
+    fontFamily: fontFamily.raglanPunch,
   },
 });
 

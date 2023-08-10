@@ -4,6 +4,7 @@ import { render } from "solid-js/web";
 
 import App from "./App";
 import { semanticColors } from "./theme/color";
+import { fontFamily } from "./theme/font";
 
 const root = document.getElementById("root");
 
@@ -11,7 +12,7 @@ const root = document.getElementById("root");
 render(() => <App />, root!);
 
 globalStyle("html, body", {
-  fontFamily: `'JetBrainsMono Nerd Font', 'Noto Sans JP Thin', monospace`,
+  fontFamily: fontFamily.mono,
   color: semanticColors.text.white,
   background: "transparent",
 });

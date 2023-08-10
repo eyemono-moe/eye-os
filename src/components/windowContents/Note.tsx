@@ -11,6 +11,7 @@ import { type SetStoreFunction } from "solid-js/store";
 
 import { type WindowInfo } from "../../contexts/useWindows";
 import { primitiveColors, semanticColors } from "../../theme/color";
+import { fontFamily } from "../../theme/font";
 import { type WindowData } from "../windows/WindowContent";
 import { useWindow } from "../windows/Windows";
 
@@ -53,7 +54,7 @@ const TextArea = styled("div", {
     border: "none",
     outline: "none",
     padding: "8px",
-    fontFamily: `'JetBrainsMono Nerd Font', 'Noto Sans JP Thin', monospace`,
+    fontFamily: fontFamily.mono,
     color: primitiveColors.white,
     userSelect: "text",
     backgroundColor: "transparent",
