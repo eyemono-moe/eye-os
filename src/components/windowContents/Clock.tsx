@@ -20,7 +20,7 @@ const Container = styled("div", {
     justifyContent: "center",
     alignItems: "center",
     fontFamily: "FOT-ラグランパンチ Std UB",
-    fontSize: "84px",
+    fontSize: "48px",
     fontStyle: "normal",
     width: "100%",
     height: "100%",
@@ -32,17 +32,17 @@ const Container = styled("div", {
 
 const DateContainer = styled("div", {
   base: {
-    fontSize: "32px",
+    fontSize: "22px",
     lineHeight: "100%",
   },
 });
 
 const Clock: Component = () => {
-  const { month, day, hour, minute } = useClock();
+  const { year, month, day, hour, minute } = useClock();
 
   return (
     <Container>
-      <DateContainer>{`${month().toString().padStart(2, "0")}/${day()
+      <DateContainer>{`${year()}/${month().toString().padStart(2, "0")}/${day()
         .toString()
         .padStart(2, "0")}`}</DateContainer>
       {`${hour().toString().padStart(2, "0")}:${minute()

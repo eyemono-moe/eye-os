@@ -43,8 +43,8 @@ const Container = styled("div", {
 
 const Button = styled("button", {
   base: {
-    width: "64px",
-    height: "64px",
+    width: "48px",
+    height: "48px",
     borderRadius: "50%",
     backgroundColor: primitiveColors.black,
     borderColor: primitiveColors.pink[400],
@@ -65,8 +65,8 @@ const Button = styled("button", {
 
 const SliderContainer = styled("div", {
   base: {
-    width: "128px",
-    height: "128px",
+    width: "100px",
+    height: "100px",
     position: "relative",
     display: "grid",
     placeItems: "center",
@@ -129,7 +129,7 @@ const Controller: Component<{
             min={-100}
             max={26}
             size={100}
-            width={20}
+            width={22}
             startAngle={45}
           />
         </SliderWrapper>
@@ -141,10 +141,10 @@ const Controller: Component<{
           <Show
             when={isDesktopMuted()}
             fallback={
-              <FaSolidVolumeHigh size={46} fill={primitiveColors.green[400]} />
+              <FaSolidVolumeHigh size={28} fill={primitiveColors.green[400]} />
             }
           >
-            <FaSolidVolumeXmark size={44} fill={primitiveColors.pink[400]} />
+            <FaSolidVolumeXmark size={26} fill={primitiveColors.pink[400]} />
           </Show>
         </Button>
       </SliderContainer>
@@ -158,7 +158,7 @@ const Controller: Component<{
             min={-100}
             max={26}
             size={100}
-            width={20}
+            width={22}
             startAngle={45}
           />
         </SliderWrapper>
@@ -170,11 +170,11 @@ const Controller: Component<{
           <Show
             when={isMicMuted()}
             fallback={
-              <FaSolidMicrophone size={36} fill={primitiveColors.green[400]} />
+              <FaSolidMicrophone size={26} fill={primitiveColors.green[400]} />
             }
           >
             <FaSolidMicrophoneSlash
-              size={46}
+              size={34}
               fill={primitiveColors.pink[400]}
             />
           </Show>
@@ -185,7 +185,7 @@ const Controller: Component<{
           void props.refetch();
         }}
       >
-        <FaSolidArrowRotateRight size={36} fill={primitiveColors.white} />
+        <FaSolidArrowRotateRight size={24} fill={primitiveColors.white} />
       </Button>
     </Container>
   );
