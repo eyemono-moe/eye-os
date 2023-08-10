@@ -10,13 +10,15 @@ import {
 
 import { logger } from "../lib/useLog";
 
-const connect = async () => {
+import { useGlobalConfig } from "./useGlobalConfig";
+
+const connect = async (option: { address: string; password: string }) => {
   logger.log("Connecting to OBS WebSocket");
   const obs = new OBSWebSocket();
   try {
     const { obsWebSocketVersion, negotiatedRpcVersion } = await obs.connect(
-      "ws://127.0.0.1:4455",
-      "9768oIJoX4OUlvnW",
+      option.address,
+      option.password,
       {
         rpcVersion: 1,
         eventSubscriptions: EventSubscription.All,
@@ -37,7 +39,12 @@ export type ObsWebSocketContextValue = ResourceReturn<OBSWebSocket>;
 const ObsWebSocketContext = createContext<ObsWebSocketContextValue>();
 
 export const ObsWebSocketProvider: ParentComponent = (props) => {
-  const [obs, actions] = createResource(async () => await connect());
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const [config] = useGlobalConfig()!;
+  const [obs, actions] = createResource(
+    () => ({ address: config.obs.address, password: config.obs.password }),
+    connect,
+  );
 
   return (
     <ObsWebSocketContext.Provider value={[obs, actions]}>

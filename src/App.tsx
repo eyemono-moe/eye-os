@@ -1,7 +1,7 @@
 import { type Component } from "solid-js";
 
 import Layout from "./components/Layout";
-import { ObsWebSocketProvider } from "./contexts/useObsWebSocket";
+import { GlobalConfigProvider } from "./contexts/useGlobalConfig";
 import { WindowsProvider } from "./contexts/useWindows";
 import { logger } from "./lib/useLog";
 
@@ -19,11 +19,11 @@ const App: Component = () => {
   `);
 
   return (
-    <ObsWebSocketProvider>
+    <GlobalConfigProvider>
       <WindowsProvider>
         <Layout />
       </WindowsProvider>
-    </ObsWebSocketProvider>
+    </GlobalConfigProvider>
   );
 };
 

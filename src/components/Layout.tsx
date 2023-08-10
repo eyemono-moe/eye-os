@@ -1,6 +1,8 @@
 import { styled } from "@macaron-css/solid";
 import { type Component } from "solid-js";
 
+import { ObsWebSocketProvider } from "../contexts/useObsWebSocket";
+
 import DeskTop from "./DeskTop";
 import TaskBar from "./TaskBar";
 import Windows from "./windows/Windows";
@@ -22,7 +24,9 @@ const Layout: Component = () => {
     <>
       <Container>
         <DeskTop />
-        <Windows />
+        <ObsWebSocketProvider>
+          <Windows />
+        </ObsWebSocketProvider>
         <TaskBar />
       </Container>
     </>
