@@ -2,13 +2,19 @@
 import { keyframes } from "@macaron-css/core";
 import { styled } from "@macaron-css/solid";
 import {
+  type Component,
   createSignal,
   ErrorBoundary,
   onMount,
+  Show,
   type ParentComponent,
+  createEffect,
 } from "solid-js";
 
+import { MAIN_SCENE_NAME } from "../../consts";
+import { useObsWebSocket } from "../../contexts/useObsWebSocket";
 import usePopup from "../../lib/usePopup";
+import useSceneItemTransform from "../../lib/useSceneItemTransform";
 import { primitiveColors } from "../../theme/color";
 
 import CloseButton from "./CloseButton";
@@ -19,6 +25,8 @@ import LoadingScreen from "./LoadingScreen";
 import MinimizeButton from "./MinimizeButton";
 import WindowContent from "./WindowContent";
 import { useWindow } from "./Windows";
+
+import type OBSWebSocket from "obs-websocket-js";
 
 const MIN_WIDTH = 100;
 const MIN_HEIGHT = 100;
@@ -160,7 +168,22 @@ const ContentWrapper = styled("div", {
   },
 });
 
-const Window: ParentComponent = () => {
+const OBSProvider: Component = () => {
+  const obsResource = useObsWebSocket();
+  return (
+    <Show
+      when={obsResource != null && obsResource[0].state === "ready"}
+      fallback={<LoadingScreen />}
+    >
+      {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
+      <Window obs={obsResource![0]()!} />
+    </Show>
+  );
+};
+
+const Window: ParentComponent<{
+  obs: OBSWebSocket;
+}> = (props) => {
   let headerRef: HTMLDivElement;
   let topLeftRef: HTMLDivElement;
   let topRef: HTMLDivElement;
@@ -182,6 +205,46 @@ const Window: ParentComponent = () => {
     y: 0,
   });
 
+  const transformFactory = useSceneItemTransform(props.obs, MAIN_SCENE_NAME);
+  const { transform, setTransform } = transformFactory(
+    () => windowInfo.linkSceneItemId ?? 999,
+  );
+
+  const keepAspectHeight = () => {
+    if (
+      windowInfo.linkSceneItemId !== undefined &&
+      transform.state === "ready"
+    ) {
+      const scale =
+        (windowInfo.width - edgeWidth * 2) /
+        ((transform().sourceWidth as number | null) ?? 1);
+      setState(
+        "windows",
+        index(),
+        "height",
+        scale * (transform().sourceHeight as number) + edgeWidth + headerHeight,
+      );
+    }
+  };
+
+  // eslint-disable-next-line solid/reactivity
+  createEffect(async () => {
+    if (
+      windowInfo.linkSceneItemId !== undefined &&
+      transform.state === "ready"
+    ) {
+      const scale =
+        (windowInfo.width - edgeWidth * 2) /
+        ((transform().sourceWidth as number | null) ?? 1);
+      await setTransform({
+        positionX: windowInfo.x + edgeWidth,
+        positionY: windowInfo.y + headerHeight,
+        scaleX: scale,
+        scaleY: scale,
+      });
+    }
+  });
+
   const handlePointerMoveOnLeft = (e: PointerEvent) => {
     let newX = e.pageX - offsetPosition().x;
     let newWidth = windowInfo.width + windowInfo.x - newX;
@@ -191,6 +254,7 @@ const Window: ParentComponent = () => {
     }
     setState("windows", index(), "x", newX);
     setState("windows", index(), "width", newWidth);
+    keepAspectHeight();
   };
 
   const handlePointerMoveOnTop = (e: PointerEvent) => {
@@ -202,6 +266,7 @@ const Window: ParentComponent = () => {
     }
     setState("windows", index(), "y", newY);
     setState("windows", index(), "height", newHeight);
+    keepAspectHeight();
   };
 
   const handlePointerMoveOnRight = (e: PointerEvent) => {
@@ -210,6 +275,7 @@ const Window: ParentComponent = () => {
       newWidth = MIN_WIDTH;
     }
     setState("windows", index(), "width", newWidth);
+    keepAspectHeight();
   };
 
   const handlePointerMoveOnBottom = (e: PointerEvent) => {
@@ -218,6 +284,7 @@ const Window: ParentComponent = () => {
       newHeight = MIN_HEIGHT;
     }
     setState("windows", index(), "height", newHeight);
+    keepAspectHeight();
   };
 
   const handleHeaderMove = (e: PointerEvent) => {
@@ -238,10 +305,12 @@ const Window: ParentComponent = () => {
         x: e.offsetX,
         y: e.offsetY,
       });
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       ref.addEventListener("pointermove", pointerMoveHandler);
       ref.addEventListener(
         "pointerup",
         (e: PointerEvent) => {
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises
           ref.removeEventListener("pointermove", pointerMoveHandler);
           ref.releasePointerCapture(e.pointerId);
         },
@@ -345,4 +414,4 @@ const Window: ParentComponent = () => {
   );
 };
 
-export default Window;
+export default OBSProvider;

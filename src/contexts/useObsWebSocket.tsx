@@ -18,8 +18,8 @@ const connect = async () => {
       "9768oIJoX4OUlvnW",
       {
         rpcVersion: 1,
-        eventSubscriptions:
-          EventSubscription.All | EventSubscription.SceneItemTransformChanged,
+        eventSubscriptions: EventSubscription.All,
+        // eventSubscriptions: EventSubscription.All | EventSubscription.SceneItemTransformChanged,
       },
     );
     logger.log(
