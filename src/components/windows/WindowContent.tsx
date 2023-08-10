@@ -1,27 +1,27 @@
-import { lazy, type Component, ErrorBoundary } from "solid-js";
+import { type Component, ErrorBoundary } from "solid-js";
 import { Dynamic } from "solid-js/web";
 
-import {
+import Clock, {
   defaultClockWindowData,
   type ClockWindowData,
 } from "../windowContents/Clock";
-import {
+import Color, {
   defaultColorWindowData,
   type ColorWindowData,
 } from "../windowContents/Color";
-import {
+import Controller, {
   type ControllerWindowData,
   defaultControllerWindowData,
 } from "../windowContents/Controller";
-import {
+import Empty, {
   defaultEmptyWindowData,
   type EmptyWindowData,
 } from "../windowContents/Empty";
-import {
+import Log, {
   type LogWindowData,
   defaultLogWindowData,
 } from "../windowContents/Log";
-import {
+import Note, {
   defaultNoteWindowData,
   type NoteWindowData,
 } from "../windowContents/Note";
@@ -30,12 +30,12 @@ import ErrorScreen from "./ErrorScreen";
 import { useWindow } from "./Windows";
 
 export const windowContentsMap = {
-  clock: lazy(async () => await import("../windowContents/Clock")),
-  color: lazy(async () => await import("../windowContents/Color")),
-  controller: lazy(async () => await import("../windowContents/Controller")),
-  empty: lazy(async () => await import("../windowContents/Empty")),
-  log: lazy(async () => await import("../windowContents/Log")),
-  note: lazy(async () => await import("../windowContents/Note")),
+  clock: Clock,
+  color: Color,
+  controller: Controller,
+  empty: Empty,
+  log: Log,
+  note: Note,
 };
 
 export type WindowType = keyof typeof windowContentsMap;

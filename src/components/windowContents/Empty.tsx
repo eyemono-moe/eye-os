@@ -11,7 +11,7 @@ export const defaultEmptyWindowData: EmptyWindowData = {
   type: "empty",
 };
 
-const Default = styled("div", {
+const Empty = styled("div", {
   base: {
     width: "100%",
     height: "100%",
@@ -19,4 +19,4 @@ const Default = styled("div", {
   },
 });
 
-export default Default;
+export default Empty;
