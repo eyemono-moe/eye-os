@@ -1,14 +1,21 @@
 import { styled } from "@macaron-css/solid";
-import { For, type Component, createContext, useContext } from "solid-js";
+import { For, type Component, createContext, useContext, Show } from "solid-js";
 import { type SetStoreFunction } from "solid-js/store";
 
+import { MAIN_SCENE_NAME } from "../../consts";
+import { useObsWebSocket } from "../../contexts/useObsWebSocket";
 import {
   type WindowInfo,
   useWindows,
   type WindowsContextState,
 } from "../../contexts/useWindows";
+import useSceneItemIndex from "../../lib/useSceneItemIndex";
+import useSceneItems from "../../lib/useSceneItems";
 
+import LoadingScreen from "./LoadingScreen";
 import Window from "./Window";
+
+import type OBSWebSocket from "obs-websocket-js";
 
 const Container = styled("div", {
   base: {
@@ -26,7 +33,7 @@ export type WindowContextValue = [
   state: WindowInfo,
   actions: {
     setState: SetStoreFunction<WindowsContextState>;
-    setTop: () => void;
+    setTop: () => Promise<void>;
     removeWindow: () => void;
     index: () => number;
   },
@@ -48,14 +55,40 @@ const WindowContext = createContext<WindowContextValue>([
   },
   {
     setState: () => {},
-    setTop: () => {},
+    setTop: async () => {
+      await Promise.resolve();
+    },
     removeWindow: () => {},
     index: () => 0,
   },
 ]);
 
-const Windows: Component = () => {
+const OBSProvider: Component = () => {
+  const obsResource = useObsWebSocket();
+  return (
+    <Show
+      when={obsResource != null && obsResource[0].state === "ready"}
+      fallback={<LoadingScreen />}
+    >
+      {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
+      <Windows obs={obsResource![0]()!} />
+    </Show>
+  );
+};
+
+const Windows: Component<{
+  obs: OBSWebSocket;
+}> = (props) => {
   const [state, { setState, removeWindow, setTop }] = useWindows();
+  const sceneItemIndexFactory = useSceneItemIndex(props.obs, MAIN_SCENE_NAME);
+  const { sceneItems } = useSceneItems(props.obs, MAIN_SCENE_NAME);
+  const setTopInObs = async (index: number) => {
+    const { setIndex } = sceneItemIndexFactory(() => index);
+    if (sceneItems.state === "ready") {
+      await setIndex(sceneItems().length - 2);
+    }
+  };
+
   return (
     <Container>
       <For each={state.windows}>
@@ -66,8 +99,11 @@ const Windows: Component = () => {
                 window,
                 {
                   setState,
-                  setTop: () => {
+                  setTop: async () => {
                     setTop(i());
+                    if (window.linkSceneItemId !== undefined) {
+                      await setTopInObs(window.linkSceneItemId);
+                    }
                   },
                   removeWindow: () => {
                     removeWindow(i());
@@ -87,4 +123,4 @@ const Windows: Component = () => {
 
 export const useWindow = () => useContext(WindowContext);
 
-export default Windows;
+export default OBSProvider;

@@ -15,28 +15,25 @@ const useSceneItems = (obs: OBSWebSocket, sceneName: string) => {
 
   const [sceneItems, { refetch, mutate }] = createResource(getSceneItems);
 
-  obs.on("SceneItemCreated", (data) => {
-    console.log("SceneItemCreated", data);
-    if (sceneItems.state === "ready") {
-      mutate(sceneItems().concat(data));
-    }
-  });
+  // obs.on("SceneItemCreated", (data) => {
+  //   if (sceneItems.state === "ready") {
+  //     mutate(sceneItems().concat(data));
+  //   }
+  // });
 
-  obs.on("SceneItemRemoved", (data) => {
-    console.log("SceneItemRemoved", data);
-    if (sceneItems.state === "ready") {
-      mutate(
-        sceneItems().filter((item) => item.sceneItemId !== data.sceneItemId),
-      );
-    }
-  });
+  // obs.on("SceneItemRemoved", (data) => {
+  //   if (sceneItems.state === "ready") {
+  //     mutate(
+  //       sceneItems().filter((item) => item.sceneItemId !== data.sceneItemId),
+  //     );
+  //   }
+  // });
 
-  obs.on("SceneItemListReindexed", (data) => {
-    console.log("SceneItemListReindexed", data);
-    // if (sceneItems.state === "ready") {
-    //   mutate(sceneItems().filter((item) => item.sceneItemId !== data.sceneItemId));
-    // }
-  });
+  // obs.on("SceneItemListReindexed", (data) => {
+  //   if (sceneItems.state === "ready") {
+  //     mutate(sceneItems().filter((item) => item.sceneItemId !== data.sceneItemId));
+  //   }
+  // });
 
   return { sceneItems };
 };
