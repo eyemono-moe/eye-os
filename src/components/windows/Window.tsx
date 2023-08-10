@@ -227,6 +227,23 @@ const Window: ParentComponent<{
     }
   };
 
+  const keepAspectWidth = () => {
+    if (
+      windowInfo.linkSceneItemId !== undefined &&
+      transform.state === "ready"
+    ) {
+      const scale =
+        (windowInfo.height - edgeWidth - headerHeight) /
+        ((transform().sourceHeight as number | null) ?? 1);
+      setState(
+        "windows",
+        index(),
+        "width",
+        scale * (transform().sourceWidth as number) + edgeWidth * 2,
+      );
+    }
+  };
+
   // eslint-disable-next-line solid/reactivity
   createEffect(async () => {
     if (
@@ -266,7 +283,7 @@ const Window: ParentComponent<{
     }
     setState("windows", index(), "y", newY);
     setState("windows", index(), "height", newHeight);
-    keepAspectHeight();
+    keepAspectWidth();
   };
 
   const handlePointerMoveOnRight = (e: PointerEvent) => {
@@ -284,7 +301,7 @@ const Window: ParentComponent<{
       newHeight = MIN_HEIGHT;
     }
     setState("windows", index(), "height", newHeight);
-    keepAspectHeight();
+    keepAspectWidth();
   };
 
   const handleHeaderMove = (e: PointerEvent) => {
