@@ -15,7 +15,7 @@ import useInputMuteState from "../../lib/useInputMuteState";
 import useInputVolume from "../../lib/useInputVolume";
 import { primitiveColors, semanticColors } from "../../theme/color";
 import RoundSlider from "../RoundSlider";
-import { type WindowData } from "../windows/WindowContent";
+import { type WindowData } from "../window/WindowContent";
 
 export interface ControllerWindowData extends WindowData {
   type: "controller";

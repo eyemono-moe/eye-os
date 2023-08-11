@@ -3,17 +3,17 @@ import { styled } from "@macaron-css/solid";
 import { For, type Component, createContext, useContext } from "solid-js";
 import { type SetStoreFunction } from "solid-js/store";
 
-import { MAIN_SCENE_NAME } from "../../consts";
-import { useObsWebSocket } from "../../contexts/useObsWebSocket";
+import { MAIN_SCENE_NAME } from "../consts";
+import { useObsWebSocket } from "../contexts/useObsWebSocket";
 import {
   type WindowInfo,
   useWindows,
   type WindowsContextState,
-} from "../../contexts/useWindows";
-import useSceneItemIndex from "../../lib/useSceneItemIndex";
-import useSceneItems from "../../lib/useSceneItems";
+} from "../contexts/useWindows";
+import useSceneItemIndex from "../lib/useSceneItemIndex";
+import useSceneItems from "../lib/useSceneItems";
 
-import Window from "./Window";
+import Window from "./window/Window";
 
 const Container = styled("div", {
   base: {

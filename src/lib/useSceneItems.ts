@@ -7,9 +7,6 @@ const useSceneItems = (obs: OBSWebSocket, sceneName: string) => {
     const res = await obs.call("GetSceneItemList", {
       sceneName,
     });
-    if (res == null) {
-      throw new Error("Failed to get mic mute status");
-    }
     return res.sceneItems;
   };
 

@@ -1,7 +1,7 @@
 import { styled } from "@macaron-css/solid";
 
 import { semanticColors } from "../../theme/color";
-import { type WindowData } from "../windows/WindowContent";
+import { type WindowData } from "../window/WindowContent";
 
 export interface EmptyWindowData extends WindowData {
   type: "empty";

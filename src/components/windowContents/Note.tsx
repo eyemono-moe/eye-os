@@ -12,8 +12,8 @@ import { type SetStoreFunction } from "solid-js/store";
 import { type WindowInfo } from "../../contexts/useWindows";
 import { primitiveColors, semanticColors } from "../../theme/color";
 import { fontFamily } from "../../theme/font";
-import { type WindowData } from "../windows/WindowContent";
-import { useWindow } from "../windows/Windows";
+import { type WindowData } from "../window/WindowContent";
+import { useWindow } from "../Windows";
 
 type Alignment = "center" | "left";
 

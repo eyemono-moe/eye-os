@@ -4,7 +4,7 @@ import { type Component } from "solid-js";
 import useClock from "../../lib/useClock";
 import { primitiveColors, semanticColors } from "../../theme/color";
 import { fontFamily } from "../../theme/font";
-import { type WindowData } from "../windows/WindowContent";
+import { type WindowData } from "../window/WindowContent";
 
 export interface ClockWindowData extends WindowData {
   type: "clock";

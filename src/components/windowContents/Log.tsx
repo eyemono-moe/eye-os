@@ -7,7 +7,7 @@ import toISOStringWithTimezone from "../../lib/toISOStringWithTimezone";
 import { logger, logs } from "../../lib/useLog";
 import { primitiveColors, semanticColors } from "../../theme/color";
 import { fontFamily } from "../../theme/font";
-import { type WindowData } from "../windows/WindowContent";
+import { type WindowData } from "../window/WindowContent";
 
 export interface LogWindowData extends WindowData {
   type: "log";

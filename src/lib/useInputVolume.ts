@@ -7,9 +7,6 @@ const useInputVolume = (obs: OBSWebSocket, inputName: string = "マイク") => {
     const res = await obs.call("GetInputVolume", {
       inputName,
     });
-    if (res == null) {
-      throw new Error("Failed to get mic mute status");
-    }
     return res.inputVolumeDb;
   };
 

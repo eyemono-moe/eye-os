@@ -25,9 +25,9 @@ import Note, {
   defaultNoteWindowData,
   type NoteWindowData,
 } from "../windowContents/Note";
+import { useWindow } from "../Windows";
 
 import ErrorScreen from "./ErrorScreen";
-import { useWindow } from "./Windows";
 
 export const windowContentsMap = {
   clock: Clock,

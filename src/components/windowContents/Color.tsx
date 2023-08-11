@@ -4,8 +4,8 @@ import { type SetStoreFunction } from "solid-js/store";
 
 import { type WindowInfo } from "../../contexts/useWindows";
 import usePopup from "../../lib/usePopup";
-import { type WindowData } from "../windows/WindowContent";
-import { useWindow } from "../windows/Windows";
+import { type WindowData } from "../window/WindowContent";
+import { useWindow } from "../Windows";
 
 export interface ColorWindowData extends WindowData {
   type: "color";

@@ -5,7 +5,7 @@ import { ObsWebSocketProvider } from "../contexts/useObsWebSocket";
 
 import DeskTop from "./DeskTop";
 import TaskBar from "./TaskBar";
-import Windows from "./windows/Windows";
+import Windows from "./Windows";
 
 const Container = styled("div", {
   base: {

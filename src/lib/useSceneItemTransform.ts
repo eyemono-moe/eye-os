@@ -10,9 +10,6 @@ const useSceneItemTransform = (obs: OBSWebSocket, sceneName: string) => {
         sceneName,
         sceneItemId: id,
       });
-      if (res == null) {
-        throw new Error("Failed to get mic mute status");
-      }
       return res.sceneItemTransform;
     };
 

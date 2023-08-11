@@ -7,9 +7,6 @@ const useMicMuteState = (obs: OBSWebSocket, inputName: string = "マイク") => 
     const res = await obs.call("GetInputMute", {
       inputName,
     });
-    if (res == null) {
-      throw new Error("Failed to get mic mute status");
-    }
     return res.inputMuted;
   };
 

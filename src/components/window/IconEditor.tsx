@@ -2,54 +2,22 @@ import {
   createGlobalTheme,
   createGlobalThemeContract,
 } from "@macaron-css/core";
-import { styled } from "@macaron-css/solid";
 import { createPicker, type EmojiPicker } from "picmo";
-import { type Component } from "solid-js";
+import { onMount, type Component } from "solid-js";
 
-import usePopup from "../../lib/usePopup";
 import { primitiveColors, semanticColors } from "../../theme/color";
 import { fontFamily } from "../../theme/font";
-
-import { useWindow } from "./Windows";
+import { useWindow } from "../Windows";
 
 const className = "my-picker";
 
-const Container = styled("div", {
-  base: {
-    display: "flex",
-    flexDirection: "row",
-    cursor: "pointer",
-  },
-});
-
-const Button = styled("div", {
-  base: {
-    width: "32px",
-    height: "32px",
-    fontSize: "18px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    selectors: {
-      "&:hover": {
-        backgroundColor: primitiveColors.whiteAlpha[400],
-      },
-    },
-  },
-});
-
-const EmojiButton: Component = () => {
+const IconEditor: Component = () => {
   let ref: HTMLDivElement;
   let picker: EmojiPicker;
 
-  const [state, { setState, index }] = useWindow();
-  const { Popup, open, close } = usePopup();
+  const [_, { setState, index }] = useWindow();
 
-  const openPicker = (e: MouseEvent) => {
-    open({
-      x: e.clientX,
-      y: e.clientY,
-    });
+  const openPicker = () => {
     picker = createPicker({
       rootElement: ref,
       showPreview: false,
@@ -61,18 +29,13 @@ const EmojiButton: Component = () => {
     });
   };
 
-  return (
-    <Container>
-      <Button onClick={openPicker}>{state.icon}</Button>
-      <Popup>
-        {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
-        <div ref={ref!} />
-      </Popup>
-    </Container>
-  );
+  onMount(openPicker);
+
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  return <div ref={ref!} />;
 };
 
-export default EmojiButton;
+export default IconEditor;
 
 const vars = createGlobalThemeContract(
   {
@@ -123,17 +86,17 @@ createGlobalTheme(`div.${className}`, vars, {
   placeholder: { background: { color: primitiveColors.pink[400] } },
   preview: { background: { color: primitiveColors.pink[400] } },
   search: {
-    background: { color: semanticColors.text.white },
-    focus: { background: { color: semanticColors.text.white } },
-    icon: { color: primitiveColors.pink[400] },
-    placeholder: { color: primitiveColors.pink[600] },
+    background: { color: primitiveColors.black },
+    focus: { background: { color: primitiveColors.black } },
+    icon: { color: primitiveColors.gray[600] },
+    placeholder: { color: primitiveColors.gray[600] },
   },
   secondary: {
     background: { color: primitiveColors.pink[400] },
     text: { color: primitiveColors.pink[600] },
   },
   tag: { background: { color: primitiveColors.pink[400] } },
-  text: { color: primitiveColors.pink[400] },
+  text: { color: semanticColors.text.white },
   ui: { font: fontFamily.mono },
   variant: { popup: { background: { color: primitiveColors.pink[400] } } },
 });
