@@ -25,7 +25,6 @@ const IconEditor: Component = () => {
     });
     picker.addEventListener("emoji:select", (selection) => {
       setState("windows", index(), "icon", selection.emoji);
-      close();
     });
   };
 
