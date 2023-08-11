@@ -203,7 +203,9 @@ const Window: Component = () => {
     y: 0,
   };
 
-  const [obs] = useObsWebSocket()!;
+  const {
+    obsResource: [obs],
+  } = useObsWebSocket();
   const { transform, setTransform } = useSceneItemTransform(
     obs()!,
     MAIN_SCENE_NAME,

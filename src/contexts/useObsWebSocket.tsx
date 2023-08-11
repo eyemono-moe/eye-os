@@ -1,16 +1,8 @@
 import OBSWebSocket, { EventSubscription } from "obs-websocket-js";
-import {
-  type ParentComponent,
-  createContext,
-  createResource,
-  type ResourceReturn,
-  useContext,
-  Show,
-} from "solid-js";
+import { createResource } from "solid-js";
 
+import { createLocalStore } from "../lib/createLocalStore";
 import { logger } from "../lib/useLog";
-
-import { useGlobalConfig } from "./useGlobalConfig";
 
 const connect = async (option: { address: string; password: string }) => {
   logger.log("Connecting to OBS WebSocket");
@@ -22,7 +14,6 @@ const connect = async (option: { address: string; password: string }) => {
       {
         rpcVersion: 1,
         eventSubscriptions: EventSubscription.All,
-        // eventSubscriptions: EventSubscription.All | EventSubscription.SceneItemTransformChanged,
       },
     );
     logger.log(
@@ -30,27 +21,27 @@ const connect = async (option: { address: string; password: string }) => {
     );
   } catch (error) {
     logger.error("Failed to connect");
+    throw error;
   }
   return obs;
 };
 
-export type ObsWebSocketContextValue = ResourceReturn<OBSWebSocket>;
+const [obsConfig, setObsConfig] = createLocalStore<{
+  address: string;
+  password: string;
+}>("obsConfig", {
+  address: "ws://localhost:4455",
+  password: "",
+});
+const obsResource = createResource(
+  () => ({ address: obsConfig.address, password: obsConfig.password }),
+  connect,
+);
 
-const ObsWebSocketContext = createContext<ObsWebSocketContextValue>();
-
-export const ObsWebSocketProvider: ParentComponent = (props) => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const [config] = useGlobalConfig()!;
-  const [obs, actions] = createResource(
-    () => ({ address: config.obs.address, password: config.obs.password }),
-    connect,
-  );
-
-  return (
-    <ObsWebSocketContext.Provider value={[obs, actions]}>
-      <Show when={obs.state === "ready"}>{props.children}</Show>
-    </ObsWebSocketContext.Provider>
-  );
-};
-
-export const useObsWebSocket = () => useContext(ObsWebSocketContext);
+export const useObsWebSocket = () => ({
+  obsResource,
+  obsConfig,
+  actions: {
+    setObsConfig,
+  },
+});

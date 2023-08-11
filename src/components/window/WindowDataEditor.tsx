@@ -28,7 +28,9 @@ const Ul = styled("ul", {
 
 const WindowDataEditor = () => {
   const [store, { setState, index }] = useWindow();
-  const [obs] = useObsWebSocket()!;
+  const {
+    obsResource: [obs],
+  } = useObsWebSocket();
   const { sceneItems } = useSceneItems(obs()!, MAIN_SCENE_NAME);
 
   return (

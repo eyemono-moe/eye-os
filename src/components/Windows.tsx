@@ -63,7 +63,9 @@ const WindowContext = createContext<WindowContextValue>([
 
 const Windows: Component = () => {
   const [state, { setState, removeWindow, setTop }] = useWindows();
-  const [obs] = useObsWebSocket()!;
+  const {
+    obsResource: [obs],
+  } = useObsWebSocket();
   const sceneItemIndexFactory = useSceneItemIndex(obs()!, MAIN_SCENE_NAME);
   const { sceneItems } = useSceneItems(obs()!, MAIN_SCENE_NAME);
   const setTopInObs = async (index: number) => {

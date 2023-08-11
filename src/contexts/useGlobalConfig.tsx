@@ -3,12 +3,7 @@ import { type SetStoreFunction } from "solid-js/store";
 
 import { createLocalStore } from "../lib/createLocalStore";
 
-export interface GlobalConfig {
-  obs: {
-    address: string;
-    password: string;
-  };
-}
+export interface GlobalConfig {}
 
 export type GlobalConfigContextValue = [
   config: GlobalConfig,
@@ -20,12 +15,7 @@ export type GlobalConfigContextValue = [
 export const GlobalConfigContext = createContext<GlobalConfigContextValue>();
 
 export const GlobalConfigProvider: ParentComponent = (props) => {
-  const [config, setConfig] = createLocalStore<GlobalConfig>("config", {
-    obs: {
-      address: "",
-      password: "",
-    },
-  });
+  const [config, setConfig] = createLocalStore<GlobalConfig>("config", {});
 
   return (
     <GlobalConfigContext.Provider value={[config, { setConfig }]}>

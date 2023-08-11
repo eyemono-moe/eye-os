@@ -1,7 +1,7 @@
 import { styled } from "@macaron-css/solid";
 import { type Component } from "solid-js";
 
-import { useGlobalConfig } from "../contexts/useGlobalConfig";
+import { useObsWebSocket } from "../contexts/useObsWebSocket";
 import { useWindows } from "../contexts/useWindows";
 import usePopup from "../lib/usePopup";
 import { primitiveColors, semanticColors } from "../theme/color";
@@ -37,15 +37,6 @@ const PopupContainer = styled("div", {
   },
 });
 
-const Setting = styled("div", {
-  base: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: "8px",
-  },
-});
-
 const Ul = styled("ul", {
   base: {
     listStyle: "none",
@@ -53,9 +44,12 @@ const Ul = styled("ul", {
 });
 
 const OsButton: Component = () => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const [config, { setConfig }] = useGlobalConfig()!;
-  const [_, { resetDisplay }] = useWindows();
+  const {
+    obsResource: [obs, { refetch }],
+    obsConfig,
+    actions: { setObsConfig },
+  } = useObsWebSocket();
+  const [_state, { resetDisplay }] = useWindows();
   const { Popup, open } = usePopup();
 
   return (
@@ -76,33 +70,38 @@ const OsButton: Component = () => {
             <li>
               <button onClick={resetDisplay}>reset window position</button>
             </li>
-          </Ul>
-          <Ul>
             <li>
-              <Setting>
-                <div>obs websocket address</div>
-                <input
-                  type="text"
-                  value={config.obs.address}
-                  onChange={(e) => {
-                    setConfig("obs", "address", e.currentTarget.value);
-                  }}
-                />
-              </Setting>
+              {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+              <button
+                onClick={async () => {
+                  if (obs.state === "ready") {
+                    await obs().disconnect();
+                  }
+                  await refetch();
+                }}
+              >
+                reload OBS
+              </button>
             </li>
-          </Ul>
-          <Ul>
             <li>
-              <Setting>
-                <div>obs websocket pass</div>
-                <input
-                  type="password"
-                  value={config.obs.password}
-                  onChange={(e) => {
-                    setConfig("obs", "password", e.currentTarget.value);
-                  }}
-                />
-              </Setting>
+              <div>obs websocket address</div>
+              <input
+                type="text"
+                value={obsConfig.address}
+                onChange={(e) => {
+                  setObsConfig("address", e.currentTarget.value);
+                }}
+              />
+            </li>
+            <li>
+              <div>obs websocket pass</div>
+              <input
+                type="password"
+                value={obsConfig.password}
+                onChange={(e) => {
+                  setObsConfig("password", e.currentTarget.value);
+                }}
+              />
             </li>
           </Ul>
         </PopupContainer>

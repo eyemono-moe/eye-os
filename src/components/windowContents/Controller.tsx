@@ -1,21 +1,32 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { styled } from "@macaron-css/solid";
 import {
-  FaSolidArrowRotateRight,
   FaSolidMicrophone,
   FaSolidMicrophoneSlash,
   FaSolidVolumeHigh,
   FaSolidVolumeXmark,
 } from "solid-icons/fa";
-import { Show, type Component } from "solid-js";
+import {
+  Show,
+  type Component,
+  createEffect,
+  Switch,
+  Match,
+  type JSX,
+} from "solid-js";
 
 import { DESKTOP_INPUT_NAME, MIC_INPUT_NAME } from "../../consts";
 import { useObsWebSocket } from "../../contexts/useObsWebSocket";
 import useInputMuteState from "../../lib/useInputMuteState";
 import useInputVolume from "../../lib/useInputVolume";
+import { logger } from "../../lib/useLog";
 import { primitiveColors, semanticColors } from "../../theme/color";
 import RoundSlider from "../RoundSlider";
+import ErrorScreen from "../window/ErrorScreen";
+import LoadingScreen from "../window/LoadingScreen";
 import { type WindowData } from "../window/WindowContent";
+
+import type OBSWebSocket from "obs-websocket-js";
 
 export interface ControllerWindowData extends WindowData {
   type: "controller";
@@ -83,94 +94,83 @@ const SliderWrapper = styled("div", {
   },
 });
 
-const Controller: Component = () => {
-  const [obs, { refetch }] = useObsWebSocket()!;
-  const { isMuted: isMicMuted, toggleMute: toggleMicMute } = useInputMuteState(
-    obs()!,
-    MIC_INPUT_NAME,
-  );
-  const { volume: micVolume, setVolume: setMicVolume } = useInputVolume(
-    obs()!,
-    MIC_INPUT_NAME,
-  );
-  const { isMuted: isDesktopMuted, toggleMute: toggleDesktopMute } =
-    useInputMuteState(obs()!, "デスクトップ音声");
-  const { volume: desktopVolume, setVolume: setDesktopVolume } = useInputVolume(
-    obs()!,
-    DESKTOP_INPUT_NAME,
-  );
+const VolumeButton: Component<{
+  inputName: string;
+  obs: OBSWebSocket;
+  onMute: JSX.Element;
+  offMute: JSX.Element;
+}> = (props) => {
+  const { isMuted, toggleMute } = useInputMuteState(props.obs, props.inputName);
+  const { volume, setVolume } = useInputVolume(props.obs, props.inputName);
 
   return (
-    <Container>
-      <SliderContainer>
-        <SliderWrapper>
-          <RoundSlider
-            value={() => desktopVolume() ?? 0}
-            setter={(value) => {
-              void setDesktopVolume(value);
-            }}
-            min={-100}
-            max={26}
-            size={100}
-            width={22}
-            startAngle={45}
-          />
-        </SliderWrapper>
-        <Button
-          onClick={() => {
-            void toggleDesktopMute();
+    <SliderContainer>
+      <SliderWrapper>
+        <RoundSlider
+          value={() => volume() ?? 0}
+          setter={(value) => {
+            void setVolume(value);
           }}
-        >
-          <Show
-            when={isDesktopMuted()}
-            fallback={
-              <FaSolidVolumeHigh size={28} fill={primitiveColors.green[400]} />
-            }
-          >
-            <FaSolidVolumeXmark size={26} fill={primitiveColors.pink[400]} />
-          </Show>
-        </Button>
-      </SliderContainer>
-      <SliderContainer>
-        <SliderWrapper>
-          <RoundSlider
-            value={() => micVolume() ?? 0}
-            setter={(value) => {
-              void setMicVolume(value);
-            }}
-            min={-100}
-            max={26}
-            size={100}
-            width={22}
-            startAngle={45}
-          />
-        </SliderWrapper>
-        <Button
-          onClick={() => {
-            void toggleMicMute();
-          }}
-        >
-          <Show
-            when={isMicMuted()}
-            fallback={
-              <FaSolidMicrophone size={26} fill={primitiveColors.green[400]} />
-            }
-          >
-            <FaSolidMicrophoneSlash
-              size={34}
-              fill={primitiveColors.pink[400]}
-            />
-          </Show>
-        </Button>
-      </SliderContainer>
+          min={-100}
+          max={26}
+          size={100}
+          width={22}
+          startAngle={45}
+        />
+      </SliderWrapper>
       <Button
         onClick={() => {
-          void refetch();
+          void toggleMute();
         }}
       >
-        <FaSolidArrowRotateRight size={24} fill={primitiveColors.white} />
+        <Show when={isMuted()} fallback={props.onMute}>
+          {props.offMute}
+        </Show>
       </Button>
-    </Container>
+    </SliderContainer>
+  );
+};
+
+const Controller: Component = () => {
+  const {
+    obsResource: [obs],
+  } = useObsWebSocket();
+
+  createEffect(() => {
+    logger.log(obs.state);
+  });
+
+  return (
+    <Switch fallback={<LoadingScreen />}>
+      <Match when={obs.state === "ready"}>
+        <Container>
+          <VolumeButton
+            inputName={DESKTOP_INPUT_NAME}
+            obs={obs()!}
+            onMute={
+              <FaSolidVolumeHigh size={28} fill={primitiveColors.green[400]} />
+            }
+            offMute={
+              <FaSolidVolumeXmark size={26} fill={primitiveColors.pink[400]} />
+            }
+          />
+          <VolumeButton
+            inputName={MIC_INPUT_NAME}
+            obs={obs()!}
+            onMute={
+              <FaSolidMicrophone size={26} fill={primitiveColors.green[400]} />
+            }
+            offMute={
+              <FaSolidMicrophoneSlash
+                size={34}
+                fill={primitiveColors.pink[400]}
+              />
+            }
+          />
+        </Container>
+      </Match>
+      <Match when={obs.state === "errored"} children={<ErrorScreen />} />
+    </Switch>
   );
 };
 
