@@ -6,20 +6,12 @@ import {
   FaSolidVolumeHigh,
   FaSolidVolumeXmark,
 } from "solid-icons/fa";
-import {
-  Show,
-  type Component,
-  createEffect,
-  Switch,
-  Match,
-  type JSX,
-} from "solid-js";
+import { Show, type Component, Switch, Match, type JSX } from "solid-js";
 
 import { DESKTOP_INPUT_NAME, MIC_INPUT_NAME } from "../../consts";
 import { useObsWebSocket } from "../../contexts/useObsWebSocket";
 import useInputMuteState from "../../lib/useInputMuteState";
 import useInputVolume from "../../lib/useInputVolume";
-import { logger } from "../../lib/useLog";
 import { primitiveColors, semanticColors } from "../../theme/color";
 import RoundSlider from "../RoundSlider";
 import ErrorScreen from "../window/ErrorScreen";
@@ -135,10 +127,6 @@ const Controller: Component = () => {
   const {
     obsResource: [obs],
   } = useObsWebSocket();
-
-  createEffect(() => {
-    logger.log(obs.state);
-  });
 
   return (
     <Switch fallback={<LoadingScreen />}>
