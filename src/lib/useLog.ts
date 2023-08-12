@@ -40,6 +40,10 @@ const useLog = () => {
     setLogs([]);
   };
 
+  window.addEventListener("error", (e) => {
+    error(e.message);
+  });
+
   return {
     logs,
     logger: {
