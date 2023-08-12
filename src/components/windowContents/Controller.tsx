@@ -13,6 +13,7 @@ import { useObsWebSocket } from "../../contexts/useObsWebSocket";
 import useInputMuteState from "../../lib/useInputMuteState";
 import useInputVolume from "../../lib/useInputVolume";
 import { primitiveColors, semanticColors } from "../../theme/color";
+import CircularButton from "../CircularButton";
 import RoundSlider from "../RoundSlider";
 import ErrorScreen from "../window/ErrorScreen";
 import LoadingScreen from "../window/LoadingScreen";
@@ -39,28 +40,6 @@ const Container = styled("div", {
     justifyContent: "center",
     alignItems: "center",
     gap: "16px",
-  },
-});
-
-const Button = styled("button", {
-  base: {
-    width: "48px",
-    height: "48px",
-    borderRadius: "50%",
-    backgroundColor: primitiveColors.black,
-    borderColor: primitiveColors.pink[400],
-    borderWidth: "4px",
-    outline: "none",
-    cursor: "pointer",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: "1",
-    selectors: {
-      "&:hover": {
-        backgroundColor: primitiveColors.gray[900],
-      },
-    },
   },
 });
 
@@ -110,7 +89,7 @@ const VolumeButton: Component<{
           startAngle={45}
         />
       </SliderWrapper>
-      <Button
+      <CircularButton
         onClick={() => {
           void toggleMute();
         }}
@@ -118,7 +97,7 @@ const VolumeButton: Component<{
         <Show when={isMuted()} fallback={props.onMute}>
           {props.offMute}
         </Show>
-      </Button>
+      </CircularButton>
     </SliderContainer>
   );
 };

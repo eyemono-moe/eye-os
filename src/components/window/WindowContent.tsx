@@ -21,6 +21,10 @@ import Note, {
   defaultNoteWindowData,
   type NoteWindowData,
 } from "../windowContents/Note";
+import Stopwatch, {
+  defaultStopwatchWindowData,
+  type StopwatchWindowData,
+} from "../windowContents/Stopwatch";
 import { useWindow } from "../Windows";
 
 import ErrorScreen from "./ErrorScreen";
@@ -31,6 +35,7 @@ export const windowContentsMap = {
   empty: Empty,
   log: Log,
   note: Note,
+  stopwatch: Stopwatch,
 };
 
 export type WindowType = keyof typeof windowContentsMap;
@@ -46,6 +51,7 @@ export const defaultWindowData: Record<WindowType, WindowData> = {
   empty: defaultEmptyWindowData,
   log: defaultLogWindowData,
   note: defaultNoteWindowData,
+  stopwatch: defaultStopwatchWindowData,
 };
 
 export type WindowDataConcrete =
@@ -53,7 +59,8 @@ export type WindowDataConcrete =
   | ControllerWindowData
   | EmptyWindowData
   | LogWindowData
-  | NoteWindowData;
+  | NoteWindowData
+  | StopwatchWindowData;
 
 const WindowContent: Component = () => {
   const [state] = useWindow();
