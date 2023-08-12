@@ -34,7 +34,40 @@ export type WindowsContextValue = [
 ];
 
 const defaultState: WindowsContextState = {
-  windows: [],
+  windows: [
+    {
+      title: "Log",
+      icon: "📢",
+      minimized: false,
+      zIndex: 5,
+      x: 250,
+      y: 520,
+      width: 700,
+      height: 350,
+      color: "#f5713d",
+      type: "log",
+      maximized: false,
+    },
+    {
+      title: "Note",
+      icon: "📝",
+      minimized: false,
+      zIndex: 6,
+      x: 800,
+      y: 320,
+      width: 700,
+      height: 300,
+      color: "#e133e1",
+      type: "note",
+      option: {
+        alignment: "left",
+        content:
+          'Hello, World!\n- 画面下部の"+"でウィンドウ追加\n- 画面左下の〇ボタンからOBS WebSocket設定',
+        fontSize: 32,
+      },
+      maximized: false,
+    },
+  ],
 };
 
 const WindowsContext = createContext<WindowsContextValue>([
