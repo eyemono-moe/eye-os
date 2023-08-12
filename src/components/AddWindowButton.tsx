@@ -37,6 +37,7 @@ const AddWindowButton: Component = () => {
           height: 280,
           color: generateWindowColor(),
           type: "empty",
+          maximized: false,
         });
       }}
     >
