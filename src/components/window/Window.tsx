@@ -24,6 +24,7 @@ const MIN_HEIGHT = 100;
 
 const headerHeight = 36;
 const movableEdgeWidth = 8;
+const displayEdgeWidth = 4;
 
 const MaximizeAnimation = keyframes({
   from: {
@@ -132,7 +133,7 @@ const Content = styled("div", {
     flexDirection: "column",
     overflow: "hidden",
 
-    borderWidth: "4px",
+    borderWidth: `${displayEdgeWidth}px`,
     borderStyle: "solid",
     borderRadius: "8px",
     background: "white",
@@ -235,7 +236,7 @@ const Window: Component = () => {
         index(),
         "height",
         scale * (transform()?.sourceHeight as number) +
-          movableEdgeWidth +
+          displayEdgeWidth +
           headerHeight,
       );
     }
@@ -251,7 +252,7 @@ const Window: Component = () => {
         "windows",
         index(),
         "width",
-        scale * (transform()?.sourceWidth as number) + movableEdgeWidth * 2,
+        scale * (transform()?.sourceWidth as number) + displayEdgeWidth * 2,
       );
     }
   };
