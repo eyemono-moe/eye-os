@@ -50,6 +50,8 @@ const Container = styled("div", {
 const TextArea = styled("div", {
   base: {
     width: "100%",
+    height: "auto",
+    overflowY: "auto",
     resize: "none",
     border: "none",
     outline: "none",
