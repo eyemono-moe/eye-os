@@ -6,23 +6,38 @@ import { primitiveColors, semanticColors } from "../theme/color";
 
 import AddWindowButton from "./AddWindowButton";
 import OsButton from "./OsButton";
+import TaskBarClock from "./TaskBarClock";
 
 const Container = styled("div", {
   base: {
     width: "100%",
+    height: "auto",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: "0 16px",
     backgroundColor: primitiveColors.green[900],
   },
 });
 
-const TaskBarItems = styled("div", {
+const TaskBarItemsLeft = styled("div", {
   base: {
     display: "flex",
     flexDirection: "row",
+    justifyContent: "flex-start",
+    gap: "4px",
+  },
+});
+const TaskBarItemsRight = styled("div", {
+  base: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
     gap: "4px",
   },
 });
 
-const TaskBarItem = styled("div", {
+const MinimizedWindow = styled("div", {
   base: {
     width: "80px",
     height: "40px",
@@ -53,11 +68,11 @@ const TaskBar: Component = () => {
 
   return (
     <Container>
-      <TaskBarItems>
+      <TaskBarItemsLeft>
         <OsButton />
         <For each={state.windows}>
           {(window, i) => (
-            <TaskBarItem
+            <MinimizedWindow
               minimized={window.minimized}
               onClick={() => {
                 setState("windows", i(), "minimized", false);
@@ -65,11 +80,14 @@ const TaskBar: Component = () => {
               }}
             >
               {window.icon}
-            </TaskBarItem>
+            </MinimizedWindow>
           )}
         </For>
         <AddWindowButton />
-      </TaskBarItems>
+      </TaskBarItemsLeft>
+      <TaskBarItemsRight>
+        <TaskBarClock />
+      </TaskBarItemsRight>
     </Container>
   );
 };
