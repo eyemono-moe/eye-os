@@ -1,16 +1,23 @@
-import { createResource } from "solid-js";
+import { type Resource, createResource } from "solid-js";
+
+import { useObsWebSocket } from "../contexts/useObsWebSocket";
 
 import type OBSWebSocket from "obs-websocket-js";
 
-const useSceneItems = (obs: OBSWebSocket, sceneName: string) => {
-  const getSceneItems = async () => {
-    const res = await obs.call("GetSceneItemList", {
+const {
+  obsResource: [obs],
+} = useObsWebSocket();
+
+const useSceneItems = (sceneName: string) => {
+  const getSceneItems = async (_r: Resource<OBSWebSocket>) => {
+    if (obs.state !== "ready") throw new Error("OBS is not ready");
+    const res = await obs().call("GetSceneItemList", {
       sceneName,
     });
     return res.sceneItems;
   };
 
-  const [sceneItems] = createResource(getSceneItems);
+  const [sceneItems] = createResource(obs, getSceneItems);
 
   // obs.on("SceneItemCreated", (data) => {
   //   if (sceneItems.state === "ready") {

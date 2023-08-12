@@ -17,7 +17,6 @@ const useSceneItemTransform = (
 ) => {
   const getSceneItemTransform = async (_r: Resource<OBSWebSocket>) => {
     if (obs.state !== "ready") throw new Error("OBS is not ready");
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const res = await obs().call("GetSceneItemTransform", {
       sceneName,
       sceneItemId: sceneItemId(),

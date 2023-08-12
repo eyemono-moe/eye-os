@@ -3,7 +3,6 @@ import { styled } from "@macaron-css/solid";
 import { For, Show } from "solid-js";
 
 import { MAIN_SCENE_NAME } from "../../consts";
-import { useObsWebSocket } from "../../contexts/useObsWebSocket";
 import useSceneItems from "../../lib/useSceneItems";
 import { primitiveColors } from "../../theme/color";
 import { useWindow } from "../Windows";
@@ -28,10 +27,7 @@ const Ul = styled("ul", {
 
 const WindowDataEditor = () => {
   const [store, { setState, index }] = useWindow();
-  const {
-    obsResource: [obs],
-  } = useObsWebSocket();
-  const { sceneItems } = useSceneItems(obs()!, MAIN_SCENE_NAME);
+  const { sceneItems } = useSceneItems(MAIN_SCENE_NAME);
 
   return (
     <Container>
