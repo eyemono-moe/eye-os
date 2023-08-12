@@ -9,7 +9,6 @@ import {
 import { onMount, createEffect, type Component } from "solid-js";
 
 import { MAIN_SCENE_NAME } from "../../consts";
-import { useObsWebSocket } from "../../contexts/useObsWebSocket";
 import usePopup from "../../lib/usePopup";
 import useSceneItemTransform from "../../lib/useSceneItemTransform";
 import { primitiveColors, semanticColors } from "../../theme/color";
@@ -171,6 +170,15 @@ const HeaderButtons = styled("div", {
 
 const Body = styled("div", {
   base: {
+    position: "relative",
+    width: "100%",
+    flexGrow: 1,
+  },
+});
+
+const ContentWrapper = styled("div", {
+  base: {
+    position: "absolute",
     width: "100%",
     height: "100%",
   },
@@ -187,6 +195,7 @@ const Window: Component = () => {
   let bottomRef: HTMLDivElement;
   let bottomRightRef: HTMLDivElement;
   let windowBodyRef: HTMLDivElement;
+  let windowContentRef: HTMLDivElement;
 
   const [windowInfo, { setState, setTop, removeWindow, index }] = useWindow()!;
 
@@ -202,28 +211,30 @@ const Window: Component = () => {
     x: 0,
     y: 0,
   };
+  let leftTopOffsetPosition = {
+    x: 0,
+    y: 0,
+  };
 
-  const {
-    obsResource: [obs],
-  } = useObsWebSocket();
   const { transform, setTransform } = useSceneItemTransform(
-    obs()!,
     MAIN_SCENE_NAME,
-  )(() => windowInfo.linkSceneItemId ?? 999);
+    () => windowInfo.linkSceneItemId ?? 999,
+  );
+
+  const bodyWidth = () => windowBodyRef.getBoundingClientRect().width;
+  const bodyHeight = () => windowBodyRef.getBoundingClientRect().height;
 
   const keepAspectHeight = () => {
     if (
       windowInfo.linkSceneItemId !== undefined &&
       transform.state === "ready"
     ) {
-      const scale =
-        (windowInfo.width - movableEdgeWidth * 2) /
-        ((transform().sourceWidth as number | null) ?? 1);
+      const scale = bodyWidth() / (transform()?.sourceWidth as number);
       setState(
         "windows",
         index(),
         "height",
-        scale * (transform().sourceHeight as number) +
+        scale * (transform()?.sourceHeight as number) +
           movableEdgeWidth +
           headerHeight,
       );
@@ -235,14 +246,12 @@ const Window: Component = () => {
       windowInfo.linkSceneItemId !== undefined &&
       transform.state === "ready"
     ) {
-      const scale =
-        (windowInfo.height - movableEdgeWidth - headerHeight) /
-        ((transform().sourceHeight as number | null) ?? 1);
+      const scale = bodyHeight() / (transform()?.sourceHeight as number);
       setState(
         "windows",
         index(),
         "width",
-        scale * (transform().sourceWidth as number) + movableEdgeWidth * 2,
+        scale * (transform()?.sourceWidth as number) + movableEdgeWidth * 2,
       );
     }
   };
@@ -253,15 +262,13 @@ const Window: Component = () => {
     void windowInfo.y;
     void windowInfo.width;
     void windowInfo.height;
-    void windowInfo.linkSceneItemId;
 
     if (
       windowInfo.linkSceneItemId !== undefined &&
       transform.state === "ready"
     ) {
       const displayedRect = windowBodyRef.getBoundingClientRect();
-      const scale =
-        displayedRect.width / ((transform().sourceWidth as number | null) ?? 1);
+      const scale = displayedRect.width / (transform()?.sourceWidth as number);
       await setTransform({
         positionX: displayedRect.x,
         positionY: displayedRect.y,
@@ -270,6 +277,8 @@ const Window: Component = () => {
       });
     }
   });
+
+  createEffect(keepAspectHeight);
 
   const handlePointerMoveOnLeft = (e: PointerEvent) => {
     let newX = e.pageX - offsetPosition.x;
@@ -315,9 +324,8 @@ const Window: Component = () => {
   };
 
   const handleHeaderMove = (e: PointerEvent) => {
-    const deltaX =
-      e.pageX - windowInfo.x - offsetPosition.x - movableEdgeWidth - 32;
-    const deltaY = e.pageY - windowInfo.y - offsetPosition.y - movableEdgeWidth;
+    const deltaX = e.pageX - windowInfo.x - leftTopOffsetPosition.x;
+    const deltaY = e.pageY - windowInfo.y - leftTopOffsetPosition.y;
     setState("windows", index(), "x", (p) => p + deltaX);
     setState("windows", index(), "y", (p) => p + deltaY);
   };
@@ -332,6 +340,10 @@ const Window: Component = () => {
       offsetPosition = {
         x: e.offsetX,
         y: e.offsetY,
+      };
+      leftTopOffsetPosition = {
+        x: e.pageX - windowContentRef.getBoundingClientRect().x,
+        y: e.pageY - windowContentRef.getBoundingClientRect().y,
       };
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       ref.addEventListener("pointermove", pointerMoveHandler);
@@ -391,6 +403,7 @@ const Window: Component = () => {
           : MaximizeAnimation,
         "z-index": windowInfo.zIndex,
       }}
+      ref={windowContentRef!}
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       onPointerDown={setTop}
     >
@@ -436,7 +449,9 @@ const Window: Component = () => {
           </HeaderButtons>
         </Header>
         <Body ref={windowBodyRef!}>
-          <WindowContent />
+          <ContentWrapper>
+            <WindowContent />
+          </ContentWrapper>
         </Body>
       </Content>
       <Edges>

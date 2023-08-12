@@ -21,16 +21,15 @@ const Container = styled("div", {
   base: {
     width: "100%",
     height: "100%",
+    overflowY: "auto",
     background: semanticColors.ui.background,
-    position: "relative",
   },
 });
 
 const LogContainer = styled("div", {
   base: {
     width: "100%",
-    height: "100%",
-    overflowY: "auto",
+    height: "auto",
     userSelect: "text",
   },
 });
