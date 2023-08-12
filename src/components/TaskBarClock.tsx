@@ -13,25 +13,21 @@ const Container = styled("div", {
   },
 });
 
-const Date = styled("div", {});
-
-const Time = styled("div", {});
-
 const TaskBarClock: Component = () => {
   const { year, month, day, hour, minute, second } = useClock();
 
   return (
     <Container>
-      <Time>
+      <div>
         {`${hour().toString().padStart(2, "0")}:${minute()
           .toString()
           .padStart(2, "0")}:${second().toString().padStart(2, "0")}`}
-      </Time>
-      <Date>
+      </div>
+      <div>
         {`${year()}/${month().toString().padStart(2, "0")}/${day()
           .toString()
           .padStart(2, "0")}`}
-      </Date>
+      </div>
     </Container>
   );
 };

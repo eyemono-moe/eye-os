@@ -1,10 +1,6 @@
 import { type Component, ErrorBoundary } from "solid-js";
 import { Dynamic } from "solid-js/web";
 
-import Clock, {
-  defaultClockWindowData,
-  type ClockWindowData,
-} from "../windowContents/Clock";
 import Color, {
   defaultColorWindowData,
   type ColorWindowData,
@@ -30,7 +26,6 @@ import { useWindow } from "../Windows";
 import ErrorScreen from "./ErrorScreen";
 
 export const windowContentsMap = {
-  clock: Clock,
   color: Color,
   controller: Controller,
   empty: Empty,
@@ -46,7 +41,6 @@ export interface WindowData {
 }
 
 export const defaultWindowData: Record<WindowType, WindowData> = {
-  clock: defaultClockWindowData,
   color: defaultColorWindowData,
   controller: defaultControllerWindowData,
   empty: defaultEmptyWindowData,
@@ -55,7 +49,6 @@ export const defaultWindowData: Record<WindowType, WindowData> = {
 };
 
 export type WindowDataConcrete =
-  | ClockWindowData
   | ColorWindowData
   | ControllerWindowData
   | EmptyWindowData
