@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { styled } from "@macaron-css/solid";
 import { For, type Component, createContext, useContext } from "solid-js";
 import { type SetStoreFunction } from "solid-js/store";
 
 import { MAIN_SCENE_NAME } from "../consts";
-import { useObsWebSocket } from "../contexts/useObsWebSocket";
 import {
   type WindowInfo,
   useWindows,
@@ -63,22 +61,17 @@ const WindowContext = createContext<WindowContextValue>([
 
 const Windows: Component = () => {
   const [state, { setState, removeWindow, setTop }] = useWindows();
-  const {
-    obsResource: [obs],
-  } = useObsWebSocket();
-  const sceneItemIndexFactory = useSceneItemIndex(obs()!, MAIN_SCENE_NAME);
-  const { sceneItems } = useSceneItems(obs()!, MAIN_SCENE_NAME);
-  const setTopInObs = async (index: number) => {
-    const { setIndex } = sceneItemIndexFactory(() => index);
-    if (sceneItems.state === "ready") {
-      await setIndex(sceneItems().length - 2);
-    }
-  };
+  const { sceneItems } = useSceneItems(MAIN_SCENE_NAME);
 
   return (
     <Container>
       <For each={state.windows}>
         {(window, i) => {
+          const { setIndex } = useSceneItemIndex(
+            MAIN_SCENE_NAME,
+            () => window.linkSceneItemId ?? 999,
+          );
+
           return (
             <WindowContext.Provider
               value={[
@@ -87,8 +80,11 @@ const Windows: Component = () => {
                   setState,
                   setTop: async () => {
                     setTop(i());
-                    if (window.linkSceneItemId !== undefined) {
-                      await setTopInObs(window.linkSceneItemId);
+                    if (
+                      window.linkSceneItemId !== undefined &&
+                      sceneItems.state === "ready"
+                    ) {
+                      await setIndex(sceneItems().length - 2);
                     }
                   },
                   removeWindow: () => {

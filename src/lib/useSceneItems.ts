@@ -1,4 +1,4 @@
-import { type Resource, createResource } from "solid-js";
+import { type Resource, createResource, createEffect } from "solid-js";
 
 import { useObsWebSocket } from "../contexts/useObsWebSocket";
 
@@ -17,27 +17,20 @@ const useSceneItems = (sceneName: string) => {
     return res.sceneItems;
   };
 
-  const [sceneItems] = createResource(obs, getSceneItems);
+  const [sceneItems, { refetch }] = createResource(obs, getSceneItems);
 
-  // obs.on("SceneItemCreated", (data) => {
-  //   if (sceneItems.state === "ready") {
-  //     mutate(sceneItems().concat(data));
-  //   }
-  // });
+  createEffect(() => {
+    if (obs.state !== "ready") return;
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    obs().on("SceneItemCreated", async (_data) => {
+      await refetch();
+    });
 
-  // obs.on("SceneItemRemoved", (data) => {
-  //   if (sceneItems.state === "ready") {
-  //     mutate(
-  //       sceneItems().filter((item) => item.sceneItemId !== data.sceneItemId),
-  //     );
-  //   }
-  // });
-
-  // obs.on("SceneItemListReindexed", (data) => {
-  //   if (sceneItems.state === "ready") {
-  //     mutate(sceneItems().filter((item) => item.sceneItemId !== data.sceneItemId));
-  //   }
-  // });
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    obs().on("SceneItemRemoved", async (_data) => {
+      await refetch();
+    });
+  })
 
   return { sceneItems };
 };
