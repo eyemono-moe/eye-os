@@ -2,11 +2,13 @@
 import { keyframes } from "@macaron-css/core";
 import { styled } from "@macaron-css/solid";
 import {
+  FaRegularWindowMaximize,
   FaRegularWindowMinimize,
+  FaRegularWindowRestore,
   FaSolidBars,
   FaSolidXmark,
 } from "solid-icons/fa";
-import { onMount, createEffect, type Component } from "solid-js";
+import { onMount, createEffect, type Component, Show } from "solid-js";
 
 import { MAIN_SCENE_NAME } from "../../consts";
 import usePopup from "../../lib/usePopup";
@@ -55,6 +57,16 @@ const Container = styled("div", {
     animationIterationCount: 1,
     animationFillMode: "forwards",
     pointerEvents: "auto",
+  },
+  variants: {
+    maximized: {
+      true: {
+        left: "0 !important",
+        top: "0 !important",
+        width: "100% !important",
+        height: "100% !important",
+      },
+    },
   },
 });
 
@@ -137,6 +149,17 @@ const Content = styled("div", {
     borderStyle: "solid",
     borderRadius: "8px",
     background: "white",
+    outline: `solid 1px ${primitiveColors.blackAlpha[600]}`,
+    boxShadow: `4px 4px 12px 2px ${primitiveColors.blackAlpha[400]}`,
+  },
+  variants: {
+    maximized: {
+      true: {
+        borderRadius: "0",
+        outline: "none",
+        boxShadow: "none",
+      },
+    },
   },
 });
 
@@ -173,6 +196,7 @@ const Body = styled("div", {
   base: {
     position: "relative",
     width: "100%",
+    overflow: "hidden",
     flexGrow: 1,
   },
 });
@@ -202,6 +226,12 @@ const Window: Component = () => {
 
   const minimizeWindow = () => {
     setState("windows", index(), "minimized", true);
+  };
+  const toggleMaximize = () => {
+    setState("windows", index(), "maximized", (m) => !m);
+  };
+  const restoreWindow = () => {
+    setState("windows", index(), "maximized", false);
   };
 
   const { Popup: WindowDataEditorPopup, open: windowDataEditorOpen } =
@@ -325,6 +355,9 @@ const Window: Component = () => {
   };
 
   const handleHeaderMove = (e: PointerEvent) => {
+    if (windowInfo.maximized) {
+      restoreWindow();
+    }
     const deltaX = e.pageX - windowInfo.x - leftTopOffsetPosition.x;
     const deltaY = e.pageY - windowInfo.y - leftTopOffsetPosition.y;
     setState("windows", index(), "x", (p) => p + deltaX);
@@ -390,6 +423,14 @@ const Window: Component = () => {
     });
 
     handlePointerDown(windowMoverRef, handleHeaderMove);
+    windowMoverRef.addEventListener("pointerdown", (e) => {
+      if (windowInfo.maximized) {
+        leftTopOffsetPosition = {
+          x: windowInfo.width / 2,
+          y: e.pageY,
+        };
+      }
+    });
   });
 
   return (
@@ -407,11 +448,13 @@ const Window: Component = () => {
       ref={windowContentRef!}
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       onPointerDown={setTop}
+      maximized={windowInfo.maximized}
     >
       <Content
         style={{
           "border-color": windowInfo.color,
         }}
+        maximized={windowInfo.maximized}
       >
         <Header
           style={{
@@ -443,7 +486,22 @@ const Window: Component = () => {
                 fill={semanticColors.text.white}
               />
             </HeaderButton>
-            {/* <HeaderButton>maximize</HeaderButton> */}
+            <HeaderButton onClick={toggleMaximize}>
+              <Show
+                when={windowInfo.maximized}
+                fallback={
+                  <FaRegularWindowMaximize
+                    size={24}
+                    fill={semanticColors.text.white}
+                  />
+                }
+              >
+                <FaRegularWindowRestore
+                  size={24}
+                  fill={semanticColors.text.white}
+                />
+              </Show>
+            </HeaderButton>
             <HeaderButton onClick={removeWindow} closeButton>
               <FaSolidXmark size={24} fill={semanticColors.text.white} />
             </HeaderButton>

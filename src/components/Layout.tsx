@@ -17,12 +17,22 @@ const Container = styled("div", {
   },
 });
 
+const WindowsContainer = styled("div", {
+  base: {
+    position: "relative",
+    width: "100%",
+    height: "100%",
+  },
+});
+
 const Layout: Component = () => {
   return (
     <>
       <Container>
-        <DeskTop />
-        <Windows />
+        <WindowsContainer>
+          <DeskTop />
+          <Windows />
+        </WindowsContainer>
         <TaskBar />
       </Container>
     </>

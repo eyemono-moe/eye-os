@@ -21,7 +21,6 @@ const Container = styled("div", {
   base: {
     width: "100%",
     height: "100%",
-    overflowY: "auto",
     background: semanticColors.ui.background,
   },
 });
@@ -29,7 +28,8 @@ const Container = styled("div", {
 const LogContainer = styled("div", {
   base: {
     width: "100%",
-    height: "auto",
+    height: "100%",
+    overflowY: "auto",
     userSelect: "text",
   },
 });
@@ -40,11 +40,31 @@ const LogPre = styled("pre", {
     width: "100%",
     whiteSpace: "pre-wrap",
   },
+  variants: {
+    type: {
+      log: {
+        color: primitiveColors.white,
+      },
+      error: {
+        color: primitiveColors.pink[200],
+      },
+    },
+  },
 });
 
 const TimeStamp = styled("span", {
   base: {
     color: primitiveColors.green[400],
+    selectors: {
+      "&::after": {
+        content: "]",
+        color: primitiveColors.white,
+      },
+      "&::before": {
+        content: "[",
+        color: primitiveColors.white,
+      },
+    },
   },
 });
 
@@ -106,12 +126,11 @@ const Log: Component = () => {
       <LogContainer ref={ref!} onScroll={onScroll}>
         <For each={logs()}>
           {(log) => (
-            <LogPre>
-              [
+            <LogPre type={log.type}>
               <TimeStamp>
                 {toISOStringWithTimezone(new Date(log.timestamp))}
-              </TimeStamp>
-              ] {log.message}
+              </TimeStamp>{" "}
+              {log.message}
             </LogPre>
           )}
         </For>

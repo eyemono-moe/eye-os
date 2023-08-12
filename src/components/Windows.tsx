@@ -15,12 +15,11 @@ import Window from "./window/Window";
 
 const Container = styled("div", {
   base: {
-    position: "fixed",
+    position: "relative",
     width: "100%",
-    height: "100vh",
+    height: "100%",
     top: "0",
     left: "0",
-    overflow: "hidden",
     pointerEvents: "none",
   },
 });
@@ -45,6 +44,7 @@ const WindowContext = createContext<WindowContextValue>([
     height: 200,
     color: "",
     minimized: false,
+    maximized: false,
     type: "empty",
     option: {},
     zIndex: 0,

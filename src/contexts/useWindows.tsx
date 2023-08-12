@@ -13,6 +13,7 @@ export type WindowInfo = {
   height: number;
   color: string;
   minimized: boolean;
+  maximized: boolean;
   zIndex: number;
   linkSceneItemId?: number;
 } & WindowDataConcrete;
@@ -33,99 +34,7 @@ export type WindowsContextValue = [
 ];
 
 const defaultState: WindowsContextState = {
-  windows: [
-    {
-      title: "Game",
-      icon: "🎮",
-      x: 16,
-      y: 16,
-      width: 1600,
-      height: 900,
-      color: "#db33ea",
-      minimized: false,
-      type: "color",
-      option: {
-        color: "#0000ff",
-      },
-      zIndex: 1,
-    },
-    {
-      title: "Clock",
-      icon: "🕑",
-      x: 1500,
-      y: 20,
-      width: 300,
-      height: 160,
-      color: "#da33eb",
-      minimized: false,
-      type: "clock",
-      zIndex: 0,
-    },
-    {
-      title: "Comments",
-      icon: "💬",
-      x: 1443,
-      y: 210,
-      width: 400,
-      height: 400,
-      color: "#f133ca",
-      minimized: false,
-      type: "color",
-      zIndex: 0,
-      option: {
-        color: "#0000ff",
-      },
-    },
-    {
-      title: "Info",
-      icon: "ℹ️",
-      x: 470,
-      y: 825,
-      width: 500,
-      height: 200,
-      color: "#f233ca",
-      minimized: false,
-      type: "note",
-      option: {
-        content: "- Twetter:@eyemono_moe\n- hashtag:#四十物さんは見ている",
-        alignment: "left",
-        fontSize: 24,
-      },
-      zIndex: 5,
-    },
-    {
-      title: "Note",
-      icon: "📝",
-      minimized: false,
-      zIndex: 4,
-      x: 928,
-      y: 744,
-      width: 500,
-      height: 300,
-      color: "#e133e1",
-      type: "note",
-      option: {
-        alignment: "center",
-        content: "",
-        fontSize: 24,
-      },
-    },
-    {
-      title: "Icon.svg",
-      icon: "😃",
-      minimized: false,
-      zIndex: 3,
-      x: 1502,
-      y: 670,
-      width: 300,
-      height: 300,
-      color: "#de33e5",
-      type: "color",
-      option: {
-        color: "#0000ff",
-      },
-    },
-  ],
+  windows: [],
 };
 
 const WindowsContext = createContext<WindowsContextValue>([
