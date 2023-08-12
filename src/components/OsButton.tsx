@@ -6,6 +6,9 @@ import { useWindows } from "../contexts/useWindows";
 import usePopup from "../lib/usePopup";
 import { primitiveColors, semanticColors } from "../theme/color";
 
+import UIButton from "./UI/UIButton";
+import UIInput from "./UI/UIInput";
+
 const Container = styled("div", {
   base: {
     display: "grid",
@@ -68,11 +71,11 @@ const OsButton: Component = () => {
         <PopupContainer>
           <Ul>
             <li>
-              <button onClick={resetDisplay}>reset window position</button>
+              <UIButton onClick={resetDisplay}>reset window position</UIButton>
             </li>
             <li>
-              {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-              <button
+              <UIButton
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 onClick={async () => {
                   if (obs.state === "ready") {
                     await obs().disconnect();
@@ -81,11 +84,11 @@ const OsButton: Component = () => {
                 }}
               >
                 reload OBS
-              </button>
+              </UIButton>
             </li>
             <li>
               <div>obs websocket address</div>
-              <input
+              <UIInput
                 type="text"
                 value={obsConfig.address}
                 onChange={(e) => {
@@ -95,7 +98,7 @@ const OsButton: Component = () => {
             </li>
             <li>
               <div>obs websocket pass</div>
-              <input
+              <UIInput
                 type="password"
                 value={obsConfig.password}
                 onChange={(e) => {

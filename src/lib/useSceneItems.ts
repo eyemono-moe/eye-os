@@ -30,7 +30,7 @@ const useSceneItems = (sceneName: string) => {
     obs().on("SceneItemRemoved", async (_data) => {
       await refetch();
     });
-  })
+  });
 
   return { sceneItems };
 };
