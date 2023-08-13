@@ -1,42 +1,85 @@
-import { createResource } from "solid-js";
-
+import { useGlobalConfig } from "../contexts/useGlobalConfig";
 import { useObsWebSocket } from "../contexts/useObsWebSocket";
 
 import { logger } from "./useLog";
+import useSceneItems from "./useSceneItems";
 
-const {
-  obsResource: [obs],
-} = useObsWebSocket();
+const { globalOBSWebsocket, obsConnected } = useObsWebSocket();
+const [config] = useGlobalConfig();
+const { sceneItems } = useSceneItems();
 
-const useSceneItemIndex = (sceneName: string, sceneItemId: () => number) => {
-  const getSceneItemIndex = async (id: number) => {
-    if (obs.state !== "ready") throw new Error("OBS is not ready");
-    const res = await obs().call("GetSceneItemIndex", {
-      sceneName,
-      sceneItemId: id,
-    });
-    return res.sceneItemIndex;
-  };
+const useSceneItemIndex = (sceneItemId: () => number) => {
+  // const getSceneItemIndex = async (data: {
+  //   id: number;
+  //   obsConnected: Resource<boolean>;
+  // }) => {
+  //   if (obsConnected() !== true) {
+  //     logger.error("OBS is not connected, cannot get scene item index");
+  //     return {};
+  //   }
+  //   try {
+  //     const res = await globalOBSWebsocket.call("GetSceneItemIndex", {
+  //       sceneName,
+  //       sceneItemId: data.id,
+  //     });
+  //     return res.sceneItemIndex;
+  //   } catch (e) {
+  //     logger.error("Failed to get scene item index");
+  //     return {};
+  //   }
+  // };
 
-  const [sceneItemIndex, { refetch }] = createResource(
-    sceneItemId,
-    getSceneItemIndex,
-  );
+  // const [sceneItemIndex, { refetch }] = createResource(
+  //   () => ({
+  //     id: sceneItemId(),
+  //     obsConnected,
+  //   }),
+  //   getSceneItemIndex,
+  // );
 
   const setIndex = async (index: number) => {
-    if (obs.state !== "ready") {
-      logger.error("OBS is not ready");
+    if (obsConnected() !== true) {
+      logger.error("OBS is not connected, cannot set scene item index");
       return;
     }
-
-    await obs().call("SetSceneItemIndex", {
-      sceneName,
-      sceneItemId: sceneItemId(),
-      sceneItemIndex: index,
-    });
+    try {
+      await globalOBSWebsocket.call("SetSceneItemIndex", {
+        sceneName: config.currentSceneName,
+        sceneItemId: sceneItemId(),
+        sceneItemIndex: index,
+      });
+    } catch (e) {
+      logger.error("Failed to set scene item index:", e);
+      console.error(e);
+    }
   };
 
-  return { sceneItemIndex, setIndex, refetch };
+  const setTop = async () => {
+    if (obsConnected() !== true) {
+      logger.error("OBS is not connected, cannot set scene item index");
+      return;
+    }
+    if (sceneItems[config.currentSceneName] === undefined) {
+      logger.error("Cannot set top if there are no scene items");
+      return;
+    }
+    if (sceneItems[config.currentSceneName]?.length < 2) {
+      logger.error("Cannot set top if there is only one scene item");
+      return;
+    }
+    try {
+      await globalOBSWebsocket.call("SetSceneItemIndex", {
+        sceneName: config.currentSceneName,
+        sceneItemId: sceneItemId(),
+        sceneItemIndex: sceneItems[config.currentSceneName].length - 2,
+      });
+    } catch (e) {
+      logger.error("Failed to set scene item index:", e);
+      console.error(e);
+    }
+  };
+
+  return { setIndex, setTop };
 };
 
 export default useSceneItemIndex;

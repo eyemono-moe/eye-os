@@ -1,5 +1,16 @@
 import { createSignal } from "solid-js";
 
+const stringify = (...data: any[]): string => {
+  const message = data
+    .map((d) => {
+      if (typeof d === "string") return d;
+      return JSON.stringify(d);
+    })
+    .join(" ");
+
+  return message;
+};
+
 const useLog = () => {
   interface Log {
     message: string;
@@ -9,7 +20,8 @@ const useLog = () => {
 
   const [logs, setLogs] = createSignal<Log[]>([]);
 
-  const log = (message: string) => {
+  const log = (...data: any[]) => {
+    const message = stringify(...data);
     setLogs((l) =>
       l.concat({
         message,
@@ -18,20 +30,12 @@ const useLog = () => {
       }),
     );
   };
-  const error = (message: string) => {
+  const error = (...data: any[]) => {
+    const message = stringify(...data);
     setLogs((l) =>
       l.concat({
         message,
         type: "error",
-        timestamp: Date.now(),
-      }),
-    );
-  };
-  const info = (message: string) => {
-    setLogs((l) =>
-      l.concat({
-        message,
-        type: "log",
         timestamp: Date.now(),
       }),
     );
@@ -49,7 +53,6 @@ const useLog = () => {
     logger: {
       log,
       error,
-      info,
       clear,
     },
   };

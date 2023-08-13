@@ -2,7 +2,7 @@
 import { styled } from "@macaron-css/solid";
 import { For, Show } from "solid-js";
 
-import { MAIN_SCENE_NAME } from "../../consts";
+import { useGlobalConfig } from "../../contexts/useGlobalConfig";
 import generateWindowColor from "../../lib/generateWindowColor";
 import useSceneItems from "../../lib/useSceneItems";
 import { primitiveColors } from "../../theme/color";
@@ -33,8 +33,9 @@ const Container = styled("div", {
 });
 
 const WindowDataEditor = () => {
+  const [config] = useGlobalConfig();
   const [store, { setState, index }] = useWindow();
-  const { sceneItems } = useSceneItems(MAIN_SCENE_NAME);
+  const { sceneItems } = useSceneItems();
 
   return (
     <Container>
@@ -87,7 +88,12 @@ const WindowDataEditor = () => {
           randomize
         </UIButton>
       </div>
-      <Show when={sceneItems.state === "ready"}>
+      <Show
+        when={
+          sceneItems[config.currentSceneName] !== undefined &&
+          sceneItems[config.currentSceneName].length > 0
+        }
+      >
         link obs
         <UISelect
           onChange={(e) => {
@@ -106,7 +112,7 @@ const WindowDataEditor = () => {
           }
         >
           <option value={"none"}>none</option>
-          <For each={sceneItems()}>
+          <For each={sceneItems[config.currentSceneName]}>
             {(item) => (
               <option value={item.sceneItemId as number}>
                 {item.sourceName as string}

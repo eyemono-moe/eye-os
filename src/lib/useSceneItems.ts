@@ -1,42 +1,49 @@
-import { type Resource, createResource, createEffect } from "solid-js";
+import { createEffect } from "solid-js";
+import { createStore } from "solid-js/store";
+import { type JsonObject } from "type-fest";
 
 import { useObsWebSocket } from "../contexts/useObsWebSocket";
 
 import { logger } from "./useLog";
+import useScenes from "./useScenes";
 
-import type OBSWebSocket from "obs-websocket-js";
+const { globalOBSWebsocket } = useObsWebSocket();
+const { globalOBSScenes } = useScenes();
 
-const {
-  obsResource: [obs],
-} = useObsWebSocket();
+const [sceneItems, setSceneItems] = createStore<Record<string, JsonObject[]>>(
+  {},
+);
 
-const useSceneItems = (sceneName: string) => {
-  const getSceneItems = async (_r: Resource<OBSWebSocket>) => {
-    if (obs.state !== "ready") {
-      logger.error("OBS is not ready: getSceneItems");
-      return [];
+const reloadSceneItems = async () => {
+  if (globalOBSScenes.state === "ready") {
+    for (const scene of globalOBSScenes()) {
+      try {
+        const res = await globalOBSWebsocket.call("GetSceneItemList", {
+          sceneName: scene.sceneName,
+        });
+        logger.log("Got scene items");
+        setSceneItems(scene.sceneName, res.sceneItems);
+      } catch (e) {
+        logger.error("Failed to get scene items:", e);
+      }
     }
-    const res = await obs().call("GetSceneItemList", {
-      sceneName,
-    });
-    return res.sceneItems;
-  };
+  }
+};
 
-  const [sceneItems, { refetch }] = createResource(obs, getSceneItems);
+// eslint-disable-next-line solid/reactivity
+createEffect(reloadSceneItems);
 
-  createEffect(() => {
-    if (obs.state !== "ready") return;
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    obs().on("SceneItemCreated", async (_data) => {
-      await refetch();
-    });
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+globalOBSWebsocket.on("SceneItemCreated", async (_) => {
+  await reloadSceneItems();
+});
 
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    obs().on("SceneItemRemoved", async (_data) => {
-      await refetch();
-    });
-  });
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+globalOBSWebsocket.on("SceneItemRemoved", async (_) => {
+  await reloadSceneItems();
+});
 
+const useSceneItems = () => {
   return { sceneItems };
 };
 

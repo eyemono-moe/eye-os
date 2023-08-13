@@ -1,13 +1,16 @@
 import { styled } from "@macaron-css/solid";
-import { type Component } from "solid-js";
+import { For, type Component } from "solid-js";
 
+import { useGlobalConfig } from "../contexts/useGlobalConfig";
 import { useObsWebSocket } from "../contexts/useObsWebSocket";
 import { useWindows } from "../contexts/useWindows";
 import usePopup from "../lib/usePopup";
+import useScenes from "../lib/useScenes";
 import { primitiveColors, semanticColors } from "../theme/color";
 
 import UIButton from "./UI/UIButton";
 import UIInput from "./UI/UIInput";
+import UISelect from "./UI/UISelect";
 
 const Container = styled("div", {
   base: {
@@ -48,11 +51,12 @@ const Ul = styled("ul", {
 
 const OsButton: Component = () => {
   const {
-    obsResource: [obs, { refetch }],
     obsConfig,
-    actions: { setObsConfig },
+    actions: { setObsConfig, refetchObs },
   } = useObsWebSocket();
+  const [config, { setConfig }] = useGlobalConfig();
   const [_state, { resetDisplay }] = useWindows();
+  const { globalOBSScenes } = useScenes();
   const { Popup, open } = usePopup();
 
   return (
@@ -77,10 +81,7 @@ const OsButton: Component = () => {
               <UIButton
                 // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 onClick={async () => {
-                  if (obs.state === "ready") {
-                    await obs().disconnect();
-                  }
-                  await refetch();
+                  await refetchObs();
                 }}
               >
                 reload OBS
@@ -105,6 +106,21 @@ const OsButton: Component = () => {
                   setObsConfig("password", e.currentTarget.value);
                 }}
               />
+            </li>
+            <li>
+              <div>connected scene</div>
+              <UISelect
+                value={config.currentSceneName}
+                onChange={(e) => {
+                  setConfig("currentSceneName", e.currentTarget.value);
+                }}
+              >
+                <For each={globalOBSScenes()}>
+                  {(scene) => (
+                    <option value={scene.sceneName}>{scene.sceneName}</option>
+                  )}
+                </For>
+              </UISelect>
             </li>
           </Ul>
         </PopupContainer>

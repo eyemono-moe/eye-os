@@ -3,7 +3,9 @@ import { type SetStoreFunction } from "solid-js/store";
 
 import { createLocalStore } from "../lib/createLocalStore";
 
-export interface GlobalConfig {}
+export interface GlobalConfig {
+  currentSceneName: string;
+}
 
 export type GlobalConfigContextValue = [
   config: GlobalConfig,
@@ -12,10 +14,22 @@ export type GlobalConfigContextValue = [
   },
 ];
 
-export const GlobalConfigContext = createContext<GlobalConfigContextValue>();
+const defaultState: GlobalConfig = {
+  currentSceneName: "メイン画面",
+};
+
+export const GlobalConfigContext = createContext<GlobalConfigContextValue>([
+  defaultState,
+  {
+    setConfig: () => {},
+  },
+]);
 
 export const GlobalConfigProvider: ParentComponent = (props) => {
-  const [config, setConfig] = createLocalStore<GlobalConfig>("config", {});
+  const [config, setConfig] = createLocalStore<GlobalConfig>(
+    "config",
+    defaultState,
+  );
 
   return (
     <GlobalConfigContext.Provider value={[config, { setConfig }]}>

@@ -2,14 +2,12 @@ import { styled } from "@macaron-css/solid";
 import { For, type Component, createContext, useContext } from "solid-js";
 import { type SetStoreFunction } from "solid-js/store";
 
-import { MAIN_SCENE_NAME } from "../consts";
 import {
   type WindowInfo,
   useWindows,
   type WindowsContextState,
 } from "../contexts/useWindows";
 import useSceneItemIndex from "../lib/useSceneItemIndex";
-import useSceneItems from "../lib/useSceneItems";
 
 import Window from "./window/Window";
 
@@ -61,15 +59,13 @@ const WindowContext = createContext<WindowContextValue>([
 
 const Windows: Component = () => {
   const [state, { setState, removeWindow, setTop }] = useWindows();
-  const { sceneItems } = useSceneItems(MAIN_SCENE_NAME);
 
   return (
     <Container>
       <For each={state.windows}>
         {(window, i) => {
-          const { setIndex } = useSceneItemIndex(
-            MAIN_SCENE_NAME,
-            () => window.linkSceneItemId ?? 999,
+          const { setTop: setTopInOBS } = useSceneItemIndex(
+            () => window.linkSceneItemId ?? -1,
           );
 
           return (
@@ -80,11 +76,8 @@ const Windows: Component = () => {
                   setState,
                   setTop: async () => {
                     setTop(i());
-                    if (
-                      window.linkSceneItemId !== undefined &&
-                      sceneItems.state === "ready"
-                    ) {
-                      await setIndex(sceneItems().length - 2);
+                    if (window.linkSceneItemId !== undefined) {
+                      await setTopInOBS();
                     }
                   },
                   removeWindow: () => {

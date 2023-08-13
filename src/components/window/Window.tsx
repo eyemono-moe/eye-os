@@ -249,7 +249,7 @@ const Window: Component = () => {
 
   const { transform, setTransform } = useSceneItemTransform(
     MAIN_SCENE_NAME,
-    () => windowInfo.linkSceneItemId ?? 999,
+    () => windowInfo.linkSceneItemId ?? -1,
   );
 
   const bodyWidth = () => windowBodyRef.getBoundingClientRect().width;
@@ -296,6 +296,7 @@ const Window: Component = () => {
 
   // eslint-disable-next-line solid/reactivity
   createEffect(async () => {
+    // ウィンドウの配置が変化したらOBS側のシーンアイテムの位置を更新する
     void windowInfo.x;
     void windowInfo.y;
     void windowInfo.width;

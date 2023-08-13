@@ -103,17 +103,15 @@ const VolumeButton: Component<{
 };
 
 const Controller: Component = () => {
-  const {
-    obsResource: [obs],
-  } = useObsWebSocket();
+  const { globalOBSWebsocket, obsConnected } = useObsWebSocket();
 
   return (
     <Switch fallback={<LoadingScreen />}>
-      <Match when={obs.state === "ready" && obs().identified}>
+      <Match when={obsConnected.state === "ready" && obsConnected()}>
         <Container>
           <VolumeButton
             inputName={DESKTOP_INPUT_NAME}
-            obs={obs()!}
+            obs={globalOBSWebsocket}
             onMute={
               <FaSolidVolumeHigh size={28} fill={primitiveColors.green[400]} />
             }
@@ -123,7 +121,7 @@ const Controller: Component = () => {
           />
           <VolumeButton
             inputName={MIC_INPUT_NAME}
-            obs={obs()!}
+            obs={globalOBSWebsocket}
             onMute={
               <FaSolidMicrophone size={26} fill={primitiveColors.green[400]} />
             }
@@ -137,10 +135,7 @@ const Controller: Component = () => {
         </Container>
       </Match>
       <Match
-        when={
-          obs.state === "errored" ||
-          (obs.state === "ready" && !obs().identified)
-        }
+        when={obsConnected.state === "errored" || obsConnected() === false}
         children={<ErrorScreen message="Failed to connect to OBS WebSocket." />}
       />
     </Switch>
