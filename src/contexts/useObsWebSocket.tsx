@@ -21,7 +21,6 @@ const connect = async (option: { address: string; password: string }) => {
     );
   } catch (error) {
     logger.error("Failed to connect");
-    throw error;
   }
   return obs;
 };

@@ -2,6 +2,8 @@ import { type Resource, createResource, createEffect } from "solid-js";
 
 import { useObsWebSocket } from "../contexts/useObsWebSocket";
 
+import { logger } from "./useLog";
+
 import type OBSWebSocket from "obs-websocket-js";
 
 const {
@@ -10,7 +12,10 @@ const {
 
 const useSceneItems = (sceneName: string) => {
   const getSceneItems = async (_r: Resource<OBSWebSocket>) => {
-    if (obs.state !== "ready") throw new Error("OBS is not ready");
+    if (obs.state !== "ready") {
+      logger.error("OBS is not ready: getSceneItems");
+      return [];
+    }
     const res = await obs().call("GetSceneItemList", {
       sceneName,
     });

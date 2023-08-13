@@ -260,12 +260,15 @@ const Window: Component = () => {
       windowInfo.linkSceneItemId !== undefined &&
       transform.state === "ready"
     ) {
-      const scale = bodyWidth() / (transform()?.sourceWidth as number);
+      const scale =
+        bodyWidth() /
+        ((transform()?.sourceWidth as number | null | undefined) ?? 100);
       setState(
         "windows",
         index(),
         "height",
-        scale * (transform()?.sourceHeight as number) +
+        scale *
+          ((transform()?.sourceHeight as number | null | undefined) ?? 100) +
           displayEdgeWidth +
           headerHeight,
       );
@@ -277,12 +280,16 @@ const Window: Component = () => {
       windowInfo.linkSceneItemId !== undefined &&
       transform.state === "ready"
     ) {
-      const scale = bodyHeight() / (transform()?.sourceHeight as number);
+      const scale =
+        bodyHeight() /
+        ((transform()?.sourceHeight as number | null | undefined) ?? 100);
       setState(
         "windows",
         index(),
         "width",
-        scale * (transform()?.sourceWidth as number) + displayEdgeWidth * 2,
+        scale *
+          ((transform()?.sourceWidth as number | null | undefined) ?? 100) +
+          displayEdgeWidth * 2,
       );
     }
   };
@@ -299,7 +306,9 @@ const Window: Component = () => {
       transform.state === "ready"
     ) {
       const displayedRect = windowBodyRef.getBoundingClientRect();
-      const scale = displayedRect.width / (transform()?.sourceWidth as number);
+      const scale =
+        displayedRect.width /
+        ((transform()?.sourceWidth as number | null | undefined) ?? 100);
       await setTransform({
         positionX: displayedRect.x,
         positionY: displayedRect.y,

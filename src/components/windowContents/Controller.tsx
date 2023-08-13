@@ -109,7 +109,7 @@ const Controller: Component = () => {
 
   return (
     <Switch fallback={<LoadingScreen />}>
-      <Match when={obs.state === "ready"}>
+      <Match when={obs.state === "ready" && obs().identified}>
         <Container>
           <VolumeButton
             inputName={DESKTOP_INPUT_NAME}
@@ -136,7 +136,13 @@ const Controller: Component = () => {
           />
         </Container>
       </Match>
-      <Match when={obs.state === "errored"} children={<ErrorScreen />} />
+      <Match
+        when={
+          obs.state === "errored" ||
+          (obs.state === "ready" && !obs().identified)
+        }
+        children={<ErrorScreen message="Failed to connect to OBS WebSocket." />}
+      />
     </Switch>
   );
 };
