@@ -12,6 +12,7 @@ const UIColorInput = styled("input", {
     borderColor: primitiveColors.gray[800],
     backgroundColor: primitiveColors.gray[900],
     color: primitiveColors.white,
+    cursor: "pointer",
   },
 });
 

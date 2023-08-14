@@ -1,49 +1,54 @@
-import { styled } from "@macaron-css/solid";
 import {
-  type ParentComponent,
-  Show,
+  offset,
+  autoUpdate,
+  flip,
+  shift,
+  type ReferenceElement,
+} from "@floating-ui/dom";
+import { styled } from "@macaron-css/solid";
+import { useFloating } from "solid-floating-ui";
+import {
   createSignal,
   onCleanup,
   onMount,
+  type ParentComponent,
+  Show,
 } from "solid-js";
 import { Portal } from "solid-js/web";
 
 const ZIndexTop = styled("div", {
   base: {
-    position: "fixed",
+    position: "absolute",
+    top: 0,
+    left: 0,
     width: "100%",
-    height: "100vh",
-    top: "0",
-    left: "0",
-    zIndex: "999",
+    height: "100%",
+    zIndex: 999,
   },
 });
 
 const Background = styled("div", {
   base: {
-    position: "fixed",
+    position: "absolute",
+    top: 0,
+    left: 0,
     width: "100%",
-    height: "100vh",
-    top: "0",
-    left: "0",
-  },
-});
-
-const PopupWrapper = styled("div", {
-  base: {
-    position: "fixed",
+    height: "100%",
   },
 });
 
 const usePopup = (mount?: Node) => {
+  const [baseElement, setBaseElement] = createSignal<ReferenceElement>();
+  const [popupElement, setPopupElement] = createSignal<HTMLElement>();
   const [isOpen, setIsOpen] = createSignal(false);
-  const [position, setPosition] = createSignal<{ x: number; y: number }>({
-    x: 0,
-    y: 0,
+
+  const position = useFloating(baseElement, popupElement, {
+    whileElementsMounted: autoUpdate,
+    placement: "bottom",
+    middleware: [offset(6), flip(), shift({ padding: 5 })],
   });
 
-  const open = (position: { x: number; y: number }) => {
-    setPosition(position);
+  const open = () => {
     setIsOpen(true);
   };
   const close = () => setIsOpen(false);
@@ -65,17 +70,19 @@ const usePopup = (mount?: Node) => {
   const Popup: ParentComponent = (props) => {
     return (
       <Show when={isOpen()}>
-        <Portal mount={mount != null ? mount : document.body}>
+        <Portal mount={mount}>
           <ZIndexTop>
             <Background onClick={close} />
-            <PopupWrapper
+            <div
+              ref={setPopupElement}
               style={{
-                left: `${position().x}px`,
-                top: `${position().y}px`,
+                position: position.strategy,
+                top: `${position.y ?? 0}px`,
+                left: `${position.x ?? 0}px`,
               }}
             >
               {props.children}
-            </PopupWrapper>
+            </div>
           </ZIndexTop>
         </Portal>
       </Show>
@@ -83,6 +90,7 @@ const usePopup = (mount?: Node) => {
   };
 
   return {
+    setBaseElement,
     open,
     close,
     Popup,

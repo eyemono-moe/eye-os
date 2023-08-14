@@ -234,9 +234,17 @@ const Window: Component = () => {
     setState("windows", index(), "maximized", false);
   };
 
-  const { Popup: WindowDataEditorPopup, open: windowDataEditorOpen } =
-    usePopup();
-  const { Popup: IconEditorPopup, open: iconEditorOpen } = usePopup();
+  const {
+    Popup: IconEditorPopup,
+    open: openIconEditor,
+    setBaseElement: setIconEditorBaseElement,
+  } = usePopup();
+
+  const {
+    Popup: WindowEditorPopup,
+    open: openEditor,
+    setBaseElement: setEditorBaseElement,
+  } = usePopup();
 
   let offsetPosition = {
     x: 0,
@@ -472,7 +480,8 @@ const Window: Component = () => {
           }}
         >
           <HeaderButton
-            onClick={iconEditorOpen}
+            ref={setIconEditorBaseElement}
+            onClick={openIconEditor}
             style={{
               "font-size": "20px",
             }}
@@ -484,12 +493,12 @@ const Window: Component = () => {
           </IconEditorPopup>
           <HeaderTitle ref={windowMoverRef!}>{windowInfo.title}</HeaderTitle>
           <HeaderButtons>
-            <HeaderButton onClick={windowDataEditorOpen}>
+            <HeaderButton ref={setEditorBaseElement} onClick={openEditor}>
               <FaSolidBars size={24} fill={semanticColors.text.white} />
             </HeaderButton>
-            <WindowDataEditorPopup>
+            <WindowEditorPopup>
               <WindowDataEditor />
-            </WindowDataEditorPopup>
+            </WindowEditorPopup>
             <HeaderButton onClick={minimizeWindow}>
               <FaRegularWindowMinimize
                 size={24}

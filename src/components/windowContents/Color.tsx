@@ -4,6 +4,7 @@ import { type SetStoreFunction } from "solid-js/store";
 
 import { type WindowInfo } from "../../contexts/useWindows";
 import usePopup from "../../lib/usePopup";
+import UIColorInput from "../UI/UIColorInput";
 import { type WindowData } from "../window/WindowContent";
 import { useWindow } from "../Windows";
 
@@ -29,7 +30,7 @@ const Container = styled("div", {
 });
 
 const Color: Component = () => {
-  const { Popup, open } = usePopup();
+  const { Popup, open, setBaseElement } = usePopup();
   const [state, { setState, index }] = useWindow() as [
     WindowInfo & ColorWindowData,
     {
@@ -42,12 +43,10 @@ const Color: Component = () => {
 
   return (
     <Container
+      ref={setBaseElement}
       onPointerDown={(e) => {
         if (e.button !== 2) return;
-        open({
-          x: e.clientX,
-          y: e.clientY,
-        });
+        open();
       }}
       onContextMenu={(e) => {
         e.preventDefault();
@@ -57,12 +56,15 @@ const Color: Component = () => {
       }}
     >
       <Popup>
-        <input
+        <UIColorInput
           type="color"
           value={state.option.color}
           onChange={(e) => {
             setState("windows", index(), "option", "color", e.target.value);
             close();
+          }}
+          style={{
+            width: "200px",
           }}
         />
       </Popup>

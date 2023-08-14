@@ -57,18 +57,12 @@ const OsButton: Component = () => {
   const [config, { setConfig }] = useGlobalConfig();
   const [_state, { resetDisplay }] = useWindows();
   const { globalOBSScenes } = useScenes();
-  const { Popup, open } = usePopup();
+
+  const { Popup, open, setBaseElement } = usePopup();
 
   return (
     <>
-      <Container
-        onClick={() => {
-          open({
-            x: 16,
-            y: 16,
-          });
-        }}
-      >
+      <Container ref={setBaseElement} onClick={open}>
         <Mark />
       </Container>
       <Popup>
