@@ -43,21 +43,21 @@ globalOBSWebsocket.on("SceneRemoved", async () => {
   await refetch();
 });
 
-const changeScene = async (sceneName: string) => {
-  if (obsConnected() !== true) {
-    logger.error("OBS is not connected, cannot change scene");
-    return;
-  }
-  try {
-    // await globalOBSWebsocket.call()
-  } catch (e) {
-    logger.error("Failed to change scene:", e);
-    console.error(e);
-  }
-};
+// const changeScene = async (sceneName: string) => {
+//   if (obsConnected() !== true) {
+//     logger.error("OBS is not connected, cannot change scene");
+//     return;
+//   }
+//   try {
+//     // await globalOBSWebsocket.call()
+//   } catch (e) {
+//     logger.error("Failed to change scene:", e);
+//     console.error(e);
+//   }
+// };
 
 const useScenes = () => {
-  return { globalOBSScenes, changeScene };
+  return { globalOBSScenes };
 };
 
 export default useScenes;
