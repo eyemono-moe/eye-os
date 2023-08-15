@@ -5,7 +5,7 @@ import { type Component, For, createSignal, createEffect } from "solid-js";
 import { isScrolledToBottom } from "../../lib/scroll";
 import toISOStringWithTimezone from "../../lib/toISOStringWithTimezone";
 import { logger, logs } from "../../lib/useLog";
-import { primitiveColors, semanticColors } from "../../theme/color";
+import { primitiveColors } from "../../theme/color";
 import { fontFamily } from "../../theme/font";
 import { type WindowData } from "../window/WindowContent";
 
@@ -21,7 +21,6 @@ const Container = styled("div", {
   base: {
     width: "100%",
     height: "100%",
-    background: semanticColors.ui.background,
   },
 });
 

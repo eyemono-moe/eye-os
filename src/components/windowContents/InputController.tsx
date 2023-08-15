@@ -17,7 +17,7 @@ import {
 import useInputList from "../../lib/useInputList";
 import useInputMuteState from "../../lib/useInputMuteState";
 import useInputVolume from "../../lib/useInputVolume";
-import { primitiveColors, semanticColors } from "../../theme/color";
+import { primitiveColors } from "../../theme/color";
 import CircularButton from "../CircularButton";
 import RoundSlider from "../RoundSlider";
 import ErrorScreen from "../window/ErrorScreen";
@@ -144,7 +144,6 @@ const ButtonsContainer = styled("div", {
     width: "100%",
     height: "100%",
     position: "relative",
-    background: semanticColors.ui.background,
     padding: "4px 32px",
     display: "flex",
     flexDirection: "row",

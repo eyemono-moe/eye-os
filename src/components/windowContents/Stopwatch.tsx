@@ -52,6 +52,13 @@ const Buttons = styled("div", {
   },
 });
 
+const ButtonWrapper = styled("div", {
+  base: {
+    width: "64px",
+    height: "64px",
+  },
+});
+
 const Stopwatch: Component = () => {
   const { start, stop, millisecond, second, minute, hour, reset, isRunning } =
     useStopWatch();
@@ -69,18 +76,27 @@ const Stopwatch: Component = () => {
         <Show
           when={isRunning()}
           fallback={
-            <CircularButton onClick={start}>
-              <FaSolidPlay size={24} fill={primitiveColors.pink[400]} />
-            </CircularButton>
+            <ButtonWrapper>
+              <CircularButton onClick={start}>
+                <FaSolidPlay size={24} fill={primitiveColors.pink[400]} />
+              </CircularButton>
+            </ButtonWrapper>
           }
         >
-          <CircularButton onClick={stop}>
-            <FaSolidPause size={24} fill={primitiveColors.pink[400]} />
-          </CircularButton>
+          <ButtonWrapper>
+            <CircularButton onClick={stop}>
+              <FaSolidPause size={24} fill={primitiveColors.pink[400]} />
+            </CircularButton>
+          </ButtonWrapper>
         </Show>
-        <CircularButton onClick={reset}>
-          <FaSolidArrowRotateLeft size={24} fill={primitiveColors.pink[400]} />
-        </CircularButton>
+        <ButtonWrapper>
+          <CircularButton onClick={reset}>
+            <FaSolidArrowRotateLeft
+              size={24}
+              fill={primitiveColors.pink[400]}
+            />
+          </CircularButton>
+        </ButtonWrapper>
       </Buttons>
     </Container>
   );

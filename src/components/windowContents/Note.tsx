@@ -2,7 +2,6 @@ import { styled } from "@macaron-css/solid";
 import {
   FaSolidMinus,
   FaSolidPlus,
-  FaRegularTrashCan,
   FaSolidAlignCenter,
   FaSolidAlignLeft,
 } from "solid-icons/fa";
@@ -10,7 +9,7 @@ import { type Component, Show, onMount } from "solid-js";
 import { type SetStoreFunction } from "solid-js/store";
 
 import { type WindowInfo } from "../../contexts/useWindows";
-import { primitiveColors, semanticColors } from "../../theme/color";
+import { primitiveColors } from "../../theme/color";
 import { fontFamily } from "../../theme/font";
 import { type WindowData } from "../window/WindowContent";
 import { useWindow } from "../Windows";
@@ -40,7 +39,6 @@ const Container = styled("div", {
     width: "100%",
     height: "100%",
     position: "relative",
-    background: semanticColors.ui.background,
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
@@ -118,9 +116,6 @@ const Note: Component = () => {
       Math.max(s - 4, 16),
     );
   };
-  const clearContent = () => {
-    setState("windows", index(), "option", "content", "");
-  };
   const toggleAlignment = () => {
     setState("windows", index(), "option", "alignment", (a) =>
       a === "center" ? "left" : "center",
@@ -150,9 +145,6 @@ const Note: Component = () => {
           >
             <FaSolidAlignCenter fill={primitiveColors.gray[700]} size={24} />
           </Show>
-        </Button>
-        <Button onClick={clearContent}>
-          <FaRegularTrashCan fill={primitiveColors.gray[700]} size={24} />
         </Button>
       </Buttons>
       <TextArea

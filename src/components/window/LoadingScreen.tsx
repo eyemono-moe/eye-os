@@ -1,13 +1,12 @@
 import { styled } from "@macaron-css/solid";
 import { type Component } from "solid-js";
 
-import { primitiveColors, semanticColors } from "../../theme/color";
+import { primitiveColors } from "../../theme/color";
 
 const Container = styled("div", {
   base: {
     width: "100%",
     height: "100%",
-    background: semanticColors.ui.background,
     display: "grid",
     placeItems: "center",
   },

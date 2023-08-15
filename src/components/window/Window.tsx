@@ -148,7 +148,6 @@ const Content = styled("div", {
     borderWidth: `${displayEdgeWidth}px`,
     borderStyle: "solid",
     borderRadius: "8px",
-    background: "white",
     outline: `solid 1px ${primitiveColors.blackAlpha[600]}`,
     boxShadow: `4px 4px 12px 2px ${primitiveColors.blackAlpha[400]}`,
   },
@@ -201,6 +200,7 @@ const Body = styled("div", {
     width: "100%",
     overflow: "hidden",
     flexGrow: 1,
+    background: semanticColors.ui.background,
   },
 });
 
@@ -530,9 +530,7 @@ const Window: Component = () => {
           </HeaderButtons>
         </Header>
         <Body ref={windowBodyRef!}>
-          <ContentWrapper>
-            <WindowContent />
-          </ContentWrapper>
+          <WindowContent />
         </Body>
       </Content>
       <Edges>

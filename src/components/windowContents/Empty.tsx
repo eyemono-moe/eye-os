@@ -1,6 +1,5 @@
 import { styled } from "@macaron-css/solid";
 
-import { semanticColors } from "../../theme/color";
 import { type WindowData } from "../window/WindowContent";
 
 export interface EmptyWindowData extends WindowData {
@@ -15,7 +14,6 @@ const Empty = styled("div", {
   base: {
     width: "100%",
     height: "100%",
-    background: semanticColors.ui.background,
   },
 });
 
