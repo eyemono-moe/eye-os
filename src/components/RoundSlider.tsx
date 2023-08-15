@@ -8,7 +8,6 @@ interface Props {
   min: number;
   max: number;
   startAngle: number;
-  size: number;
   width: number;
 }
 
@@ -76,84 +75,74 @@ const RoundSlider: Component<Props> = (props) => {
   };
 
   const svgPath = (endRad: number) => {
-    const r = (props.size - props.width) / 2;
+    const r = (100 - props.width) / 2;
 
     const largeArcFlag = endRad > Math.PI ? 1 : 0;
     const sweepFlag = 1;
 
-    const fx = props.size / 2 + r * Math.sin(endRad);
-    const fy = props.size / 2 - r * Math.cos(endRad);
+    const fx = 50 + r * Math.sin(endRad);
+    const fy = 50 - r * Math.cos(endRad);
 
-    return `M ${props.size / 2},${
+    return `M 50,${
       props.width / 2
     } A ${r},${r} 0 ${largeArcFlag} ${sweepFlag} ${fx},${fy}`;
   };
 
   return (
-    <div
+    <svg
+      viewBox={"0 0 100 100"}
+      xmlns="http://www.w3.org/2000/svg"
       style={{
         width: "100%",
         height: "auto",
         "aspect-ratio": "1",
       }}
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      ref={ref!}
     >
-      <svg
-        viewBox={`0 0 ${props.size} ${props.size}`}
-        xmlns="http://www.w3.org/2000/svg"
+      <path
+        d={svgPath(totalRad())}
+        stroke={primitiveColors.gray[800]}
+        fill="none"
+        stroke-width={props.width * 0.749}
+        stroke-linecap="round"
+        transform={`rotate(${props.startAngle + 180} 50 50)`}
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
         style={{
-          width: "100%",
-          height: "100%",
+          cursor: "pointer",
         }}
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        ref={ref!}
-      >
-        <path
-          d={svgPath(totalRad())}
-          stroke={primitiveColors.gray[800]}
-          fill="none"
-          stroke-width={props.width}
-          stroke-linecap="round"
-          transform={`rotate(${props.startAngle + 180} ${props.size / 2} ${
-            props.size / 2
-          })`}
-          onPointerDown={handlePointerDown}
-          onPointerUp={handlePointerUp}
-          style={{
-            cursor: "pointer",
-          }}
-        />
-        <path
-          d={svgPath(valueToRad(props.value()))}
-          stroke={primitiveColors.pink[700]}
-          fill="none"
-          stroke-width={props.width * 0.75}
-          stroke-linecap="round"
-          transform={`rotate(${props.startAngle + 180} ${props.size / 2} ${
-            props.size / 2
-          })`}
-          style={{
-            "pointer-events": "none",
-          }}
-        />
-        <circle
-          r={props.width / 2}
-          cx={
-            props.size / 2 +
-            ((props.size - props.width) / 2) *
-              Math.sin(valueToRad(props.value()) + startRad() + Math.PI)
-          }
-          cy={
-            props.size / 2 -
-            ((props.size - props.width) / 2) *
-              Math.cos(valueToRad(props.value()) + startRad() + Math.PI)
-          }
-          fill={primitiveColors.pink[400]}
-          style={{
-            "pointer-events": "none",
-          }}
-        />
-      </svg>
-    </div>
+      />
+      <path
+        d={svgPath(valueToRad(props.value()))}
+        stroke={primitiveColors.pink[700]}
+        fill="none"
+        stroke-width={props.width * 0.75}
+        stroke-linecap="round"
+        transform={`rotate(${props.startAngle + 180} 50 50)`}
+        style={{
+          "pointer-events": "none",
+        }}
+      />
+      <circle
+        r={props.width / 2}
+        cx={
+          50 +
+          ((100 - props.width) / 2) *
+            Math.sin(valueToRad(props.value()) + startRad() + Math.PI)
+        }
+        cy={
+          50 -
+          ((100 - props.width) / 2) *
+            Math.cos(valueToRad(props.value()) + startRad() + Math.PI)
+        }
+        fill={primitiveColors.pink[400]}
+        style={{
+          "pointer-events": "none",
+          cursor: "move",
+        }}
+      />
+    </svg>
   );
 };
 

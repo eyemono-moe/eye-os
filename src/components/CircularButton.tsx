@@ -4,8 +4,9 @@ import { primitiveColors } from "../theme/color";
 
 const CircularButton = styled("button", {
   base: {
-    width: "48px",
-    height: "48px",
+    width: "100%",
+    height: "auto",
+    aspectRatio: "1",
     borderRadius: "50%",
     backgroundColor: primitiveColors.black,
     borderColor: primitiveColors.pink[400],

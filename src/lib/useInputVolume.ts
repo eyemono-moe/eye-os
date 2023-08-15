@@ -1,11 +1,13 @@
-import { createResource } from "solid-js";
+import { type Accessor, createResource } from "solid-js";
 
-import type OBSWebSocket from "obs-websocket-js";
+import { useObsWebSocket } from "../contexts/useObsWebSocket";
 
-const useInputVolume = (obs: OBSWebSocket, inputName: string = "マイク") => {
+const { globalOBSWebsocket } = useObsWebSocket();
+
+const useInputVolume = (inputName: Accessor<string>) => {
   const getInputVolume = async (): Promise<number> => {
-    const res = await obs.call("GetInputVolume", {
-      inputName,
+    const res = await globalOBSWebsocket.call("GetInputVolume", {
+      inputName: inputName(),
     });
     return res.inputVolumeDb;
   };
@@ -14,8 +16,8 @@ const useInputVolume = (obs: OBSWebSocket, inputName: string = "マイク") => {
 
   const setVolume = async (volumeDb: number) => {
     const inputVolumeDb = Math.max(-100, Math.min(26, volumeDb));
-    await obs.call("SetInputVolume", {
-      inputName,
+    await globalOBSWebsocket.call("SetInputVolume", {
+      inputName: inputName(),
       inputVolumeDb,
     });
     await refetch();
@@ -26,12 +28,12 @@ const useInputVolume = (obs: OBSWebSocket, inputName: string = "マイク") => {
     inputVolumeMul: number;
     inputVolumeDb: number;
   }) => {
-    if (data.inputName === inputName) {
+    if (data.inputName === inputName()) {
       mutate(data.inputVolumeDb);
     }
   };
 
-  obs.on("InputVolumeChanged", handleInputVolumeChanged);
+  globalOBSWebsocket.on("InputVolumeChanged", handleInputVolumeChanged);
 
   return { volume, setVolume };
 };

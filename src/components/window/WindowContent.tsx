@@ -5,14 +5,14 @@ import Color, {
   defaultColorWindowData,
   type ColorWindowData,
 } from "../windowContents/Color";
-import Controller, {
-  type ControllerWindowData,
-  defaultControllerWindowData,
-} from "../windowContents/Controller";
 import Empty, {
   defaultEmptyWindowData,
   type EmptyWindowData,
 } from "../windowContents/Empty";
+import InputController, {
+  type InputControllerWindowData,
+  defaultINputControllerWindowData,
+} from "../windowContents/InputController";
 import Log, {
   type LogWindowData,
   defaultLogWindowData,
@@ -31,7 +31,7 @@ import ErrorScreen from "./ErrorScreen";
 
 export const windowContentsMap = {
   color: Color,
-  controller: Controller,
+  inputController: InputController,
   empty: Empty,
   log: Log,
   note: Note,
@@ -47,7 +47,7 @@ export interface WindowData {
 
 export const defaultWindowData: Record<WindowType, WindowData> = {
   color: defaultColorWindowData,
-  controller: defaultControllerWindowData,
+  inputController: defaultINputControllerWindowData,
   empty: defaultEmptyWindowData,
   log: defaultLogWindowData,
   note: defaultNoteWindowData,
@@ -56,7 +56,7 @@ export const defaultWindowData: Record<WindowType, WindowData> = {
 
 export type WindowDataConcrete =
   | ColorWindowData
-  | ControllerWindowData
+  | InputControllerWindowData
   | EmptyWindowData
   | LogWindowData
   | NoteWindowData

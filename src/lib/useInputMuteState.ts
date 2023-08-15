@@ -1,37 +1,45 @@
-import { createResource } from "solid-js";
+import { type Accessor, createResource } from "solid-js";
 
-import type OBSWebSocket from "obs-websocket-js";
+import { useObsWebSocket } from "../contexts/useObsWebSocket";
 
-const useMicMuteState = (obs: OBSWebSocket, inputName: string = "マイク") => {
+import { logger } from "./useLog";
+const { globalOBSWebsocket, obsConnected } = useObsWebSocket();
+const useMicMuteState = (inputName: Accessor<string>) => {
   const getInputMuted = async (): Promise<boolean> => {
-    const res = await obs.call("GetInputMute", {
-      inputName,
+    const res = await globalOBSWebsocket.call("GetInputMute", {
+      inputName: inputName(),
     });
     return res.inputMuted;
   };
 
-  const [isMuted, { refetch, mutate }] = createResource(getInputMuted);
+  const [isMuted, { mutate }] = createResource(getInputMuted);
 
   const toggleMute = async () => {
-    const res = await obs.call("ToggleInputMute", {
-      inputName,
-    });
-    if (res == null) {
-      throw new Error("Failed to toggle mic mute");
+    if (obsConnected() !== true) {
+      logger.error("OBS is not connected, cannot set scene item index");
+      return;
     }
-    await refetch();
+    try {
+      const res = await globalOBSWebsocket.call("ToggleInputMute", {
+        inputName: inputName(),
+      });
+      mutate(res.inputMuted);
+    } catch (e) {
+      logger.error("Failed to set scene item index:", e);
+      console.error(e);
+    }
   };
 
   const handleInputMuteStateChanged = (data: {
     inputName: string;
     inputMuted: boolean;
   }) => {
-    if (data.inputName === inputName) {
+    if (data.inputName === inputName()) {
       mutate(data.inputMuted);
     }
   };
 
-  obs.on("InputMuteStateChanged", handleInputMuteStateChanged);
+  globalOBSWebsocket.on("InputMuteStateChanged", handleInputMuteStateChanged);
 
   return { isMuted, toggleMute };
 };
