@@ -2,6 +2,7 @@ import {
   createGlobalTheme,
   createGlobalThemeContract,
 } from "@macaron-css/core";
+import { styled } from "@macaron-css/solid";
 import { createPicker, type EmojiPicker } from "picmo";
 import { onMount, type Component } from "solid-js";
 
@@ -10,6 +11,15 @@ import { fontFamily } from "../../theme/font";
 import { useWindow } from "../Windows";
 
 const className = "my-picker";
+
+const Container = styled("div", {
+  base: {
+    border: "1px solid",
+    borderRadius: "8px",
+    borderColor: primitiveColors.gray[800],
+    boxShadow: `4px 4px 12px 2px ${primitiveColors.blackAlpha[400]}`,
+  },
+});
 
 const IconEditor: Component = () => {
   let ref: HTMLDivElement;
@@ -30,8 +40,12 @@ const IconEditor: Component = () => {
 
   onMount(openPicker);
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return <div ref={ref!} />;
+  return (
+    <Container>
+      {/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */}
+      <div ref={ref!} />
+    </Container>
+  );
 };
 
 export default IconEditor;
@@ -40,7 +54,7 @@ const vars = createGlobalThemeContract(
   {
     accent: { color: null },
     background: { color: null },
-    border: { color: null },
+    border: { color: null, radius: null },
     category: {
       name: { background: { color: null }, text: { color: null } },
       tab: { color: null },
@@ -68,7 +82,7 @@ const vars = createGlobalThemeContract(
 createGlobalTheme(`div.${className}`, vars, {
   accent: { color: primitiveColors.pink[400] },
   background: { color: semanticColors.ui.background },
-  border: { color: primitiveColors.pink[400] },
+  border: { color: primitiveColors.pink[400], radius: "8px" },
   category: {
     name: {
       background: { color: "transparent" },
@@ -96,6 +110,6 @@ createGlobalTheme(`div.${className}`, vars, {
   },
   tag: { background: { color: primitiveColors.pink[400] } },
   text: { color: semanticColors.text.white },
-  ui: { font: fontFamily.mono },
+  ui: { font: `${fontFamily.mono} !important` },
   variant: { popup: { background: { color: primitiveColors.pink[400] } } },
 });

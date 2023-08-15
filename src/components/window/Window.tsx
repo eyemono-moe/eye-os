@@ -21,12 +21,12 @@ import IconEditor from "./IconEditor";
 import WindowContent from "./WindowContent";
 import WindowDataEditor from "./WindowDataEditor";
 
-const MIN_WIDTH = 100;
-const MIN_HEIGHT = 100;
-
 const headerHeight = 36;
 const movableEdgeWidth = 8;
 const displayEdgeWidth = 4;
+
+const MIN_WIDTH = 32 * 5 + displayEdgeWidth * 2;
+const MIN_HEIGHT = 100;
 
 const MaximizeAnimation = keyframes({
   from: {
@@ -176,6 +176,9 @@ const HeaderTitle = styled("div", {
     width: "100%",
     height: "32px",
     cursor: "move",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
 
     fontSize: "18px",
     lineHeight: "32px",
