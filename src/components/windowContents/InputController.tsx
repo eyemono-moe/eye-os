@@ -6,13 +6,7 @@ import {
   FaSolidLockOpen,
   FaSolidLock,
 } from "solid-icons/fa";
-import {
-  Show,
-  type Component,
-  createEffect,
-  For,
-  createSignal,
-} from "solid-js";
+import { Show, type Component, For, createSignal } from "solid-js";
 
 import useInputList from "../../lib/useInputList";
 import useInputMuteState from "../../lib/useInputMuteState";
@@ -190,10 +184,6 @@ const Button = styled("div", {
 const InputController: Component = () => {
   const { globalOBSInputs } = useInputList();
   const [locked, setLocked] = createSignal<boolean>(true);
-
-  createEffect(() => {
-    console.log(globalOBSInputs());
-  });
 
   return (
     <Container>

@@ -27,7 +27,7 @@ const getScenes = async (): Promise<OBSScene[]> => {
 };
 
 const [globalOBSScenes, { refetch }] = createResource(
-  () => obsConnected.state === "ready" && obsConnected(),
+  () => obsConnected.state === "ready",
   getScenes,
 );
 

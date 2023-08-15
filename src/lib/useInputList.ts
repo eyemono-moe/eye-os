@@ -30,7 +30,7 @@ const getInputs = async (): Promise<Input[]> => {
 };
 
 const [globalOBSInputs, { refetch }] = createResource(
-  () => obsConnected.state === "ready" && obsConnected(),
+  () => obsConnected.state === "ready",
   getInputs,
 );
 

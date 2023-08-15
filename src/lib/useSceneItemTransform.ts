@@ -14,9 +14,9 @@ const useSceneItemTransform = (
 ) => {
   const getSceneItemTransform = async (data: {
     id: number;
-    obsConnected: boolean;
+    _obsIsReady: boolean;
   }) => {
-    if (!data.obsConnected) {
+    if (obsConnected() !== true) {
       logger.error("OBS is not connected, cannot get scene item transform");
       throw new Error("OBS is not connected, cannot get scene item transform");
     }
@@ -36,7 +36,7 @@ const useSceneItemTransform = (
   const [transform, { refetch }] = createResource(
     () => ({
       id: sceneItemId(),
-      obsConnected: obsConnected.state === "ready" && obsConnected(),
+      _obsIsReady: obsConnected.state === "ready",
     }),
     getSceneItemTransform,
   );
