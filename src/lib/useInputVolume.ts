@@ -6,6 +6,12 @@ import { logger } from "./useLog";
 
 const { globalOBSWebsocket, obsConnected } = useObsWebSocket();
 
+/**
+ * Hook to get and set the volume of an OBS input
+ *
+ * @param inputName The name of the input to get/set the volume of
+ * @returns An object containing the current volume and a function to set the volume
+ */
 const useInputVolume = (inputName: Accessor<string>) => {
   const getInputVolume = async (): Promise<number> => {
     if (obsConnected.state !== "ready" || !obsConnected()) {
@@ -24,6 +30,7 @@ const useInputVolume = (inputName: Accessor<string>) => {
   };
 
   const [volume, { refetch, mutate }] = createResource(
+    // update when obsConnected state changes
     () => obsConnected.state === "ready",
     getInputVolume,
   );
