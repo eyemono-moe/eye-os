@@ -204,14 +204,6 @@ const Body = styled("div", {
   },
 });
 
-const ContentWrapper = styled("div", {
-  base: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-  },
-});
-
 const Window: Component = () => {
   let windowMoverRef: HTMLDivElement;
   let topLeftRef: HTMLDivElement;
