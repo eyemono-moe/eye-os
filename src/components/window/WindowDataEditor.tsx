@@ -52,11 +52,16 @@ const WindowDataEditor = () => {
         value={store.type}
         onChange={(e) => {
           setState("windows", index(), (info) => {
-            const newInfo = { ...info };
-            newInfo.type = e.target.value as WindowType;
-            newInfo.option =
-              defaultWindowData[e.target.value as WindowType].option;
-            return newInfo;
+            const d = JSON.parse(
+              JSON.stringify(
+                defaultWindowData[e.currentTarget.value as WindowType],
+              ),
+            );
+            return {
+              ...info,
+              type: d.type,
+              option: d.option,
+            };
           });
         }}
       >

@@ -1,6 +1,7 @@
 import { type Component, ErrorBoundary } from "solid-js";
 import { Dynamic } from "solid-js/web";
 
+import { logger } from "../../lib/useLog";
 import Color, {
   defaultColorWindowData,
   type ColorWindowData,
@@ -45,7 +46,7 @@ export interface WindowData {
   option?: unknown;
 }
 
-export const defaultWindowData: Record<WindowType, WindowData> = {
+export const defaultWindowData = {
   color: defaultColorWindowData,
   inputController: defaultINputControllerWindowData,
   empty: defaultEmptyWindowData,
@@ -65,7 +66,12 @@ export type WindowDataConcrete =
 const WindowContent: Component = () => {
   const [state] = useWindow();
   return (
-    <ErrorBoundary fallback={(err) => <ErrorScreen message={err} />}>
+    <ErrorBoundary
+      fallback={(err) => {
+        logger.error(err);
+        return <ErrorScreen message={err} />;
+      }}
+    >
       {/* <Suspense fallback={<LoadingScreen />}> */}
       <Dynamic component={windowContentsMap[state.type]} />
       {/* </Suspense> */}
