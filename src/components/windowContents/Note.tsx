@@ -85,6 +85,8 @@ const Button = styled("div", {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: "4px",
+    cursor: "pointer",
     selectors: {
       "&:hover": {
         backgroundColor: primitiveColors.whiteAlpha[400],

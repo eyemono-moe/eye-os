@@ -78,6 +78,7 @@ const WindowDataEditor = () => {
         }}
       >
         <UIColorInput
+          full
           type="color"
           value={store.color}
           onChange={(e) => {

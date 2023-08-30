@@ -22,6 +22,10 @@ import Note, {
   defaultNoteWindowData,
   type NoteWindowData,
 } from "../windowContents/Note";
+import Paint, {
+  defaultPaintWindowData,
+  type PaintWindowData,
+} from "../windowContents/Paint";
 import Stopwatch, {
   defaultStopwatchWindowData,
   type StopwatchWindowData,
@@ -36,6 +40,7 @@ export const windowContentsMap = {
   empty: Empty,
   log: Log,
   note: Note,
+  paint: Paint,
   stopwatch: Stopwatch,
 };
 
@@ -52,6 +57,7 @@ export const defaultWindowData = {
   empty: defaultEmptyWindowData,
   log: defaultLogWindowData,
   note: defaultNoteWindowData,
+  paint: defaultPaintWindowData,
   stopwatch: defaultStopwatchWindowData,
 };
 
@@ -61,6 +67,7 @@ export type WindowDataConcrete =
   | EmptyWindowData
   | LogWindowData
   | NoteWindowData
+  | PaintWindowData
   | StopwatchWindowData;
 
 const WindowContent: Component = () => {

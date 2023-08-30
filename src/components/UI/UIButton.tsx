@@ -15,7 +15,19 @@ const UIButton = styled("button", {
     cursor: "pointer",
     selectors: {
       "&:hover": {
-        backgroundColor: primitiveColors.gray[900],
+        backgroundColor: primitiveColors.gray[800],
+      },
+    },
+  },
+  variants: {
+    danger: {
+      true: {
+        backgroundColor: primitiveColors.pink[500],
+        selectors: {
+          "&:hover": {
+            backgroundColor: primitiveColors.pink[700],
+          },
+        },
       },
     },
   },

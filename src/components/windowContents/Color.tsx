@@ -63,9 +63,6 @@ const Color: Component = () => {
             setState("windows", index(), "option", "color", e.target.value);
             close();
           }}
-          style={{
-            width: "200px",
-          }}
         />
       </Popup>
     </Container>

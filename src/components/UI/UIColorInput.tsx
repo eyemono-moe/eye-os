@@ -4,7 +4,6 @@ import { primitiveColors } from "../../theme/color";
 
 const UIColorInput = styled("input", {
   base: {
-    width: "100%",
     height: "24px",
     padding: "0",
     borderRadius: "4px",
@@ -13,6 +12,13 @@ const UIColorInput = styled("input", {
     backgroundColor: primitiveColors.gray[900],
     color: primitiveColors.white,
     cursor: "pointer",
+  },
+  variants: {
+    full: {
+      true: {
+        width: "100%",
+      },
+    },
   },
 });
 
