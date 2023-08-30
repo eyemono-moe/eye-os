@@ -1,4 +1,4 @@
 export const fontFamily = {
-  mono: `'JetBrainsMono Nerd Font', 'Noto Sans JP Thin', monospace`,
+  mono: `'JetBrainsMono Nerd Font', 'Noto Sans JP', monospace`,
   raglanPunch: "FOT-ラグランパンチ Std UB",
 };
