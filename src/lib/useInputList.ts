@@ -12,6 +12,13 @@ interface Input {
   unversionedInputKind: string;
 }
 
+const controllableInputKinds = [
+  "wasapi_output_capture",
+  "wasapi_input_capture",
+  "browser_source",
+  "dshow_input",
+];
+
 const getInputs = async (): Promise<Input[]> => {
   if (obsConnected() !== true) {
     logger.error("OBS is not connected, cannot get inputs");
@@ -21,7 +28,7 @@ const getInputs = async (): Promise<Input[]> => {
     const res = await globalOBSWebsocket.call("GetInputList");
     logger.log("Got inputs");
     return (res.inputs as unknown as Input[]).filter((input) =>
-      input.inputKind.startsWith("wasapi"),
+      controllableInputKinds.includes(input.inputKind),
     );
   } catch (e) {
     logger.error("Failed to get inputs:", e);

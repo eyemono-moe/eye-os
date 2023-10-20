@@ -139,11 +139,11 @@ const ButtonsContainer = styled("div", {
     height: "100%",
     position: "relative",
     padding: "4px 32px",
-    display: "flex",
-    flexDirection: "row",
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, 90px)",
     justifyContent: "center",
-    alignItems: "center",
-    gap: "32px",
+    alignContent: "center",
+    gap: "16px 32px",
   },
 });
 
